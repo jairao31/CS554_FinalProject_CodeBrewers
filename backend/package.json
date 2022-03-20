@@ -1,0 +1,19 @@
+{
+  "name": "tulsee-backend",
+  "version": "1.0.0",
+  "description": "This is the backend for TULSEE app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jairao31/CS554_FinalProject_CodeBrewers.git"
+  },
+  "author": "CodeBrewers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jairao31/CS554_FinalProject_CodeBrewers/issues"
+  },
+  "homepage": "https://github.com/jairao31/CS554_FinalProject_CodeBrewers#readme"
+}
