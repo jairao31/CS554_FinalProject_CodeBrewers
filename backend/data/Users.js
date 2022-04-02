@@ -1,5 +1,5 @@
 const { getDatabase } = require('firebase-admin/database');
-//const { taskCollection } = require('./Refs');
+const { userCollection } = require('./UserRefs');
 const bcrypt = require("bcryptjs");
 const saltRounds = 16;
 
@@ -56,26 +56,28 @@ const checkPass= async(passedPass, mypassword)=>{
     }
 }
 
-const getTaskList = async(projectId) => {
-    if(!projectId) throw "Please provide a project ID"
-    if(typeof projectId !== "string" || projectId === "") throw "Invalid request"
-    taskCollection().orderByChild("projectId").equalTo(projectId).on('value', (snapshot) => {
+const getUserList = async(userName) => {
+    if(!userName) throw "Please provide a userName"
+    if(typeof userName !== "string" || userName === "") throw "Invalid request"
+    userCollection().orderByChild("userName").equalTo(userName).on('value', (snapshot) => {
         let result = []
         for (var key in snapshot.val()) {
             result.push(snapshot.val()[key])
         }
-        // console.log(result)
+        console.log(result)
         return result
     })
     // const output = await Promise.resolve(result);
     // const realOP = await output();
     // console.log(realOP)
     // console.log(output.result)
-    return output
+    // return output
 }
+
+
 
 module.exports = {
     CreateUser,
-    checkPass
-    //getTaskList
+    checkPass,
+    getUserList
 }
