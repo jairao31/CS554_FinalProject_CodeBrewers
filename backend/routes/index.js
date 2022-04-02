@@ -1,7 +1,9 @@
-const routes = require('./task');
+const tasks = require('./task');
+const users = require('./user');
 
 const constructorMethod = (app) => {
-  app.use('/task', routes);
+  app.use('/task', tasks);
+  app.use('/user', users);
 
 
   app.use('*', (req, res) => {
