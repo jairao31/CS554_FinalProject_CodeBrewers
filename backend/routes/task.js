@@ -2,13 +2,41 @@ const express = require('express');
 const { getDatabase } = require('firebase-admin/database');
 const { taskCollection } = require('../data/Refs');
 const router = express.Router();
-let task = require('../data/Tasks');
 
 router.post('/', async(req,res) => {
     try {
         const {projectId, title, description, assignee, createdBy} = req.body;
-        task.CreateTask(projectId, title, description, assignee, createdBy);
-        res.json('success');
+        if(!projectId || !title || !description || !assignee || !createdBy) {
+            res.status(401).json({error:'Insufficient Funds'})
+            return
+        }
+        if(typeof projectId !== "string" || typeof title !== "string" || typeof description !== "string" || typeof assignee !== "string" || typeof createdBy !== "string") {
+            res.status(401).json({error:'Invalid data type'})
+            return
+        }
+
+        const taskData = {
+            projectId,
+            title,
+            description,
+            assignee,
+            createdBy,
+            status: 0,
+            comments:[],
+            createdOn: new Date().toISOString()
+        }
+
+        const db = getDatabase();
+        const ref = db.ref('server/tulsee');
+        const taskRef = ref.child('tasks')
+        taskRef.push().set(taskData, error => {
+            if(error) {
+                res.status(500).json({error: "Task could not be added"})
+            }else{
+                res.json('Task was added successfully');
+            }
+        })
+        
     } catch (error) {
         res.status(500).json({error: error.message ?error.messsage: error})
     }
@@ -22,7 +50,10 @@ router.get('/project/:projectId', async(req,res) => {
             for (var key in snapshot.val()) {
                 result.push({id: key, ...snapshot.val()[key]})
             }
-            console.log(result)
+            if(result.length === 0) {
+                res.status(500).json({error: 'Task could not be found for the given project ID'});
+                return;
+            }
             res.json(result)
         })
     } catch (error) {
@@ -33,9 +64,13 @@ router.get('/project/:projectId', async(req,res) => {
 router.get('/:taskId', async(req,res) => {
     try {
         const {taskId} = req.params;
-        console.log(taskId)
         taskCollection(taskId).once('value', (snapshot) => {
-            res.json({id:taskId,...snapshot.val()})
+            if(snapshot.val()) {
+                res.json({id:taskId,...snapshot.val()})
+            }else{
+                res.status(500).json({error: 'task could not be found for the given task ID'});
+                return;
+            }
         })
     } catch (error) {
         res.status(500).json({error: error.message ?error.messsage: error})
@@ -46,8 +81,13 @@ router.patch('/:taskId', async(req,res) => {
     try {
         const {taskId} = req.params;
         const request = req.body;
-        taskCollection(taskId).update(request)
-        res.json('success')
+        taskCollection(taskId).update(request, error => {
+            if(error) {
+                res.status(500).json({error:'Task could not be updated'})
+            }else{
+                res.json('Task was updated successfully')
+            }
+        })
     } catch (error) {
         res.status(500).json({error: error.message ?error.messsage: error})
     }
