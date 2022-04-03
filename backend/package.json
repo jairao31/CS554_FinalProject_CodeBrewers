@@ -19,7 +19,6 @@
   "homepage": "https://github.com/jairao31/CS554_FinalProject_CodeBrewers#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
-    "bcryptjs": "^2.4.3",
     "express": "^4.17.3",
     "express-session": "^1.17.2",
     "firebase-admin": "^10.0.2",

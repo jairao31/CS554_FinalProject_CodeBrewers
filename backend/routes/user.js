@@ -1,8 +1,7 @@
 const express = require('express');
 const { getDatabase } = require('firebase-admin/database');
-const { userCollection } = require('../data/UserRefs');
+const { userCollection } = require('../data/Refs');
 const router = express.Router();
-let task = require('../data/Users');
 const bcrypt = require("bcrypt");
 const saltRounds = 12;
 
@@ -131,6 +130,7 @@ router.get('/searchByUserName',async(req,res)=>{
             }
             if (result.length===0){
                 res.json("Sorry! No user found with "+userName+" username. Try Again!")
+                return;
             }
             res.json(result)
         })
@@ -150,6 +150,7 @@ router.get('/searchByFirstName',async(req,res)=>{
             }
             if (result.length===0){
                 res.json("Sorry! No user found with "+firstName+" first name. Try Again!")
+                return;
             }
             res.json(result)
         })
