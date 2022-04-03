@@ -3,62 +3,116 @@ const { getDatabase } = require('firebase-admin/database');
 const { userCollection } = require('../data/UserRefs');
 const router = express.Router();
 let task = require('../data/Users');
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
+const saltRounds = 12;
+
+// "isPassword" function used to check pass
+function isPassword(str) {
+    if (!str) throw `Password must be provided`;
+    if (typeof str != "string") throw `Password must be a string`;
+    if (str.trim().length == 0) throw `Password cannot just be empty spaces`;
+    if (str.toLowerCase().trim() != str.toLowerCase().trim().replace(/\s+/g, ""))
+      throw `Password cannot have spaces`;
+    let strippedStr = str.toLowerCase().trim().replace(/\s+/g, "");
+    if (strippedStr.length < 6) throw `Password must be at least six characters`;
+}
 
 // "SIGNUP" Router calling "CreateUser"
 router.post('/signup', async(req,res) => {
     try {
         const {userName, password, profilePhotoUrl, firstName, lastName, skills, requests, projects, completedProjects, createdOn, lastActive, isActive} = req.body;
-        task.CreateUser(userName, password, profilePhotoUrl, firstName, lastName, skills, requests, projects, completedProjects, createdOn, lastActive, isActive);
-        res.json('success');
+        isPassword(password);
+        userCollection().orderByChild("userName").equalTo(userName).on('value', (snapshot) => {
+            try {
+                // console.log('entered')
+                let result = []
+                for (var key in snapshot.val()) {
+                    result.push({id: key, ...snapshot.val()[key]})
+                }
+                if (result.length>=1){
+                    res.status(404).json("This username is already taken. Please choose another username.")
+                }else{
+                    bcrypt.genSalt(saltRounds, (err, salt) => {
+                        bcrypt.hash(password, salt, (err, hash) => {
+                            const userData = {
+                                userName: userName.trim(), 
+                                password: hash,
+                                profilePhotoUrl:profilePhotoUrl || null, 
+                                firstName: firstName.trim(), 
+                                lastName: lastName.trim(), 
+                                skills: skills || null, 
+                                requests: requests || null, 
+                                projects: projects || null, 
+                                completedProjects: completedProjects, 
+                                createdOn: new Date().toISOString(), 
+                                lastActive: new Date().toISOString(), 
+                                isActive: true
+                            }
+                            const db = getDatabase();
+                            const ref = db.ref('server/tulsee');
+                            const taskRef = ref.child('users')
+                            taskRef.push().set(userData)
+                            res.json(userName+' successfully Registered');
+                            
+                            
+                        });
+                    });
+                }
+                userCollection().off('value');
+            } catch (error) {
+                console.log(error)
+                res.status(500).json({error: error.message ?error.messsage: error})
+                console.log(error)
+            }
+        })
+        // res.json('success');
     } catch (error) {
+        console.log(error)
         res.status(500).json({error: error.message ?error.messsage: error})
     }
 })
-
-// "_P_R_A_T_I_K_"
-// userSchema.methods.deleteToken=function(token,cb){
-//     var user=this;
-
-//     user.update({$unset : {token :1}},function(err,user){
-//         if(err) return cb(err);
-//         cb(null,user);
-//     })
-// }
 
 // "LOGIN" Router calling "checkPass" and "userCollection"
 router.post('/login',async(req,res)=>{
     try{
         const {userName,password} = req.body;
         userCollection().orderByChild("userName").equalTo(userName).on('value', (snapshot) => {
-            let result = []
-            for (var key in snapshot.val()) {
-                result.push({id: key, ...snapshot.val()[key]})
+            try {
+                let result = []
+                for (var key in snapshot.val()) {
+                    result.push({id: key, ...snapshot.val()[key]})
+                }
+                if (result.length===0){
+                    res.status(404).json("No username found")
+                }else{
+                    bcrypt.compare(password, result[0]['password'], (e, output) => {
+                        console.log(output)
+                        if (output) {
+                            console.log('logged IN')
+                            res.json( { authenticated: true });
+                        }else{
+                            res.status(401).json("Invalid Password")
+                        }
+                    });
+                }
+            } catch (error) {
+                res.status(500).json({error: error.message ?error.messsage: error})
+                console.log(error)
             }
-            if (result.length===0){
-                res.json("No username found")
-            }
-            if (task.checkPass(password, result[0]['password'])) {
-                console.log('logged IN')
-                res.json( { authenticated: true });
-            } else {
-                res.status(500).json({error:error.message ?error.messsage: error})
-                //throw `Either the username or password is invalid`;
-            }
+            
         })
     }catch(error){
         res.status(500).json({error: error.message ?error.messsage: error})
     }
 })
 
-router.patch('/:userName', async(req,res) => {
+// Edit User by userId
+router.patch('/:userId', async(req,res) => {
     try {
-        const {userName} = req.params;
+        const {userId} = req.params;
         const request = req.body;
-        var idToUpdate=''
-        console.log(task.getUserList(userName))
-        console.log("ihfdshfsdfdsjfbgdjfbgjdsbdsfjbgjdf")
-        // userCollection(idToUpdate).update(request)
+        // var idToUpdate=task.getUserList(userName);
+        userCollection(userId).update(request)
         // console.log(result)
     } catch (error) {
         res.status(500).json({error: error.message ?error.messsage: error})
@@ -104,5 +158,19 @@ router.get('/searchByFirstName',async(req,res)=>{
     }
 })
 
+// :projectId in the router
+router.patch('/invite/:userId/:projectId', async(req,res) => {
+    try {
+        const {userId, projectId} = req.params;
+        const request = req.body;
+        for (var i=0; i< request['requests'].length;i++){
+            userCollection(request['requests'][i]).child('requests').push().set(projectId)       
+        }
+
+        res.json("Invite Sent to Id/Id's: "+ request['requests'] +" by "+userId)
+    } catch (error) {
+        res.status(500).json({error: error.message ?error.messsage: error})
+    }
+})
 
 module.exports = router

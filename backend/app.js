@@ -40,35 +40,3 @@ app.listen(3000, () => {
   console.log("Server has been initialized!");
   console.log('Your routes will be running on http://localhost:3000');
 });
-
-/*Next function is for generating a token when user logged in.
-// generate token
-userSchema.methods.generateToken=function(cb){
-  var user =this;
-  var token=jwt.sign(user._id.toHexString(),confiq.SECRET);
-
-  user.token=token;
-  user.save(function(err,user){
-      if(err) return cb(err);
-      cb(null,user);
-  })
-}
-
-// get logged in user
-app.get('/api/profile',auth,function(req,res){
-  res.json({
-    isAuth: true,
-    id: req.user._id,
-    email: req.user.email,
-    name: req.user.firstname + req.user.lastname
-})
-
-//logout user
-app.get('/api/logout',auth,function(req,res){
-  req.user.deleteToken(req.token,(err,user)=>{
-    if(err) return res.status(400).send(err);
-    res.sendStatus(200);
-  });
-}); 
-
-*/
