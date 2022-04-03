@@ -4,7 +4,7 @@ const skillRoutes = require('./skill');
 const constructorMethod = (app) => {
   app.use('/task', routes);
 
-  app.use('/skill', routes);
+  app.use('/skill', skillRoutes);
 
 
   app.use('*', (req, res) => {
