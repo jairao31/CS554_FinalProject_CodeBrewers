@@ -10,7 +10,17 @@ const taskCollection = taskId => {
     // const taskRef = ref.child('tasks')
 }
 
-const userCollection = userId => {
+const skillCollection = skillId => {
+    const db = getDatabase();
+    if (skillId) {
+        return db.ref(`server/tulsee/skills/${skillId}`);
+    }else{
+        return db.ref('server/tulsee/skills');
+
+    }
+}
+
+const userCollection = () => {
     const db = getDatabase();
     if (userId) {
         return db.ref(`server/tulsee/users/${userId}`);
@@ -21,5 +31,6 @@ const userCollection = userId => {
 
 module.exports = {
     taskCollection,
-    userCollection
+    userCollection,
+    skillCollection
 }
