@@ -6,7 +6,6 @@ const taskCollection = taskId => {
         return db.ref(`server/tulsee/tasks/${taskId}`);
     }else{
         return db.ref('server/tulsee/tasks');
-
     }
     // const taskRef = ref.child('tasks')
 }
