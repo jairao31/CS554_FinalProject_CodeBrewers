@@ -1,0 +1,26 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Lato, sans-serif;
+  background-color: rgb(245, 245, 245)!important;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+  /* background-color: #87AAAA; */
+}
+
+input::placeholder{
+  color: black!important;
+}
+
+.chakra-form__required-indicator{
+  color: black!important;
+}

@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const jwt=require('jsonwebtoken');
+const {verifyUser} = require("./middlewares/JWT");
 
 var firebase = require('firebase-admin')
 
@@ -34,6 +34,30 @@ app.use(
     })
   );
 app.use(express.urlencoded({ extended: true }));
+
+app.use((req,res,next) => {
+  console.log('Current Timestamp: ', new Date().toUTCString());
+  console.log('Request Method: ', req.method);
+  console.log('Request Route: ', req.originalUrl);
+  next();
+  // console.log(`User is${req.session.email ? "" : " not"} authenticated`)
+})
+
+app.use((req,res,next) => {
+  try{
+    if(req.originalUrl !== "/user/login" &&
+    req.originalUrl !== "/user/signup"
+    ) {
+      let user = verifyUser(req.headers.accesstoken)
+      req.headers.user = user;
+    }
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({error: "Unauthorized access!"})
+  }
+})
+
 configRoutes(app);
 
 app.listen(3000, () => {
