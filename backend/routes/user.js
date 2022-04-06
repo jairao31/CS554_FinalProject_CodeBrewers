@@ -174,4 +174,10 @@ router.patch('/invite/:userId/:projectId', async(req,res) => {
     }
 })
 
+
+router.get("/logout", async (req, res) => {
+    req.session.destroy();
+    res.json({loggedOut: true})
+  });
+
 module.exports = router
