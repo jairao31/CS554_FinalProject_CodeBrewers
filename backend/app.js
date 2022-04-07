@@ -30,7 +30,7 @@ app.use(
         name: 'AuthCookie',
         secret: 'some secret string!',
         resave: false,
-        saveUninitialized: true      
+        saveUninitialized: true
     })
   );
 app.use(express.urlencoded({ extended: true }));
