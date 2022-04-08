@@ -25,10 +25,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/project/[...slug]": [
+    "/project": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/project/[...slug].js"
+      "static/chunks/pages/project.js"
     ],
     "/project/[projectId]": [
       "static/chunks/webpack.js",
