@@ -30,6 +30,30 @@ const overrides = {
         focusBorderColor: "brand.900",
       },
     },
+    Button: {
+      baseStyle:{
+        fontWeight: '500'
+      },
+      variants: {
+        'ghost' : {
+          _hover:{
+            backgroundColor:'rgba(180, 207, 176,0.3)'
+          }
+        },
+        'outline' : {
+          borderColor:'#789395',
+          _hover:{
+            backgroundColor:'rgba(180, 207, 176,0.3)'
+          }
+        },
+        'solid': {
+          backgroundColor:'#789395',
+          _hover:{
+            backgroundColor:'#94B49F'
+          }
+        }
+      }
+    }
   },
 };
 

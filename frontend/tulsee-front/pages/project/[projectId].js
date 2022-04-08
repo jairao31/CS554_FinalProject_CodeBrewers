@@ -1,5 +1,6 @@
 import { useRouter } from 'next/dist/client/router';
 import React, { useEffect } from 'react';
+import Layout from '../../Components/Common/layout';
 
 const SingleProject = () => {
 
@@ -11,9 +12,9 @@ const SingleProject = () => {
     },[query])
 
     return (
-        <div>
-            this is single project
-        </div>
+        <Layout>
+            {/* Your coomponent here */}
+        </Layout>
     );
 };
 
