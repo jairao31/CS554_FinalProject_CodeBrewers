@@ -25,15 +25,25 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/project": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/project.js"
-    ],
     "/project/[projectId]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/project/[projectId].js"
+    ],
+    "/project/[projectId]/chat": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/project/[projectId]/chat.js"
+    ],
+    "/project/[projectId]/meet": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/project/[projectId]/meet.js"
+    ],
+    "/project/[projectId]/task": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/project/[projectId]/task.js"
     ]
   },
   "ampFirstPages": []
