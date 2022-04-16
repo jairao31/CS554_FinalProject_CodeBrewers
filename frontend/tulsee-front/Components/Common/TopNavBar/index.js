@@ -42,7 +42,7 @@ const TopNavBar = ({activePage, title}) => {
             <Text mt={'5px'} fontSize={'lg'} fontWeight={500} alignSelf={'flex-start'}>{title}</Text>
             <HStack ml='30%'>
                 {/* <Tooltip label='task' placement='bottom'>hover</Tooltip> */}
-                {navs.map((i,idx) => <Tooltip hasArrow  label={i} placement='bottom'>
+                {navs.map((i,idx) => <Tooltip key={idx} hasArrow  label={i} placement='bottom'>
                     <div>
                         <IconButton 
                             label={'top-nav-task'} 
