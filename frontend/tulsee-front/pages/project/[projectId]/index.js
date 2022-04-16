@@ -1,6 +1,7 @@
 import { useRouter } from 'next/dist/client/router';
 import React, { useEffect } from 'react';
-import Layout from '../../Components/Common/layout';
+import Layout from '../../../Components/Common/layout';
+import TopNavBar from '../../../Components/Common/TopNavBar';
 
 const SingleProject = () => {
 
@@ -13,7 +14,9 @@ const SingleProject = () => {
 
     return (
         <Layout>
+            <TopNavBar/>
             {/* Your coomponent here */}
+            this is specific project
         </Layout>
     );
 };

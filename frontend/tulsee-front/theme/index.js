@@ -27,12 +27,13 @@ const overrides = {
       // The default `size` or `variant` values
       defaultProps: {
         size: "lg",
-        focusBorderColor: "brand.900",
+        focusBorderColor: "brand.900"
       },
     },
     Button: {
       baseStyle:{
-        fontWeight: '500'
+        fontWeight: '500',
+        color:"brand.700"
       },
       variants: {
         'ghost' : {
@@ -50,6 +51,19 @@ const overrides = {
           backgroundColor:'#789395',
           _hover:{
             backgroundColor:'#94B49F'
+          }
+        }
+      }
+    },
+    IconButton:{
+      defaultProps:{
+        textColor:"brand.700",
+      },
+      variants:{
+        'ghost':{
+          _hover:{
+            color: 'black!important',
+            backgroundColor:'rgba(180, 207, 176,0.2)'
           }
         }
       }
