@@ -14,7 +14,7 @@ const SingleProject = () => {
 
     return (
         <Layout>
-            <TopNavBar/>
+            <TopNavBar title={'Project Name'}/>
             {/* Your coomponent here */}
             this is specific project
         </Layout>
