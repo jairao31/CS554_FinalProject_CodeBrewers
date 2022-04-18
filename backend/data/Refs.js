@@ -20,6 +20,15 @@ const skillCollection = skillId => {
     }
 }
 
+const mediaCollection = (mediaId) => {
+  const db = getDatabase();
+  if (mediaId) {
+    return db.ref(`server/tulsee/media/${mediaId}`);
+  } else {
+    return db.ref("server/tulsee/media");
+  }
+};
+
 const userCollection = () => {
     const db = getDatabase();
     if (userId) {
@@ -39,8 +48,9 @@ const projectCollection = () => {
 }
 
 module.exports = {
-    taskCollection,
-    userCollection,
-    skillCollection,
-    projectCollection
-}
+  taskCollection,
+  userCollection,
+  skillCollection,
+  projectCollection,
+  mediaCollection,
+};
