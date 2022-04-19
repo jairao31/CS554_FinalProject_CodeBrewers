@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const {verifyUser} = require("./middlewares/JWT");
+// const {verifyUser} = require("./middlewares/JWT");
 
 var firebase = require('firebase-admin')
 
@@ -43,20 +43,20 @@ app.use((req,res,next) => {
   // console.log(`User is${req.session.email ? "" : " not"} authenticated`)
 })
 
-app.use((req,res,next) => {
-  try{
-    if(req.originalUrl !== "/user/login" &&
-    req.originalUrl !== "/user/signup"
-    ) {
-      let user = verifyUser(req.headers.accesstoken)
-      req.headers.user = user;
-    }
-    next();
-  } catch (error) {
-    console.log(error);
-    res.status(401).json({error: "Unauthorized access!"})
-  }
-})
+// app.use((req,res,next) => {
+//   try{
+//     if(req.originalUrl !== "/user/login" &&
+//     req.originalUrl !== "/user/signup"
+//     ) {
+//       let user = verifyUser(req.headers.accesstoken)
+//       req.headers.user = user;
+//     }
+//     next();
+//   } catch (error) {
+//     console.log(error);
+//     res.status(401).json({error: "Unauthorized access!"})
+//   }
+// })
 
 configRoutes(app);
 
