@@ -27,6 +27,16 @@ router.post("/", async (req, res) => {
       return;
     }
 
+    if (
+      type.trim().length === 0 ||
+      url.trim().length === 0 ||
+      uploadedBy.trim().length === 0 ||
+      projectId.trim().length === 0
+    ) {
+      res.status(401).json({ error: "empty space as input detected" });
+      return;
+    }
+
     const mediaData = {
       type,
       url,
