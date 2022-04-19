@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from "react";
-import { Input, Button, Flex, Text, VStack } from "@chakra-ui/react";
+import { Input, Button, Flex, Text, VStack, Box } from "@chakra-ui/react";
 import { storage } from "../../../firebase";
 import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import { v4 } from "uuid";
@@ -35,19 +35,20 @@ const Media = () => {
   return (
     <Layout>
       <TopNavBar activePage="media" title={"Project Name"} />
-      this is media page
-      <center>
-        <input
-          type="file"
-          onChange={(e) => {
-            setImageUpload(e.target.files[0]);
-          }}
-        />
-        <Button onClick={uploadFile}>Upload</Button>
-      </center>
-      {imageUrls.map((url) => {
-        return <img className="media" src={url} />;
-      })}
+      <Box maxH={"100vh"} overflowY="auto">
+        <center>
+          <input
+            type="file"
+            onChange={(e) => {
+              setImageUpload(e.target.files[0]);
+            }}
+          />
+          <Button onClick={uploadFile}>Upload</Button>
+        </center>
+        {imageUrls.map((url) => {
+          return <img src={url} />;
+        })}
+      </Box>
     </Layout>
   );
 };;;
