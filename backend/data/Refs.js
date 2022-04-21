@@ -38,9 +38,19 @@ const projectCollection = () => {
     }
 }
 
+const messageCollection = projectId => {
+    const db = getDatabase();
+    if (projectId) {
+        return db.ref(`server/tulsee/messages/${projectId}`);
+    }else{
+        return db.ref('server/tulsee/messages');
+    }
+}
+
 module.exports = {
     taskCollection,
     userCollection,
     skillCollection,
-    projectCollection
+    projectCollection,
+    messageCollection
 }
