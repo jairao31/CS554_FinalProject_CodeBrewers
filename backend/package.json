@@ -4,7 +4,7 @@
   "description": "This is the backend for TULSEE app",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "cross-env PORT=3001 nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,10 +19,14 @@
   "homepage": "https://github.com/jairao31/CS554_FinalProject_CodeBrewers#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "express": "^4.17.3",
     "express-session": "^1.17.2",
     "firebase-admin": "^10.0.2",
+    "http": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.4.1"
   }
 }

@@ -19,45 +19,45 @@ function isPassword(str) {
 // "SIGNUP" Router calling "CreateUser"
 router.post('/signup', async(req,res) => {
     try {
-        const {userName, password, profilePhotoUrl, firstName, lastName, skills, requests, projects, completedProjects, createdOn, lastActive, isActive} = req.body;
+        const {publicId, password, firstName, lastName, email} = req.body;
         isPassword(password);
-        userCollection().orderByChild("userName").equalTo(userName).on('value', (snapshot) => {
+        userCollection().orderByChild("email").equalTo(email).on('value', (snapshot) => {
             try {
                 // console.log('entered')
                 let result = []
+                userCollection().off('value');
                 for (var key in snapshot.val()) {
                     result.push({id: key, ...snapshot.val()[key]})
                 }
                 if (result.length>=1){
-                    res.status(404).json("This username is already taken. Please choose another username.")
+                    res.status(404).json("An account with this email already exists. Please try logging in.")
                 }else{
-                    bcrypt.genSalt(saltRounds, (err, salt) => {
-                        bcrypt.hash(password, salt, (err, hash) => {
-                            const userData = {
-                                userName: userName.trim(), 
-                                password: hash,
-                                profilePhotoUrl:profilePhotoUrl || null, 
-                                firstName: firstName.trim(), 
-                                lastName: lastName.trim(), 
-                                skills: skills || null, 
-                                requests: requests || null, 
-                                projects: projects || null, 
-                                completedProjects: completedProjects, 
-                                createdOn: new Date().toISOString(), 
-                                lastActive: new Date().toISOString(), 
-                                isActive: true
-                            }
-                            const db = getDatabase();
-                            const ref = db.ref('server/tulsee');
-                            const taskRef = ref.child('users')
-                            taskRef.push().set(userData)
+                    const userData = {
+                        publicId,
+                        profilePhotoUrl:null, 
+                        firstName: firstName.trim(), 
+                        lastName: lastName.trim(), 
+                        email: email.trim(),
+                        skills: [], 
+                        requests: [], 
+                        projects: [], 
+                        completedProjects: [], 
+                        createdOn: new Date().toISOString(), 
+                        lastActive: null, 
+                        isActive: false
+                    }
+                    const db = getDatabase();
+                    const ref = db.ref('server/tulsee');
+                    const taskRef = ref.child('users')
+                    taskRef.push().set(userData, error => {
+                        if(error) {
+                            res.status(500).json({error: 'User could not be registered!'})
+                        }else{
                             res.json(userName+' successfully Registered');
-                            
-                            
-                        });
-                    });
+                        }
+                    })
                 }
-                userCollection().off('value');
+                
             } catch (error) {
                 console.log(error)
                 res.status(500).json({error: error.message ?error.messsage: error})
@@ -72,27 +72,19 @@ router.post('/signup', async(req,res) => {
 })
 
 // "LOGIN" Router calling "checkPass" and "userCollection"
-router.post('/login',async(req,res)=>{
+router.get('/login/:publicId',async(req,res)=>{
     try{
-        const {userName,password} = req.body;
-        userCollection().orderByChild("userName").equalTo(userName).on('value', (snapshot) => {
+        const {publicId} = req.params;
+        userCollection().orderByChild("publicId").equalTo(publicId).on('value', (snapshot) => {
             try {
                 let result = []
                 for (var key in snapshot.val()) {
-                    result.push({id: key, ...snapshot.val()[key]})
+                    result.push(snapshot.val()[key])
                 }
                 if (result.length===0){
                     res.status(404).json("No username found")
                 }else{
-                    bcrypt.compare(password, result[0]['password'], (e, output) => {
-                        console.log(output)
-                        if (output) {
-                            console.log('logged IN')
-                            res.json( { authenticated: true });
-                        }else{
-                            res.status(401).json("Invalid Password")
-                        }
-                    });
+                    res.json(result[0]);
                 }
             } catch (error) {
                 res.status(500).json({error: error.message ?error.messsage: error})
