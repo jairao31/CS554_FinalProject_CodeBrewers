@@ -10,35 +10,42 @@ export const UserContext = createContext()
 const UserContextProvider = ({children}) => {
 
     const [userID, setUserID] = useState();
+    const [UserDetails, setUserDetails] = useState()
 
     const auth = getAuth()
-    const {push} = useRouter()
+    const {push,pathname} = useRouter()
 
     const {mutate: addUser} = useCreateUser()
 
     const toast = useToast();
 
-    const {data: UserDetails} = useGetUser(userID, !!userID);
+    const {data: User} = useGetUser(userID, !!userID);
 
     useEffect(() => {
-        console.log(UserDetails);
-    },[UserDetails])
+        if(User) setUserDetails(User);
+    },[User])
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
-          const uid = user.uid;
-          setUserID(uid);
-          push('/')
-          // ...
-        } else {
-            console.log("user is logged out")
-            push('/login')
-          // User is signed out
-          // ...
-        }
-      });
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+              // User is signed in, see docs for a list of available properties
+              // https://firebase.google.com/docs/reference/js/firebase.User
+              const uid = user.uid;
+              setUserID(uid);
+              // ...
+            } else {
+                console.log("user is logged out")
+                if(pathname !== '/login') {
+                    setUserDetails(null)
+                    setUserID(null)
+                    push('/login')
+                }
+              // User is signed out
+              // ...
+            }
+          });
+    },[])
+
 
     const createUser = details => {
         const {email, password} = details;
@@ -80,7 +87,7 @@ const UserContextProvider = ({children}) => {
 
     const logout = () => {
         signOut(auth).then(
-        () => {setUserID(null)}
+        () => {}
         ).catch((e) => console.log(e))
     }
  

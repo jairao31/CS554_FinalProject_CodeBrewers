@@ -15,7 +15,7 @@ import {
   IconButton,
   Flex,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Button,
 } from "@chakra-ui/react";
@@ -26,6 +26,7 @@ import { useColorMode } from "@chakra-ui/react";
 import { FaSun, FaMoon, FaGithub } from "react-icons/fa";
 import RegisterForm from "../../Components/Register/RegisterForm";
 import LoginForm from "../../Components/Login/loginForm";
+import { UserContext } from "../../Components/Contexts/UserContext";
 // import RegisterForm from "../Components/Register/RegisterForm";
 // import LoginForm from "../Components/Login/loginForm";
 // import Zoom from "./component/zoomMeet";
@@ -40,6 +41,15 @@ export default function Login() {
   )
   const [tabIndex, setTabIndex] = React.useState(0)
   const bg = colors[tabIndex]
+
+  const {UserDetails} = useContext(UserContext)
+
+    const {push} = useRouter()
+
+    useEffect(() => {
+      if(UserDetails) push('/')
+    },[UserDetails])
+
   return (
     // <div className={styles.container}>
     <VStack p={5}>

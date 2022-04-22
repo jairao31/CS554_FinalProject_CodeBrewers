@@ -25,6 +25,7 @@ router.post('/signup', async(req,res) => {
             try {
                 // console.log('entered')
                 let result = []
+                userCollection().off('value');
                 for (var key in snapshot.val()) {
                     result.push({id: key, ...snapshot.val()[key]})
                 }
@@ -56,7 +57,7 @@ router.post('/signup', async(req,res) => {
                         }
                     })
                 }
-                userCollection().off('value');
+                
             } catch (error) {
                 console.log(error)
                 res.status(500).json({error: error.message ?error.messsage: error})
