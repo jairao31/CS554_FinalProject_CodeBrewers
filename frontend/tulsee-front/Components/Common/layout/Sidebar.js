@@ -1,14 +1,18 @@
 import { Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import {MdAdd, MdPerson,MdGroups} from 'react-icons/md'
+import { UserContext } from '../../Contexts/UserContext';
 
 const Sidebar = () => {
+
+    const {logout} = useContext(UserContext)
+
     return (
         <Box p={2} h={'100%'}>
             <Text fontSize={'xl'} fontWeight='bold' mb={2} color='#E5E3C9' bg='#789395' w={'fit-content'} p={2} borderRadius={5}>TULSEE.io</Text>
             <Flex justifyContent={'space-between'}>
                 <Text pt={2} verticalAlign={'middle'}>Hi, Saurabh</Text>
-                <Button variant='ghost'>Logout</Button>
+                <Button variant='ghost' onClick={() => logout()}>Logout</Button>
             </Flex>
             <Flex direction={'column'} h={'100%'}>
                 <VStack textAlign={'left'} py={4} px={4} borderBottom='1px solid #DBDBDB'>

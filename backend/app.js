@@ -94,9 +94,9 @@ io.on('connection', (socket) => {
 
 
 
-http.listen(3000, () => {
+http.listen(3001, () => {
   console.log("Server has been initialized!");
-  console.log('Your routes will be running on http://localhost:3000');
+  console.log('Your routes will be running on http://localhost:3001');
 });
 
 

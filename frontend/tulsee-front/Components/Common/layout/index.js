@@ -3,6 +3,8 @@ import {Box, Grid, GridItem} from '@chakra-ui/react';
 import Sidebar from './Sidebar';
 
 const Layout = ({children}) => {
+
+
     return (
         <Box w={'100%'} h='100vh' position={'fixed'}>
             <Grid h={'100%'}  templateColumns='repeat(5,1fr)' >

@@ -20,7 +20,7 @@ const skillCollection = skillId => {
     }
 }
 
-const userCollection = () => {
+const userCollection = (userId) => {
     const db = getDatabase();
     if (userId) {
         return db.ref(`server/tulsee/users/${userId}`);
