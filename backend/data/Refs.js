@@ -56,18 +56,10 @@ const messageCollection = projectId => {
 }
 
 module.exports = {
-<<<<<<< HEAD
   taskCollection,
   userCollection,
   skillCollection,
   projectCollection,
   mediaCollection,
+  messageCollection,
 };
-=======
-    taskCollection,
-    userCollection,
-    skillCollection,
-    projectCollection,
-    messageCollection
-}
->>>>>>> 3d2988c781926872408e7b7a3d1e9dd53b4fd57e
