@@ -29,13 +29,13 @@ const mediaCollection = (mediaId) => {
 };
 
 const userCollection = (userId) => {
-  const db = getDatabase();
-  if (userId) {
-    return db.ref(`server/tulsee/users/${userId}`);
-  } else {
-    return db.ref("server/tulsee/users");
-  }
-};
+    const db = getDatabase();
+    if (userId) {
+        return db.ref(`server/tulsee/users/${userId}`);
+    }else{
+        return db.ref('server/tulsee/users');
+    }
+}
 
 const projectCollection = () => {
     const db = getDatabase();
@@ -46,10 +46,28 @@ const projectCollection = () => {
     }
 }
 
+const messageCollection = projectId => {
+    const db = getDatabase();
+    if (projectId) {
+        return db.ref(`server/tulsee/messages/${projectId}`);
+    }else{
+        return db.ref('server/tulsee/messages');
+    }
+}
+
 module.exports = {
+<<<<<<< HEAD
   taskCollection,
   userCollection,
   skillCollection,
   projectCollection,
   mediaCollection,
 };
+=======
+    taskCollection,
+    userCollection,
+    skillCollection,
+    projectCollection,
+    messageCollection
+}
+>>>>>>> 3d2988c781926872408e7b7a3d1e9dd53b4fd57e

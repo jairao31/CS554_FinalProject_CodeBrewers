@@ -1,11 +1,14 @@
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+import Layout from '../Components/Common/layout';
 
 const Home = () => {
-    return (
-        <div>
-            Welcome to home
-        </div>
-    );
+
+
+
+  return (
+    <Layout></Layout>
+  );
 };
 
 export default Home;

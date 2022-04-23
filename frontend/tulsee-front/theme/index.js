@@ -30,6 +30,11 @@ const overrides = {
         focusBorderColor: "brand.900"
       },
     },
+    Input:{
+      baseStyle:{
+        color: "brand.900"
+      }
+    },
     Button: {
       baseStyle:{
         fontWeight: '500',

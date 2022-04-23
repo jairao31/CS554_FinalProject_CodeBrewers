@@ -3,6 +3,7 @@ const users = require('./user');
 const skillRoutes = require('./skill');
 const projectRoutes=require('./projects');
 const mediaRoutes = require("./media");
+const messageRoutes = require('./messages')
 
 const constructorMethod = (app) => {
   app.use('/task', tasks);
@@ -10,6 +11,7 @@ const constructorMethod = (app) => {
   app.use('/skill', skillRoutes);
   app.use('/project',projectRoutes);
   app.use("/media", mediaRoutes);
+  app.use('/messages', messageRoutes);
 
   app.use('*', (req, res) => {
     res.redirect('/');
