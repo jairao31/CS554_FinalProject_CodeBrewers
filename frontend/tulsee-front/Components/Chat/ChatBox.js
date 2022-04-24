@@ -54,7 +54,7 @@ const ChatBox = () => {
           setChat(prev => {
               return [
                   ...prev,
-                  {name: 'ChatBot', userId: data.userId, text: `${data.name} has joined the chat`}
+                  {name: 'ChatBot', sender: data.userId, text: `${data.name} has joined the chat`}
               ]
           });
         });

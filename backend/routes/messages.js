@@ -31,13 +31,16 @@ router.post('/:projectId', (req,res) => {
 
 router.get("/:projectId", (req,res) => {
     try {
-        const {projectId} = req.body
+        const {projectId} = req.params
+        console.log(projectId)
+
         messageCollection(projectId).once('value', snapshot => {
             if(snapshot.val()) {
-                let allMessages = snapshot.val()[Object.keys(snapshot.val())[0]]
+                console.log(snapshot.val())
+                // let allMessages = snapshot.val()[Object.keys(snapshot.val())[0]]
                 let result = []
-                for (var key in allMessages) {
-                    result.push(allMessages[key])
+                for (var key in snapshot.val()) {
+                    result.push(snapshot.val()[key])
                 }
                 res.json(result)
             }else{
