@@ -112,4 +112,23 @@ router.patch('/:projectId', async(req,res) => {
     }
 });
 
+//route to archive project
+router.patch('/archive/:projectId', async(req,res) => {
+    try {
+        const {projectId} = req.params;
+        const request = req.body;
+        projectCollection(projectId).update(request, error => {
+            if(error) {
+                res.status(500).json({error:'Project could not be updated'});
+            }else{
+                console.log("Project updated successfully");
+                res.json('Project was updated successfully');
+            }
+        });
+    } catch (error) {
+        console.log('no such route');
+        res.status(500).json({error: error.message ? error.messsage: error});
+    }
+});
+
 module.exports= router
