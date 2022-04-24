@@ -19,10 +19,10 @@ const skillCollection = (skillId) => {
   }
 };
 
-const mediaCollection = (mediaId) => {
+const mediaCollection = (projectId) => {
   const db = getDatabase();
-  if (mediaId) {
-    return db.ref(`server/tulsee/media/${mediaId}`);
+  if (projectId) {
+    return db.ref(`server/tulsee/media/${projectId}`);
   } else {
     return db.ref("server/tulsee/media");
   }
