@@ -40,7 +40,7 @@ const userCollection = (userId) => {
 const projectCollection = () => {
     const db = getDatabase();
     if (projectId) {
-        return db.ref(`server/tulsee/projects/${projectsId}`);
+        return db.ref(`server/tulsee/projects/${projectId}`);
     }else{
         return db.ref('server/tulsee/projects');
     }
