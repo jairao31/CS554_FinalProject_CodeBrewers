@@ -38,7 +38,7 @@ app.use(cors());
 
 const io = new Server(http, {
   cors: {
-    origin: "http://localhost:3001",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
@@ -56,19 +56,14 @@ app.use(
   );
 app.use(express.urlencoded({ extended: true }));
 
-app.use((req,res,next) => {
-  console.log('Current Timestamp: ', new Date().toUTCString());
-  console.log('Request Method: ', req.method);
-  console.log('Request Route: ', req.originalUrl);
-  next();
-  // console.log(`User is${req.session.email ? "" : " not"} authenticated`)
-})
+
 
 
 
 
 
 configRoutes(app);
+
 
 io.on('connection', (socket) => {
   console.log('new client connected', socket.id);
@@ -81,9 +76,9 @@ io.on('connection', (socket) => {
 
   // socket.on()
 
-  socket.on('message', ({room, name, userId, message}) => {
+  socket.on('message', ({room, name, sender, text}) => {
     // console.log(name, message, socket.id);
-    io.to(room).emit('message', {name, userId, message});
+    io.to(room).emit('message', {name, sender, text});
   });
 
   socket.on('disconnect', () => {
@@ -92,6 +87,13 @@ io.on('connection', (socket) => {
   
 });
 
+app.use((req,res,next) => {
+  console.log('Current Timestamp: ', new Date().toUTCString());
+  console.log('Request Method: ', req.method);
+  console.log('Request Route: ', req.originalUrl);
+  next();
+  // console.log(`User is${req.session.email ? "" : " not"} authenticated`)
+})
 
 
 http.listen(3001, () => {
