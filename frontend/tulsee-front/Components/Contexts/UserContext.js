@@ -52,9 +52,12 @@ const UserContextProvider = ({children}) => {
         createUserWithEmailAndPassword(auth, email, password)
         .then(credential => {
             console.log(credential.user)
-            addUser({publicId: credential.user.uid,...details}, {
-                onSuccess: d => {
-                    console.log(d);
+            addUser({
+                publicId: credential.user.uid,
+                ...details
+            }, {
+                onSuccess: data => {
+                    console.log(data);
                     toast({title:"User registered successfully!", status:'success', duration: 2000});
                 },
                 onError: e => {
