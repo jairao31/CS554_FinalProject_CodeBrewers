@@ -10,15 +10,23 @@ const taskCollection = taskId => {
     // const taskRef = ref.child('tasks')
 }
 
-const skillCollection = skillId => {
-    const db = getDatabase();
-    if (skillId) {
-        return db.ref(`server/tulsee/skills/${skillId}`);
-    }else{
-        return db.ref('server/tulsee/skills');
+const skillCollection = (skillId) => {
+  const db = getDatabase();
+  if (skillId) {
+    return db.ref(`server/tulsee/skills/${skillId}`);
+  } else {
+    return db.ref("server/tulsee/skills");
+  }
+};
 
-    }
-}
+const mediaCollection = (mediaId) => {
+  const db = getDatabase();
+  if (mediaId) {
+    return db.ref(`server/tulsee/media/${mediaId}`);
+  } else {
+    return db.ref("server/tulsee/media");
+  }
+};
 
 const userCollection = (userId) => {
     const db = getDatabase();
@@ -48,9 +56,10 @@ const messageCollection = projectId => {
 }
 
 module.exports = {
-    taskCollection,
-    userCollection,
-    skillCollection,
-    projectCollection,
-    messageCollection
-}
+  taskCollection,
+  userCollection,
+  skillCollection,
+  projectCollection,
+  mediaCollection,
+  messageCollection,
+};

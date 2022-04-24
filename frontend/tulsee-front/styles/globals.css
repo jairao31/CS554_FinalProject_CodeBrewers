@@ -24,3 +24,8 @@ input::placeholder{
 .chakra-form__required-indicator{
   color: black!important;
 }
+
+.media{
+  width: 300px;
+  margin: 10px;
+}

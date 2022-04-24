@@ -7,36 +7,35 @@ const router = express.Router();
 router.post('/', async(req, res) => {
     try {
         const CreateSkill = (skillName) => {
-    
-            if (!skillName) throw "Insufficient fields"
-            if (typeof skillName !== "string") throw "Invalid data"
-            if(skillName.trim().length === 0) throw 'Skill name as empty space detected'
-        
-            function titleCase(str) {
-                str = str.toLowerCase().split(' ');
-                for (var i = 0; i < str.length; i++) {
-                str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1); 
-                }
-                return str.join(' ');
+          if (!skillName) throw "Insufficient fields";
+          if (typeof skillName !== "string") throw "Invalid data";
+          if (skillName.trim().length === 0)
+            throw "Skill name as empty space detected";
+
+          function titleCase(str) {
+            str = str.toLowerCase().split(" ");
+            for (var i = 0; i < str.length; i++) {
+              str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
             }
-            
-            const skillData = {
-                skillName: skillName,
-                skillDisplayName: titleCase(skillName) 
-            }
-        
-            const db = getDatabase();
-            const ref = db.ref('server/tulsee')
-            const skillRef = ref.child('skills')
-            skillRef.push().set(skillData)
-            
+            return str.join(" ");
+          }
+
+          const skillData = {
+            skillName: skillName,
+            skillDisplayName: titleCase(skillName),
+          };
+
+          const db = getDatabase();
+          const ref = db.ref("server/tulsee");
+          const skillRef = ref.child("skills");
+          skillRef.push().set(skillData);
         }
 
         const {skillName} = req.body
         CreateSkill(skillName)
         res.json('success')
     } catch (error) {
-        res.status(500).json({error: error.message ?error.messsage: error})
+        res.status(500).json({ error: error.message ? error.messsage : error });
     }
 })
 
