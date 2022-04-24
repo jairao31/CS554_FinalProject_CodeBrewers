@@ -1,6 +1,14 @@
 const express = require('express');
 const app = express();
-const {verifyUser} = require("./middlewares/JWT");
+var cors = require("cors");
+var options = {
+  "origin": "*",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": false,
+  "optionsSuccessStatus": 204
+}
+app.use(cors(options));
+// const {verifyUser} = require("./middlewares/JWT");
 
 var firebase = require('firebase-admin')
 
@@ -23,6 +31,19 @@ firebase.initializeApp({
 
 const session = require('express-session');
 const configRoutes = require('./routes');
+const http = require('http').createServer(app);
+const { Server } = require("socket.io");
+app.use(cors());
+
+
+const io = new Server(http, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+
 app.use(express.json());
 
 app.use(
@@ -35,6 +56,37 @@ app.use(
   );
 app.use(express.urlencoded({ extended: true }));
 
+
+
+
+
+
+
+configRoutes(app);
+
+
+io.on('connection', (socket) => {
+  console.log('new client connected', socket.id);
+
+  socket.on('user_join', (name, userId, room) => {
+    console.log(name, room)
+    socket.join(room)
+    io.to(room).emit('user_join', {name, userId});
+  });
+
+  // socket.on()
+
+  socket.on('message', ({room, name, sender, text}) => {
+    // console.log(name, message, socket.id);
+    io.to(room).emit('message', {name, sender, text});
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Disconnect Fired');
+  });
+  
+});
+
 app.use((req,res,next) => {
   console.log('Current Timestamp: ', new Date().toUTCString());
   console.log('Request Method: ', req.method);
@@ -43,24 +95,10 @@ app.use((req,res,next) => {
   // console.log(`User is${req.session.email ? "" : " not"} authenticated`)
 })
 
-app.use((req,res,next) => {
-  try{
-    if(req.originalUrl !== "/user/login" &&
-    req.originalUrl !== "/user/signup"
-    ) {
-      let user = verifyUser(req.headers.accesstoken)
-      req.headers.user = user;
-    }
-    next();
-  } catch (error) {
-    console.log(error);
-    res.status(401).json({error: "Unauthorized access!"})
-  }
-})
 
-configRoutes(app);
-
-app.listen(3000, () => {
+http.listen(3001, () => {
   console.log("Server has been initialized!");
-  console.log('Your routes will be running on http://localhost:3000');
+  console.log('Your routes will be running on http://localhost:3001');
 });
+
+
