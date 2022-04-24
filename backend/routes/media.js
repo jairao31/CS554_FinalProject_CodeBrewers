@@ -1,13 +1,9 @@
 const express = require("express");
 const { getDatabase } = require("firebase-admin/database");
 const { mediaCollection } = require("../data/Refs");
+import { v4 } from "uuid";
 const router = express.Router();
 
-// media type
-// 0: document
-// 1: Image
-// 2: video
-// 3: audio
 
 //Routes for Media upload
 router.post("/", async (req, res) => {
@@ -40,9 +36,10 @@ router.post("/", async (req, res) => {
     const mediaData = {
       type,
       url,
-      uploadedOn: new Date().toISOString(),
+      timeCreated,
       uploadedBy,
       projectId,
+      publicId: v4(),
     };
 
     const db = getDatabase();
@@ -60,7 +57,16 @@ router.post("/", async (req, res) => {
   }
 });
 
-//Route for get all media by projectID
+//Route to delete media in a project
+router.delete("/project/:projectId", async (req, res) => {
+  try {
+    const { projectId } = req.params;
+  } catch (error) {
+    
+  }
+})
+
+//Route to get all media by projectID
 router.get("/project/:projectId", async (req, res) => {
   try {
     const { projectId } = req.params;
