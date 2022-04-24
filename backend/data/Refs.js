@@ -37,7 +37,7 @@ const userCollection = (userId) => {
     }
 }
 
-const projectCollection = () => {
+const projectCollection = (projectId) => {
     const db = getDatabase();
     if (projectId) {
         return db.ref(`server/tulsee/projects/${projectId}`);
