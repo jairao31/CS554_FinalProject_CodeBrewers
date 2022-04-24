@@ -4,6 +4,7 @@ import { Input, Button, Flex, Text, VStack, Box } from "@chakra-ui/react";
 import { storage } from "../../../firebase";
 import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import { v4 } from "uuid";
+import { useRouter } from "next/router";
 import Layout from "../../../Components/Common/layout";
 import TopNavBar from "../../../Components/Common/TopNavBar";
 
@@ -11,10 +12,15 @@ const Media = () => {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageUrls, setImageUrls] = useState([]);
 
+  const { query } = useRouter();
+
   const imagesListRef = ref(storage, "projects/");
   const uploadFile = () => {
     if (imageUpload == null) return;
-    const imageRef = ref(storage, `projects/${imageUpload.name + v4()}`);
+    const imageRef = ref(
+      storage,
+      `projects/${query.projectId}/${imageUpload.name + v4()}`
+    );
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
         setImageUrls((prev) => [...prev, url]);
