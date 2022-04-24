@@ -14,7 +14,7 @@ const Media = () => {
 
   const { query } = useRouter();
 
-  const imagesListRef = ref(storage, "projects/");
+
   const uploadFile = () => {
     if (imageUpload == null) return;
     const imageRef = ref(
@@ -22,6 +22,7 @@ const Media = () => {
       `projects/${query.projectId}/${imageUpload.name + v4()}`
     );
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
+      alert("Image Uploaded!");
       getDownloadURL(snapshot.ref).then((url) => {
         setImageUrls((prev) => [...prev, url]);
       });
@@ -29,6 +30,8 @@ const Media = () => {
   };
 
   useEffect(() => {
+    if (!query) return;
+    const imagesListRef = ref(storage, `projects/${query.projectId}`);
     listAll(imagesListRef).then((response) => {
       response.items.forEach((item) => {
         getDownloadURL(item).then((url) => {
@@ -36,7 +39,7 @@ const Media = () => {
         });
       });
     });
-  }, []);
+  }, [query]);
 
   return (
     <Layout>
