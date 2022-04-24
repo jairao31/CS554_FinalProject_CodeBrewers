@@ -1,6 +1,12 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
-import { Button, Box } from "@chakra-ui/react";
+import {
+  Button,
+  Box,
+  Image,
+  useColorModeValue,
+  Center,
+} from "@chakra-ui/react";
 import { storage } from "../../firebase";
 import {
   ref,
@@ -8,15 +14,18 @@ import {
   getDownloadURL,
   getMetadata,
   listAll,
+  deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
 import { useRouter } from "next/router";
 import { UserContext } from "../Contexts/UserContext";
 import { useUploadMedia } from "../../api/media/uploadMedia";
+// import "../../styles/globals.css";
 
 const MediaContainer = () => {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageUrls, setImageUrls] = useState([]);
+  //   const [imageDelete, SetImageDelete] = useState(null);
 
   const { query } = useRouter();
   const { UserDetails } = useContext(UserContext);
@@ -49,9 +58,19 @@ const MediaContainer = () => {
               },
             }
           );
+          setImageUrls((prev) => [...prev, { ...metadata, url }]);
         });
-        setImageUrls((prev) => [...prev, url]);
       });
+    });
+  };
+
+  const deleteFile = (name) => {
+    if (name == null) return;
+    const deleteRef = ref(storage, `projects/${query.projectId}/${name}`);
+    deleteObject(deleteRef).then(() => {
+      let curr = imageUrls;
+      curr = curr.filter((i) => i.name !== name);
+      setImageUrls(curr);
     });
   };
 
@@ -61,7 +80,9 @@ const MediaContainer = () => {
     listAll(imagesListRef).then((response) => {
       response.items.forEach((item) => {
         getDownloadURL(item).then((url) => {
-          setImageUrls((prev) => [...prev, url]);
+          getMetadata(item).then((res) => {
+            setImageUrls((prev) => [...prev, { ...res, url }]);
+          });
         });
       });
     });
@@ -69,7 +90,7 @@ const MediaContainer = () => {
 
   return (
     <Box maxH={"100vh"} overflowY="auto">
-      <center>
+      <Center>
         <input
           type="file"
           onChange={(e) => {
@@ -77,9 +98,32 @@ const MediaContainer = () => {
           }}
         />
         <Button onClick={uploadFile}>Upload</Button>
-      </center>
-      {imageUrls.map((url) => {
-        return <img src={url} />;
+      </Center>
+
+      {imageUrls.map((img) => {
+        return (
+          <Box
+            role={"group"}
+            p={6}
+            maxW={"330px"}
+            w={"full"}
+            bg={useColorModeValue("white", "gray.800")}
+            boxShadow={"2xl"}
+            rounded={"lg"}
+            pos={"relative"}
+            zIndex={1}
+            mb={2}
+          >
+            <Image
+              rounded={"lg"}
+              height={230}
+              width={282}
+              objectFit={"cover"}
+              src={img.url}
+            />
+            <Button onClick={() => deleteFile(img.name)}>Delete</Button>
+          </Box>
+        );
       })}
     </Box>
   );
