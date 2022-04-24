@@ -12,7 +12,7 @@ const router=express.Router();
 //     createdOn: dateString,
 //     createdBy: userPublicId}
 
-
+//route to create project
 router.post('/',async(req,res)=>{
     try{
 
@@ -32,17 +32,15 @@ router.post('/',async(req,res)=>{
             type: type,
             chatRoomId: chatRoomId,
             createdBy: createdBy,
-            createdOn: new Date().toISOString()
+            createdOn: new Date().toISOString(),
+            archived: false
         }
-
-        const db = getDatabase();
-        const ref = db.ref('server/tulsee');
-        const taskRef = ref.child('projects')
-        taskRef.push().set(projectData, error => {
+        projectCollection().off('value');
+        projectCollection().push().set(projectData, error => {
             if(error) {
                 res.status(500).json({error: "Project could not be added"})
             }else{
-                res.json('Project was added successfully');
+                res.json({sucess:'Project was added successfully'});
             }
         })
     }catch(error){
@@ -51,16 +49,21 @@ router.post('/',async(req,res)=>{
 });
 
 //get all projects
-router.get('/',async(req,res)=>{
+//by userId
+router.get('/byUser/:userId',async(req,res)=>{
     try {
-        projectCollection().on('value', (snapshot) => {
+        const {userId} = req.params;
+        projectCollection().once('value', (snapshot) => {
             let result = []
             for (var key in snapshot.val()) {
-                result.push({id: key, ...snapshot.val()[key]})
+                let exist = snapshot.val()[key].participants.find(i => i === userId)
+                if(exist)  result.push({id: key, ...snapshot.val()[key]});
             }
+            projectCollection().off('value');
             res.json(result)
         });
     } catch (error) {
+        console.log(error)
         res.status(500).json({error: error.message ?error.messsage: error})
     }
 });
@@ -68,16 +71,24 @@ router.get('/',async(req,res)=>{
 //get project by id
 router.get('/:projectId',async(req,res)=>{
     try {
+        // console.log("inside the projecid route");
         const {projectId} = req.params;
+        // console.log(req.params);
         projectCollection(projectId).once('value', (snapshot) => {
-            console.log(snapshot.val())
+            console.log(snapshot.val());
+            console.log("inside query");
             if (snapshot.val()){
-                res.json({id:projectId,...snapshot.val()})
+                // projectCollection().off('value');
+                console.log('value found');
+                res.json({id:projectId,...snapshot.val()});
             }else{
-                res.status(500).json({error: "Project not found"})
+                console.log(error);
+                res.status(500).json({error: "Project not found for the given id"});
+                return;
             }
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({error: error.message ?error.messsage: error})
     }
 });
@@ -89,13 +100,15 @@ router.patch('/:projectId', async(req,res) => {
         const request = req.body;
         projectCollection(projectId).update(request, error => {
             if(error) {
-                res.status(500).json({error:'Project could not be updated'})
+                res.status(500).json({error:'Project could not be updated'});
             }else{
-                res.json('Project was updated successfully')
+                console.log("Project updated successfully");
+                res.json('Project was updated successfully');
             }
         });
     } catch (error) {
-        res.status(500).json({error: error.message ? error.messsage: error})
+        console.log('no such route');
+        res.status(500).json({error: error.message ? error.messsage: error});
     }
 });
 
