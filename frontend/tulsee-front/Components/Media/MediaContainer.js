@@ -12,6 +12,7 @@ import {
 import { v4 } from "uuid";
 import { useRouter } from "next/router";
 import { UserContext } from "../Contexts/UserContext";
+import { useUploadMedia } from "../../api/media/uploadMedia";
 
 const MediaContainer = () => {
   const [imageUpload, setImageUpload] = useState(null);
@@ -20,6 +21,8 @@ const MediaContainer = () => {
   const { query } = useRouter();
   const { UserDetails } = useContext(UserContext);
 
+  const { mutate: uploadMd } = useUploadMedia();
+
   const uploadFile = () => {
     if (imageUpload == null) return;
     const imageRef = ref(
@@ -27,11 +30,25 @@ const MediaContainer = () => {
       `projects/${query.projectId}/${imageUpload.name + v4()}`
     );
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
-      alert("Image Uploaded!");
       getDownloadURL(snapshot.ref).then((url) => {
-        console.log(url);
         getMetadata(imageRef).then((metadata) => {
-          console.log(metadata);
+          uploadMd(
+            {
+              type: metadata.type,
+              url: url,
+              timeCreated: metadata.timeCreated,
+              uploadedBy: UserDetails.publicId,
+              projectId: query.projectId,
+            },
+            {
+              onSuccess: (d) => {
+                alert("Image Uploaded!");
+              },
+              onError: (e) => {
+                console.log(e);
+              },
+            }
+          );
         });
         setImageUrls((prev) => [...prev, url]);
       });
