@@ -1,4 +1,5 @@
 import { Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import {MdAdd, MdPerson,MdGroups} from 'react-icons/md'
 import { UserContext } from '../../Contexts/UserContext';
@@ -6,6 +7,8 @@ import { UserContext } from '../../Contexts/UserContext';
 const Sidebar = () => {
 
     const {logout} = useContext(UserContext)
+
+    const {push} = useRouter()
 
     return (
         <Box p={2} h={'100%'}>
@@ -15,11 +18,13 @@ const Sidebar = () => {
                 <Button variant='ghost' onClick={() => logout()}>Logout</Button>
             </Flex>
             <Flex direction={'column'} h={'100%'}>
+                
                 <VStack textAlign={'left'} py={4} px={4} borderBottom='1px solid #DBDBDB'>
-                    <Text w={'100%'} fontWeight={'semibold'} mb={2} fontSize='lg'>Personal</Text>
-                    <Button variant={'outline'} w='100%' leftIcon={<MdAdd/>} mb={'10px!important'}>
-                        Create New
+                    <Button variant={'outline'} w='100%' leftIcon={<MdAdd/>} mb={'10px!important'} onClick={() => push('/project/createNew')}>
+                       New Project
                     </Button>
+                    <Text w={'100%'} fontWeight={'semibold'} mb={2} fontSize='lg'>Personal</Text>
+
                     {
                         [1,2].map(i => <Button key={i} variant={'solid'} w='100%' leftIcon={<MdPerson/>}>
                             Personal Project {i}
@@ -28,9 +33,6 @@ const Sidebar = () => {
                 </VStack>
                 <VStack textAlign={'left'} py={4} px={4} h={'100%'}>
                     <Text w={'100%'} fontWeight={'semibold'} mb={2} fontSize='lg'>Group</Text>
-                    <Button variant={'outline'} w='100%' leftIcon={<MdAdd/>} mb={'10px!important'}>
-                        Create New
-                    </Button>
                     {
                         [1,2].map(i => <Button key={i} variant={'solid'} w='100%' leftIcon={<MdGroups/>}>
                             Group Project {i}

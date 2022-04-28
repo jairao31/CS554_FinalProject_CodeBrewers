@@ -3,6 +3,7 @@ const { getDatabase } = require('firebase-admin/database');
 const { userCollection } = require('../data/Refs');
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const { v4 } = require('uuid');
 const saltRounds = 12;
 
 // "isPassword" function used to check pass
@@ -36,7 +37,8 @@ router.post('/signup', async(req,res) => {
                         publicId,
                         profilePhotoUrl:null, 
                         firstName: firstName.trim(), 
-                        lastName: lastName.trim(), 
+                        lastName: lastName.trim(),
+                        displayName: firstName.trim()[0].toUpperCase() + firstName.trim().slice(1),
                         email: email.trim(),
                         skills: [], 
                         requests: [], 
@@ -46,10 +48,7 @@ router.post('/signup', async(req,res) => {
                         lastActive: null, 
                         isActive: false
                     }
-                    const db = getDatabase();
-                    const ref = db.ref('server/tulsee');
-                    const taskRef = ref.child('users')
-                    taskRef.push().set(userData, error => {
+                    userCollection(userData.publicId).set(userData, error => {
                         if(error) {
                             res.status(500).json({error: 'User could not be registered!'})
                         }else{
@@ -75,16 +74,13 @@ router.post('/signup', async(req,res) => {
 router.get('/login/:publicId',async(req,res)=>{
     try{
         const {publicId} = req.params;
-        userCollection().orderByChild("publicId").equalTo(publicId).on('value', (snapshot) => {
+        userCollection(publicId).once('value', (snapshot) => {
             try {
-                let result = []
-                for (var key in snapshot.val()) {
-                    result.push(snapshot.val()[key])
-                }
-                if (result.length===0){
+                
+                if (!snapshot.val()){
                     res.status(404).json("No username found")
                 }else{
-                    res.json(result[0]);
+                    res.json(snapshot.val());
                 }
             } catch (error) {
                 res.status(500).json({error: error.message ?error.messsage: error})
@@ -166,6 +162,21 @@ router.patch('/invite/:userId/:projectId', async(req,res) => {
     }
 })
 
+router.get("/autoComplete/:query", async(req,res) => {
+    const {query} = req.params
+    userCollection().orderByChild('firstName').startAt(query).endAt(query + '\uf8ff').once('value',snapshot => {
+        let result = []
+        for(key in snapshot.val()){
+            if(snapshot.val()[key].firstName.indexOf(query) === 0) {
+                const {displayName, publicId} = snapshot.val()[key]
+                result.push({
+                    displayName, publicId
+                })
+            }
+          }
+        res.json(result)
+    })
+})
 
 router.get("/logout", async (req, res) => {
     req.session.destroy();
