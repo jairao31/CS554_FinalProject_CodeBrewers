@@ -3,7 +3,7 @@ import axios from 'axios'
 
 
 const createProject = async(payload) => {
-    const {data} = axios.post(`http://localhost:3001/project/`,payload)
+    const {data} = await axios.post(`http://localhost:3001/project/`,payload)
     return data;
 }
 
