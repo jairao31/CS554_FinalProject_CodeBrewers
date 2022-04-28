@@ -1,5 +1,6 @@
 const express = require('express');
 const { getDatabase } = require('firebase-admin/database');
+const { v4 } = require('uuid');
 const { taskCollection } = require('../data/Refs');
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.post('/', async(req,res) => {
         }
 
         const taskData = {
+            publicId: v4(),
             projectId,
             title,
             description,
@@ -26,10 +28,7 @@ router.post('/', async(req,res) => {
             createdOn: new Date().toISOString()
         }
 
-        const db = getDatabase();
-        const ref = db.ref('server/tulsee');
-        const taskRef = ref.child('tasks')
-        taskRef.push().set(taskData, error => {
+        taskCollection(taskData.publicId).set(taskData, error => {
             if(error) {
                 res.status(500).json({error: "Task could not be added"})
             }else{
@@ -45,10 +44,10 @@ router.post('/', async(req,res) => {
 router.get('/project/:projectId', async(req,res) => {
     try {
         const {projectId} = req.params;
-        taskCollection().orderByChild("projectId").equalTo(projectId).on('value', (snapshot) => {
+        taskCollection().orderByChild("projectId").equalTo(projectId).once('value', (snapshot) => {
             let result = []
             for (var key in snapshot.val()) {
-                result.push({id: key, ...snapshot.val()[key]})
+                result.push(snapshot.val()[key])
             }
             if(result.length === 0) {
                 res.status(500).json({error: 'Task could not be found for the given project ID'});
@@ -66,7 +65,7 @@ router.get('/:taskId', async(req,res) => {
         const {taskId} = req.params;
         taskCollection(taskId).once('value', (snapshot) => {
             if(snapshot.val()) {
-                res.json({id:taskId,...snapshot.val()})
+                res.json(snapshot.val())
             }else{
                 res.status(500).json({error: 'task could not be found for the given task ID'});
                 return;

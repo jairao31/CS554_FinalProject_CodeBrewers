@@ -20,6 +20,7 @@ import { v4 } from "uuid";
 import { useRouter } from "next/router";
 import { UserContext } from "../Contexts/UserContext";
 import { useUploadMedia } from "../../api/media/uploadMedia";
+import { useDeleteMedia } from "../../api/media/deleteMedia";
 // import "../../styles/globals.css";
 
 const MediaContainer = () => {
@@ -31,6 +32,7 @@ const MediaContainer = () => {
   const { UserDetails } = useContext(UserContext);
 
   const { mutate: uploadMd } = useUploadMedia();
+    const {mutate: deleteMedia } = useDeleteMedia();
 
   const uploadFile = () => {
     if (imageUpload == null) return;
@@ -68,6 +70,7 @@ const MediaContainer = () => {
     if (name == null) return;
     const deleteRef = ref(storage, `projects/${query.projectId}/${name}`);
     deleteObject(deleteRef).then(() => {
+      deleteMedia({})
       let curr = imageUrls;
       curr = curr.filter((i) => i.name !== name);
       setImageUrls(curr);
