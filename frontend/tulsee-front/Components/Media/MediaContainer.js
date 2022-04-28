@@ -21,25 +21,22 @@ import { useRouter } from "next/router";
 import { UserContext } from "../Contexts/UserContext";
 import { useUploadMedia } from "../../api/media/uploadMedia";
 import { useDeleteMedia } from "../../api/media/deleteMedia";
-// import "../../styles/globals.css";
 
 const MediaContainer = () => {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageUrls, setImageUrls] = useState([]);
-  //   const [imageDelete, SetImageDelete] = useState(null);
+  // const [imageDelete, SetImageDelete] = useState(null);
 
   const { query } = useRouter();
   const { UserDetails } = useContext(UserContext);
 
   const { mutate: uploadMd } = useUploadMedia();
-    const {mutate: deleteMedia } = useDeleteMedia();
+  const { mutate: deleteMedia } = useDeleteMedia();
 
   const uploadFile = () => {
     if (imageUpload == null) return;
-    const imageRef = ref(
-      storage,
-      `projects/${query.projectId}/${imageUpload.name + v4()}`
-    );
+    let uniqueName = imageUpload.name.split(".")[0] + v4();
+    const imageRef = ref(storage, `projects/${query.projectId}/${uniqueName}`);
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
         getMetadata(imageRef).then((metadata) => {
@@ -50,6 +47,7 @@ const MediaContainer = () => {
               timeCreated: metadata.timeCreated,
               uploadedBy: UserDetails.publicId,
               projectId: query.projectId,
+              publicId: metadata.name,
             },
             {
               onSuccess: (d) => {
@@ -69,8 +67,24 @@ const MediaContainer = () => {
   const deleteFile = (name) => {
     if (name == null) return;
     const deleteRef = ref(storage, `projects/${query.projectId}/${name}`);
-    deleteObject(deleteRef).then(() => {
-      deleteMedia({})
+    getMetadata(deleteRef).then((metadata) => {
+      let idToDelete = metadata.name;
+      deleteMedia(
+        {
+          projectId: query.projectId,
+          mediaId: idToDelete,
+        },
+        {
+          onSuccess: (d) => {
+            deleteObject(deleteRef).then(() => {
+              alert("Image Deleted!");
+            });
+          },
+          onError: (e) => {
+            console.log(e);
+          },
+        }
+      );
       let curr = imageUrls;
       curr = curr.filter((i) => i.name !== name);
       setImageUrls(curr);

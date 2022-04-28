@@ -7,7 +7,8 @@ const router = express.Router();
 //Routes for Media upload
 router.post("/", async (req, res) => {
   try {
-    const { type, url, uploadedBy, timeCreated, projectId } = req.body;
+    const { type, url, uploadedBy, timeCreated, projectId, publicId } =
+      req.body;
     if (!type || !url || !uploadedBy || !projectId || !timeCreated) {
       res.status(401).json({ error: "Insufficient data" });
       return;
@@ -15,9 +16,10 @@ router.post("/", async (req, res) => {
     if (
       typeof type !== "string" ||
       typeof url !== "string" ||
+      typeof timeCreated !== "string" ||
       typeof uploadedBy !== "string" ||
       typeof projectId !== "string" ||
-      typeof timeCreated !== "string"
+      typeof publicId != "string"
     ) {
       res.status(401).json({ error: "Invalid data type" });
       return;
@@ -26,9 +28,10 @@ router.post("/", async (req, res) => {
     if (
       type.trim().length === 0 ||
       url.trim().length === 0 ||
+      timeCreated.trim().length === 0 ||
       uploadedBy.trim().length === 0 ||
       projectId.trim().length === 0 ||
-      timeCreated.trim().length === 0
+      publicId.trim().length === 0
     ) {
       res.status(401).json({ error: "empty space as input detected" });
       return;
@@ -40,13 +43,13 @@ router.post("/", async (req, res) => {
       timeCreated,
       uploadedBy,
       projectId,
-      publicId: v4(),
+      publicId,
     };
 
     const db = getDatabase();
     const ref = db.ref("server/tulsee");
-    const mediaRef = ref.child(`media/${projectId}`);
-    mediaRef.push().set(mediaData, (error) => {
+    const mediaRef = ref.child(`media/${projectId}/${publicId}`);
+    mediaRef.set(mediaData, (error) => {
       if (error) {
         res.status(500).json({ error: "Media could not be added" });
       } else {
@@ -65,14 +68,13 @@ router.delete("/project/:projectId/:mediaId", async (req, res) => {
     const { projectId, mediaId } = req.params;
     const db = getDatabase();
     const ref = db.ref("server/tulsee");
-    const mediaRef = ref.child(`media/${projectId}`);
-    mediaRef.once("value", (snapshot) => {
-      snapshot.forEach((child) => {
-        if (child.val().publicId === mediaId) {
-          child.ref.remove();
-        }
-      });
-      res.json("done");
+    const mediaRef = ref.child(`media/${projectId}/${mediaId}`);
+    mediaRef.remove((error) => {
+      if (error) {
+        res.status(500).json({ error: "could not be deleted" });
+      } else {
+        res.json("Media deleted successfully");
+      }
     });
   } catch (error) {
     console.log(error);
