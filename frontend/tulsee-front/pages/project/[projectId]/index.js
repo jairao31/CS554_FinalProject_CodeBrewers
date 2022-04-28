@@ -1,20 +1,16 @@
 import { useRouter } from 'next/dist/client/router';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Layout from '../../../Components/Common/layout';
 import TopNavBar from '../../../Components/Common/TopNavBar';
+import { ProjectContext } from '../../../Components/Contexts/ProjectContext';
 
 const SingleProject = () => {
 
-    const {query} = useRouter()
-
-    useEffect(() => {
-        console.log(query)
-
-    },[query])
+    const {currentProject} = useContext(ProjectContext)
 
     return (
         <Layout>
-            <TopNavBar title={'Project Name'}/>
+            <TopNavBar title={currentProject ? currentProject.name : ''}/>
             {/* Your coomponent here */}
             this is specific project
         </Layout>
