@@ -1,13 +1,15 @@
 import React from 'react';
 import Layout from '../../../Components/Common/layout';
+import ProjectLayout from '../../../Components/Common/ProjectLayout';
 import TopNavBar from '../../../Components/Common/TopNavBar';
 
 const Meet = () => {
     return (
         <Layout>
-            <TopNavBar activePage="meet" title={'Project Name'}/>
+            <ProjectLayout activePage={'meet'}>
             {/* Your coomponent here */}
             this is meet page
+            </ProjectLayout>
         </Layout>
     );
 };

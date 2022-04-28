@@ -17,8 +17,8 @@ const router=express.Router();
 router.post('/',async(req,res)=>{
     try{
 
-        const {name, requested, type, createdBy} = req.body;
-        if(!name || !requested || !type  || !createdBy) {
+        const {name,requested, type, createdBy} = req.body;
+        if(!name || !type  || !createdBy) {
             res.status(400).json({error:'Insufficient Funds'})
             return
         }
@@ -58,10 +58,11 @@ router.post('/',async(req,res)=>{
                         })
                     });
                 } 
-                res.json({sucess:'Project was added successfully'});
+                res.json(projectData);
             }
         })
     }catch(error){
+        console.log(error)
         res.status(500).json({error: error.message ?error.messsage: error});
     }
 });
@@ -76,7 +77,7 @@ router.get('/byUser/:userId',async(req,res)=>{
             console.log(snapshot.val())
             for (var key in snapshot.val()) {
                 if(snapshot.val()[key].participants) {
-                    let exist = snapshot.val()[key].participants.find(i => i === userId)
+                    let exist = snapshot.val()[key].participants.find(i => i.publicId === userId)
                     if(exist)  result.push({id: key, ...snapshot.val()[key]});
                 }
             }
