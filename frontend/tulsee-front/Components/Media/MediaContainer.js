@@ -92,6 +92,8 @@ const MediaContainer = () => {
     });
   };
 
+  const downLoadFile = () => {};
+
   useEffect(() => {
     if (!query) return;
     const imagesListRef = ref(storage, `projects/${query.projectId}`);
@@ -140,6 +142,7 @@ const MediaContainer = () => {
               src={img.url}
             />
             <Button onClick={() => deleteFile(img.name)}>Delete</Button>
+            <Button onClick={() => downLoadFile(img.name)}>Download</Button>
           </Box>
         );
       })}
