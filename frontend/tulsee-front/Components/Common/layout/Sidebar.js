@@ -1,23 +1,27 @@
-import { Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, IconButton, Text, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import {MdAdd, MdPerson,MdGroups} from 'react-icons/md'
 import { ProjectContext } from '../../Contexts/ProjectContext';
 import { UserContext } from '../../Contexts/UserContext';
+import {GoRequestChanges} from 'react-icons/go'
 
 const Sidebar = () => {
 
-    const {logout} = useContext(UserContext);
+    const {logout,UserDetails} = useContext(UserContext);
     const {groupProjects, personalProjects} = useContext(ProjectContext);
 
     const {push} = useRouter()
 
     return (
         <Box p={2} h={'100%'}>
-            <Text fontSize={'xl'} fontWeight='bold' mb={2} color='#E5E3C9' bg='#789395' w={'fit-content'} p={2} borderRadius={5}>TULSEE.io</Text>
             <Flex justifyContent={'space-between'}>
-                <Text pt={2} verticalAlign={'middle'}>Hi, Saurabh</Text>
+                <Text fontSize={'xl'} fontWeight='bold' mb={2} color='#E5E3C9' bg='#789395' w={'fit-content'} p={2} borderRadius={5}>TULSEE.io</Text>
                 <Button variant='ghost' onClick={() => logout()}>Logout</Button>
+            </Flex>
+            <Flex justifyContent={'space-between'}>
+                <Text pt={2} verticalAlign={'middle'}>Hi, {UserDetails ? UserDetails.firstName : ''}</Text>
+                <IconButton onClick={() => push("/invites")} fontWeight={'bold'} variant={'ghost'} size={'sm'} icon={<GoRequestChanges size={'18px'}/>}/>
             </Flex>
             <Flex direction={'column'} h={'100%'}>
                 
