@@ -65,7 +65,7 @@ const TopNavBar = ({activePage, title}) => {
                 <IconButton variant={'ghost'} icon={<MdArrowBackIosNew size={'20px'}/>} onClick={() => back()}/>
                 <Text mt={'8px!important'} fontSize={'lg'} fontWeight={500} minW={'100px'} alignSelf={'flex-start'}>{title}</Text>
             </HStack>
-            {query.projectId && <HStack ml='30%'>
+            {query.projectId && currentProject ? <HStack ml='30%'>
                 {/* <Tooltip label='task' placement='bottom'>hover</Tooltip> */}
                 {navs.map((i,idx) => <Tooltip key={idx} hasArrow  label={i} placement='bottom'>
                     <div>
@@ -80,7 +80,7 @@ const TopNavBar = ({activePage, title}) => {
                         />
                     </div>
                 </Tooltip>)}
-            </HStack>}
+            </HStack> : <>loading</>}
         </Flex>
     );
 };
