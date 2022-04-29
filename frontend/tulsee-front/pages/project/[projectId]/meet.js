@@ -33,11 +33,79 @@ const Meet = () => {
     };
     return (
         <Layout>
-            <ProjectLayout activePage={'meet'}>
-            {/* Your coomponent here */}
-            this is meet page
+          <ProjectLayout activePage={'meet'}>
+            {/* <TopNavBar activePage="meet" title={'Project Name'}/> */}
+            <div className="zoomApp">
+                <header className="App-header">
+                
+                <h1><img src='\ZoomTu.png'/>Zoom Meeting</h1>
+                <div className="card">
+                    <h5>
+                    Name&nbsp;&nbsp;
+                    <Input
+                        type="name"
+                        placeholder="Name"
+                        aria-label="Name"
+                        name='firstName'
+                        style={{
+                            width: "300px",
+                            borderRadius: "5px",
+                            padding: "8px 12px",
+                            fontSize: "18px",
+                            }}
+                        onChange={(e) => setUsername(e.target.value)}
+                        value={username}
+                    />
+                    {/* <input
+                        type="text"
+                        name="name"
+                        style={{
+                        width: "300px",
+                        borderRadius: "5px",
+                        padding: "8px 12px",
+                        fontSize: "18px",
+                        }}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    /> */}
+                    </h5>
+        
+                    <div className="row" style={{ margin: "10px" }}>
+                    <div className="column">
+                        <div style={{ margin: "10px", marginTop: "120px" }}>
+                        <Button
+                            className="btn btn-info"
+                            style={{
+                              width: "290px",
+                              height: "80px",
+                              fontSize: "20px",
+                              fontFamily: "cursive",
+                            }}
+                            onClick={zoomMeeting}
+                        >
+                            Create Meeting
+                        </Button>
+                        <h2>{username} : {urlState}</h2>
+                        </div>
+                    </div>
+                    <div className="column" style={{ float: "right" }}>
+                        <img
+                        src="\meeting.png"
+                        height="330px"
+                        width="400px"
+                        style={{
+                            margin: "10px",
+                            borderRadius: "50px",
+                        }}
+                        alt=""
+                        />
+                    </div>
+                    </div>
+                </div>
+                </header>
+            </div>
             </ProjectLayout>
-        </Layout>
+      </Layout>
     );
 };
 
