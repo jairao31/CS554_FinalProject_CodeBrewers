@@ -6,11 +6,11 @@ import TopNavBar from '../../../Components/Common/TopNavBar';
 // import "./App.css";
 import React, { useState } from "react";
 import axios from "axios";
-
+import {Button, Input} from "@chakra-ui/react"
 const Meet = () => {
     const [username, setUsername] = useState("");
     
-    const [urlState, setUrl] = useState(0);
+    const [urlState, setUrl] = useState();
     const zoomMeeting = () => {
       const data = {
         email: "saurabhmane7120@outlook.com",
@@ -33,17 +33,28 @@ const Meet = () => {
     return (
         <Layout>
             <TopNavBar activePage="meet" title={'Project Name'}/>
-            {/* Your coomponent here */}
-            this is meet page
-        
-            <div className="App">
+            <div className="zoomApp">
                 <header className="App-header">
-                {/* <Student /> */}
-                <h1>Zoom Meeting</h1>
+                
+                <h1><img src='\ZoomTu.png'/>Zoom Meeting</h1>
                 <div className="card">
                     <h5>
                     Name&nbsp;&nbsp;
-                    <input
+                    <Input
+                        type="name"
+                        placeholder="Name"
+                        aria-label="Name"
+                        name='firstName'
+                        style={{
+                            width: "300px",
+                            borderRadius: "5px",
+                            padding: "8px 12px",
+                            fontSize: "18px",
+                            }}
+                        onChange={(e) => setUsername(e.target.value)}
+                        value={username}
+                    />
+                    {/* <input
                         type="text"
                         name="name"
                         style={{
@@ -54,16 +65,13 @@ const Meet = () => {
                         }}
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                    />
+                    /> */}
                     </h5>
         
                     <div className="row" style={{ margin: "10px" }}>
                     <div className="column">
-                        <div
-                        className="row"
-                        style={{ margin: "10px", marginTop: "120px" }}
-                        >
-                        <button
+                        <div style={{ margin: "10px", marginTop: "120px" }}>
+                        <Button
                             className="btn btn-info"
                             style={{
                               width: "290px",
@@ -74,8 +82,8 @@ const Meet = () => {
                             onClick={zoomMeeting}
                         >
                             Create Meeting
-                        </button>
-                        <h2>{username}:{urlState}</h2>
+                        </Button>
+                        <h2>{username} : {urlState}</h2>
                         </div>
                     </div>
                     <div className="column" style={{ float: "right" }}>
