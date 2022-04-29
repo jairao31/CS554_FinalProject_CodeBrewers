@@ -6,6 +6,7 @@ import {
   Image,
   useColorModeValue,
   Center,
+  Input,
 } from "@chakra-ui/react";
 import { storage } from "../../firebase";
 import {
@@ -108,7 +109,7 @@ const MediaContainer = () => {
   return (
     <Box maxH={"100vh"} overflowY="auto">
       <Center>
-        <input
+        <Input
           type="file"
           onChange={(e) => {
             setImageUpload(e.target.files[0]);
