@@ -148,19 +148,20 @@ router.get('/searchByFirstName',async(req,res)=>{
 })
 
 // :projectId in the router
-router.patch('/invite/:userId/:projectId', async(req,res) => {
-    try {
-        const {userId, projectId} = req.params;
-        const request = req.body;
-        for (var i=0; i< request['requests'].length;i++){
-            userCollection(request['requests'][i]).child('requests').push().set(projectId)       
-        }
+// router.patch('/invite/:userId/:projectId', async(req,res) => {
+//     try {
+//         const {userId, projectId} = req.params;
+//         const request = req.body;
+//         for (var i=0; i< request['requests'].length;i++){
+//             userCollection(request['requests'][i]).child('requests').push().set(projectId)       
+//         }
 
-        res.json("Invite Sent to Id/Id's: "+ request['requests'] +" by "+userId)
-    } catch (error) {
-        res.status(500).json({error: error.message ?error.messsage: error})
-    }
-})
+//         res.json("Invite Sent to Id/Id's: "+ request['requests'] +" by "+userId)
+//     } catch (error) {
+//         res.status(500).json({error: error.message ?error.messsage: error})
+//     }
+// })
+
 
 router.get("/autoComplete/:query", async(req,res) => {
     const {query} = req.params
