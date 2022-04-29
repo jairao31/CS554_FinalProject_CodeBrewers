@@ -27,9 +27,7 @@ import { FaSun, FaMoon, FaGithub } from "react-icons/fa";
 import RegisterForm from "../../Components/Register/RegisterForm";
 import LoginForm from "../../Components/Login/loginForm";
 import { UserContext } from "../../Components/Contexts/UserContext";
-// import RegisterForm from "../Components/Register/RegisterForm";
-// import LoginForm from "../Components/Login/loginForm";
-// import Zoom from "./component/zoomMeet";
+
 
 export default function Login() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -69,23 +67,18 @@ export default function Login() {
           onClick={toggleColorMode}
         ></IconButton>
       </Flex>
-      <Center>
+      <Center><img src="\Logo1.png" width={50} height={50}/>
         <Text
           className='typeWriter'
           bgGradient="linear(to-l, red, green)"
           bgClip="text"
           fontSize="6xl"
           fontWeight="extrabold"
-          
         >
           TULSEE
         </Text>
       </Center>
       {/* <Skeleton startColor="pink.500" endColor="orange.500" height="20px" /> */}
-      <Button as={Link} boxShadow={'dark-lg'} href="./component/zoomMeet">
-        Zoom Meet
-      </Button>
-      
       <Center>
         <Box 
           // bgGradient={isDark ?["linear(to-tr, teal.300, yellow.400)"]: "linear(to-t, green.200, pink.500)"}
