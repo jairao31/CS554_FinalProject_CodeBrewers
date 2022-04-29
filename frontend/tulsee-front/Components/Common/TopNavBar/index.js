@@ -76,7 +76,7 @@ const TopNavBar = ({activePage, title}) => {
                                     getIcon(i)
                             } 
                             variant='ghost'
-                            onClick={() => push(`/project/123/${i}`)}
+                            onClick={() => push(`/project/${currentProject.publicId}/${i}`)}
                         />
                     </div>
                 </Tooltip>)}

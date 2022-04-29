@@ -74,9 +74,10 @@ router.get('/byUser/:userId',async(req,res)=>{
         const {userId} = req.params;
         projectCollection().once('value', (snapshot) => {
             let result = []
-            console.log(snapshot.val())
+            
             for (var key in snapshot.val()) {
                 if(snapshot.val()[key].participants) {
+                    console.log(snapshot.val()[key].participants)
                     let exist = snapshot.val()[key].participants.find(i => i.publicId === userId)
                     if(exist)  result.push({id: key, ...snapshot.val()[key]});
                 }
@@ -199,6 +200,51 @@ router.patch('/invite/:userId/:projectId', async(req,res) => {
         console.log(error)
         res.status(500).json({error: error.message ?error.messsage: error})
     }
+})
+
+router.patch('/invite/update/:userId/:projectId/:status', async(req,res) => {
+    try {
+        const {userId, projectId, status} = req.params;
+        userCollection(userId).once('value', snapshot => {
+            if(snapshot.val()) {
+                if(snapshot.val().invites) {
+                    userCollection(userId).update({
+                        ...snapshot.val(),
+                        invites: snapshot.val().invites.filter(i => i.publicId !== projectId)
+                    }, error => {
+                        if(error) {
+                            res.status(500).json({error:'user could not be updated'})
+                            return
+                        }else{
+                            projectCollection(projectId).once('value', projectSnap => {
+                                let snap = projectSnap.val()
+                                let request = snap.requested.find(r => r.publicId === userId);
+                                snap = {
+                                    ...snap,
+                                    participants: parseInt(status) === 1 ? [...snap.participants, request] : snap.participants,
+                                    requested: snap.requested.filter(r => r.publicId !== userId)
+                                }
+                                projectCollection(projectId).update(snap, error => {
+                                    if(error) {
+                                        res.status(500).json({error:'project could not be updated'})
+                                    }else{
+                                        res.json(snap)
+                                    }
+                                })
+                            })
+                        }
+                    })
+                }
+
+            }else{
+                res.status(404).json({error:'this user has no invites'})
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error:error.message? error.message: error})
+    }
+
 })
 
 module.exports= router
