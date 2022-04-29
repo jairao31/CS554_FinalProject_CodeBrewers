@@ -1,5 +1,6 @@
 // import React from 'react';
 import Layout from '../../../Components/Common/layout';
+import ProjectLayout from '../../../Components/Common/ProjectLayout';
 import TopNavBar from '../../../Components/Common/TopNavBar';
 
 // import "bootstrap/dist/css/bootstrap.min.css";
@@ -32,6 +33,7 @@ const Meet = () => {
     };
     return (
         <Layout>
+<<<<<<< HEAD
             <TopNavBar activePage="meet" title={'Project Name'}/>
             <div className="zoomApp">
                 <header className="App-header">
@@ -103,6 +105,13 @@ const Meet = () => {
                 </header>
             </div>
       </Layout>
+=======
+            <ProjectLayout activePage={'meet'}>
+            {/* Your coomponent here */}
+            this is meet page
+            </ProjectLayout>
+        </Layout>
+>>>>>>> 583652fd33b87e151c7d4610f3f92fdb93699a18
     );
 };
 

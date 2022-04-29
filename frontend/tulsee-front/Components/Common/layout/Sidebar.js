@@ -2,11 +2,13 @@ import { Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import {MdAdd, MdPerson,MdGroups} from 'react-icons/md'
+import { ProjectContext } from '../../Contexts/ProjectContext';
 import { UserContext } from '../../Contexts/UserContext';
 
 const Sidebar = () => {
 
-    const {logout} = useContext(UserContext)
+    const {logout} = useContext(UserContext);
+    const {groupProjects, personalProjects} = useContext(ProjectContext);
 
     const {push} = useRouter()
 
@@ -26,16 +28,16 @@ const Sidebar = () => {
                     <Text w={'100%'} fontWeight={'semibold'} mb={2} fontSize='lg'>Personal</Text>
 
                     {
-                        [1,2].map(i => <Button key={i} variant={'solid'} w='100%' leftIcon={<MdPerson/>}>
-                            Personal Project {i}
+                        personalProjects.map(i => <Button onClick={() => push(`/project/${i.publicId}/task`)} key={i.publicId} variant={'solid'} w='100%' leftIcon={<MdPerson/>}>
+                            {i.name}
                         </Button>)
                     }
                 </VStack>
                 <VStack textAlign={'left'} py={4} px={4} h={'100%'}>
                     <Text w={'100%'} fontWeight={'semibold'} mb={2} fontSize='lg'>Group</Text>
                     {
-                        [1,2].map(i => <Button key={i} variant={'solid'} w='100%' leftIcon={<MdGroups/>}>
-                            Group Project {i}
+                        groupProjects.map(i => <Button onClick={() => push(`/project/${i.publicId}/task`)} key={i.publicId} variant={'solid'} w='100%' leftIcon={<MdGroups/>}>
+                            {i.name}
                         </Button>)
                     }
                 </VStack>

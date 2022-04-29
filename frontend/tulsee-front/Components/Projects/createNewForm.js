@@ -18,6 +18,7 @@ import UserAutocomplete from '../Common/UserAutocomplete';
 import {RiCloseCircleFill} from 'react-icons/ri'
 import { useCreateProject } from '../../api/project/createProject';
 import { UserContext } from '../Contexts/UserContext';
+import { ProjectContext } from '../Contexts/ProjectContext';
 
 
 
@@ -26,6 +27,7 @@ const CreateNewForm = () => {
     });
 
     const {UserDetails} = useContext(UserContext);
+    const {addProject} = useContext(ProjectContext)
 
     const {mutate: createProject, isLoading} = useCreateProject();
     
@@ -73,23 +75,15 @@ const CreateNewForm = () => {
         })
     }
 
-    const handleCreate = () => {
-        createProject(payload, {
-            onSuccess: d => {
-                console.log(d);
-                setPayload({})
-                toast({title:"Project created successfully", status:"success", duration: 2000});
-            },
-            onError: e => {
-                console.log(e)
-                toast({title:"Project could not be created", status:"error", duration: 2000});
-            }
-        })
+    const handleCreate = e => {
+        e.preventDefault()
+        addProject(payload)
+        setPayload({})
     }
 
     return (
         <Flex justifyContent={'left'} pt={'50px'} px={5}>
-            <form>
+            <form onSubmit={handleCreate}>
                 <CommonInput
                     label='Project Name'
                      name='name'
@@ -113,7 +107,7 @@ const CreateNewForm = () => {
                     </HStack>}
                     )
                 }
-                <Button onClick={handleCreate} isLoading={isLoading}>
+                <Button type='submit' isLoading={isLoading}>
                     Create Project
                 </Button>
             </form>
