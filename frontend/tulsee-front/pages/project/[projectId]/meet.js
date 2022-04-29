@@ -33,8 +33,8 @@ const Meet = () => {
     };
     return (
         <Layout>
-<<<<<<< HEAD
-            <TopNavBar activePage="meet" title={'Project Name'}/>
+          <ProjectLayout activePage={'meet'}>
+            {/* <TopNavBar activePage="meet" title={'Project Name'}/> */}
             <div className="zoomApp">
                 <header className="App-header">
                 
@@ -104,14 +104,8 @@ const Meet = () => {
                 </div>
                 </header>
             </div>
-      </Layout>
-=======
-            <ProjectLayout activePage={'meet'}>
-            {/* Your coomponent here */}
-            this is meet page
             </ProjectLayout>
-        </Layout>
->>>>>>> 583652fd33b87e151c7d4610f3f92fdb93699a18
+      </Layout>
     );
 };
 
