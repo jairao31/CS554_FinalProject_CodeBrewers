@@ -6,6 +6,7 @@ import {IoMdChatboxes} from 'react-icons/io'
 import {SiGooglemeet} from 'react-icons/si'
 import {VscFileMedia} from 'react-icons/vsc'
 import {MdArrowBackIosNew} from 'react-icons/md'
+import {MdSettings} from 'react-icons/md'
 import { ProjectContext } from '../../Contexts/ProjectContext';
 import IconButton from '../IconButton';
 
@@ -50,7 +51,8 @@ const TopNavBar = ({activePage, title}) => {
                 return <SiGooglemeet/>
             case "media":
                 return <VscFileMedia/>
-        
+            case "setting":
+                return <MdSettings/>
             default:
                 return <BiTask/>
         }
@@ -65,12 +67,12 @@ const TopNavBar = ({activePage, title}) => {
                 <IconButton variant={'ghost'} icon={<MdArrowBackIosNew size={'20px'}/>} onClick={() => back()}/>
                 <Text mt={'8px!important'} fontSize={'lg'} fontWeight={500} minW={'100px'} alignSelf={'flex-start'}>{title}</Text>
             </HStack>
-            {query.projectId ? currentProject ? <HStack ml='30%'>
+            {query.projectId ? currentProject ? <HStack mx='auto'>
                 {/* <Tooltip label='task' placement='bottom'>hover</Tooltip> */}
                 {navs.map((i,idx) => <Tooltip key={idx} hasArrow  label={i} placement='bottom'>
                     <div>
                         <IconButton 
-                            label={'top-nav-task'} 
+                            label={`top-nav-${i}`} 
                             active={activePage === i} 
                                 icon={
                                     getIcon(i)
@@ -82,7 +84,21 @@ const TopNavBar = ({activePage, title}) => {
                 </Tooltip>)}
             </HStack> : <>loading</> :
             <></>
-            }
+            } 
+            <Tooltip hasArrow  label={'setting'} placement='bottom'>
+                <div>
+                    <IconButton 
+                        ms='auto'
+                        active={activePage === 'setting'} 
+                        label={'top-nav-settings'} 
+                        icon={
+                            getIcon('setting')
+                        } 
+                        variant='ghost'
+                        onClick={() => push(`/project/${currentProject.publicId}/settings`)}
+                    />
+                </div>
+            </Tooltip>               
         </Flex>
     );
 };

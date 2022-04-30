@@ -65,7 +65,7 @@ const ProjectContextProvider = ({children}) => {
         })
     }
  
-    return <ProjectContext.Provider value={{groupProjects, personalProjects, addProject, currentProject, setGroupProjects}}>
+    return <ProjectContext.Provider value={{groupProjects, personalProjects, addProject, currentProject, setGroupProjects, setCurrentProject, setPersonalProjects}}>
         {children}
     </ProjectContext.Provider>
 }
