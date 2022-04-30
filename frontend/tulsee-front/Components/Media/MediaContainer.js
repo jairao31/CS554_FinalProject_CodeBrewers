@@ -7,106 +7,70 @@ import {
   useColorModeValue,
   Center,
   Input,
+  IconButton,
+  Flex,
 } from "@chakra-ui/react";
-import { storage } from "../../firebase";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  getMetadata,
-  listAll,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import { useRouter } from "next/router";
 import { UserContext } from "../Contexts/UserContext";
 import { useUploadMedia } from "../../api/media/uploadMedia";
 import { useDeleteMedia } from "../../api/media/deleteMedia";
+import { useGetAllMedia } from "../../api/media/getAllMedia";
+import { MdSimCardDownload } from "react-icons/md";
+import { RiDeleteBin6Fill } from "react-icons/ri";
 
 const MediaContainer = () => {
-  const [imageUpload, setImageUpload] = useState(null);
-  const [imageUrls, setImageUrls] = useState([]);
-  // const [imageDelete, SetImageDelete] = useState(null);
+  const [fileUpload, setFileUpload] = useState(null);
 
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const { UserDetails } = useContext(UserContext);
+  const {
+    data: Media,
+    refetch,
+    isLoading,
+  } = useGetAllMedia(query.projectId, !!query.projectId);
 
   const { mutate: uploadMd } = useUploadMedia();
   const { mutate: deleteMedia } = useDeleteMedia();
 
-  const uploadFile = () => {
-    if (imageUpload == null) return;
-    let uniqueName = imageUpload.name.split(".")[0] + v4();
-    const imageRef = ref(storage, `projects/${query.projectId}/${uniqueName}`);
-    uploadBytes(imageRef, imageUpload).then((snapshot) => {
-      getDownloadURL(snapshot.ref).then((url) => {
-        getMetadata(imageRef).then((metadata) => {
-          uploadMd(
-            {
-              type: metadata.type,
-              url: url,
-              timeCreated: metadata.timeCreated,
-              uploadedBy: UserDetails.publicId,
-              projectId: query.projectId,
-              publicId: metadata.name,
-            },
-            {
-              onSuccess: (d) => {
-                alert("Image Uploaded!");
-              },
-              onError: (e) => {
-                console.log(e);
-              },
-            }
-          );
-          setImageUrls((prev) => [...prev, { ...metadata, url }]);
-        });
-      });
-    });
-  };
-
-  const deleteFile = (name) => {
-    if (name == null) return;
-    const deleteRef = ref(storage, `projects/${query.projectId}/${name}`);
-    getMetadata(deleteRef).then((metadata) => {
-      let idToDelete = metadata.name;
-      deleteMedia(
-        {
-          projectId: query.projectId,
-          mediaId: idToDelete,
-        },
-        {
-          onSuccess: (d) => {
-            deleteObject(deleteRef).then(() => {
-              alert("Image Deleted!");
-            });
-          },
-          onError: (e) => {
-            console.log(e);
-          },
-        }
-      );
-      let curr = imageUrls;
-      curr = curr.filter((i) => i.name !== name);
-      setImageUrls(curr);
-    });
-  };
-
-  const downLoadFile = () => {};
-
   useEffect(() => {
-    if (!query) return;
-    const imagesListRef = ref(storage, `projects/${query.projectId}`);
-    listAll(imagesListRef).then((response) => {
-      response.items.forEach((item) => {
-        getDownloadURL(item).then((url) => {
-          getMetadata(item).then((res) => {
-            setImageUrls((prev) => [...prev, { ...res, url }]);
-          });
-        });
-      });
+    // console.log(Media);
+  }, [Media]);
+
+  const uploadFile = () => {
+    if (fileUpload == null) return;
+    const form = new FormData();
+    form.append("uploadData", fileUpload);
+    form.append("projectId", query.projectId);
+    form.append("uploadedBy", UserDetails.publicId);
+    uploadMd(form, {
+      onSuccess: (d) => {
+        alert("Media Uploaded!");
+        refetch();
+      },
+      onError: (e) => {
+        console.log(e);
+      },
     });
-  }, [query]);
+  };
+
+  const deleteFile = (mediaId) => {
+    if (mediaId == null) return;
+    deleteMedia(
+      {
+        projectId: query.projectId,
+        mediaId: mediaId,
+      },
+      {
+        onSuccess: (d) => {
+          alert("Media Deleted!");
+          refetch();
+        },
+        onError: (e) => {
+          console.log(e);
+        },
+      }
+    );
+  };
 
   return (
     <Box maxH={"100vh"} overflowY="auto">
@@ -114,40 +78,56 @@ const MediaContainer = () => {
         <Input
           type="file"
           onChange={(e) => {
-            setImageUpload(e.target.files[0]);
+            setFileUpload(e.target.files[0]);
           }}
         />
         <Button onClick={uploadFile}>Upload</Button>
       </Center>
+      <Flex gap={2}>
+        {Media && !isLoading ? (
+          Media.map((img) => {
+            return (
+              <Box
+                role={"group"}
+                p={6}
+                maxW={"330px"}
+                maxH={"350px"}
+                w={"full"}
+                height={"310px"}
+                bg={useColorModeValue("white", "gray.800")}
+                boxShadow={"2xl"}
+                rounded={"lg"}
+                pos={"relative"}
+                zIndex={1}
+                mb={5}
+              >
+                <Image
+                  rounded={"lg"}
+                  height={230}
+                  width={282}
+                  objectFit={"cover"}
+                  src={img.url}
+                />
 
-      {imageUrls.map((img) => {
-        return (
-          <Box
-            role={"group"}
-            p={6}
-            maxW={"330px"}
-            w={"full"}
-            bg={useColorModeValue("white", "gray.800")}
-            boxShadow={"2xl"}
-            rounded={"lg"}
-            pos={"relative"}
-            zIndex={1}
-            mb={2}
-          >
-            <Image
-              rounded={"lg"}
-              height={230}
-              width={282}
-              objectFit={"cover"}
-              src={img.url}
-            />
-            <Button onClick={() => deleteFile(img.name)}>Delete</Button>
-            <Button onClick={() => downLoadFile(img.name)}>Download</Button>
-          </Box>
-        );
-      })}
+                <IconButton
+                  style={{ float: "left" }}
+                  onClick={() => push(img.url)}
+                  icon={<MdSimCardDownload />}
+                />
+                <IconButton
+                  style={{ float: "right" }}
+                  onClick={() => deleteFile(img.publicId)}
+                  icon={<RiDeleteBin6Fill />}
+                />
+              </Box>
+            );
+          })
+        ) : (
+          <>loading...</>
+        )}
+      </Flex>
     </Box>
   );
-};
+};;;;;;;;;;;;
 
 export default MediaContainer;
