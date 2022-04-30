@@ -2,56 +2,66 @@ const express = require("express");
 const { getDatabase } = require("firebase-admin/database");
 const { mediaCollection } = require("../data/Refs");
 const { v4 } = require("uuid");
+const { storage } = require("../data/firebase");
+const {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  getMetadata,
+  deleteObject,
+} = require("firebase/storage");
 const router = express.Router();
 
 //Routes for Media upload
 router.post("/", async (req, res) => {
   try {
-    const { type, url, uploadedBy, timeCreated, projectId } = req.body;
-    if (!type || !url || !uploadedBy || !projectId || !timeCreated) {
+    const { uploadedBy, projectId } = req.body;
+    const file = req.files.uploadData;
+    // console.log(file);
+    // console.log(req.files.uploadData);
+    // console.log(projectId);
+    if (!uploadedBy || !projectId) {
       res.status(401).json({ error: "Insufficient data" });
       return;
     }
-    if (
-      typeof type !== "string" ||
-      typeof url !== "string" ||
-      typeof uploadedBy !== "string" ||
-      typeof projectId !== "string" ||
-      typeof timeCreated !== "string"
-    ) {
+    if (typeof uploadedBy !== "string" || typeof projectId !== "string") {
       res.status(401).json({ error: "Invalid data type" });
       return;
     }
 
-    if (
-      type.trim().length === 0 ||
-      url.trim().length === 0 ||
-      uploadedBy.trim().length === 0 ||
-      projectId.trim().length === 0 ||
-      timeCreated.trim().length === 0
-    ) {
+    if (uploadedBy.trim().length === 0 || projectId.trim().length === 0) {
       res.status(401).json({ error: "empty space as input detected" });
       return;
     }
 
-    const mediaData = {
-      type,
-      url,
-      timeCreated,
-      uploadedBy,
-      projectId,
-      publicId: v4(),
-    };
+    const imageRef = ref(storage, `projects/${projectId}/${file.name}`);
+    uploadBytes(imageRef, file.data).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        getMetadata(imageRef).then((metadata) => {
+          const mediaData = {
+            type: metadata.type,
+            name: metadata.name,
+            url: url,
+            timeCreated: metadata.timeCreated,
+            uploadedBy: uploadedBy,
+            projectId: projectId,
+            publicId: v4(),
+          };
 
-    const db = getDatabase();
-    const ref = db.ref("server/tulsee");
-    const mediaRef = ref.child(`media/${projectId}`);
-    mediaRef.push().set(mediaData, (error) => {
-      if (error) {
-        res.status(500).json({ error: "Media could not be added" });
-      } else {
-        res.json("Media was added successfully");
-      }
+          const db = getDatabase();
+          const ref = db.ref("server/tulsee");
+          const mediaRef = ref.child(
+            `media/${projectId}/${mediaData.publicId}`
+          );
+          mediaRef.set(mediaData, (error) => {
+            if (error) {
+              res.status(500).json({ error: "Media could not be added" });
+            } else {
+              res.json("Media was added successfully");
+            }
+          });
+        });
+      });
     });
   } catch (error) {
     console.log(error);
@@ -63,16 +73,22 @@ router.post("/", async (req, res) => {
 router.delete("/project/:projectId/:mediaId", async (req, res) => {
   try {
     const { projectId, mediaId } = req.params;
+
     const db = getDatabase();
-    const ref = db.ref("server/tulsee");
-    const mediaRef = ref.child(`media/${projectId}`);
-    mediaRef.once("value", (snapshot) => {
-      snapshot.forEach((child) => {
-        if (child.val().publicId === mediaId) {
-          child.ref.remove();
-        }
+    const reff = db.ref("server/tulsee");
+    const mediaRef = reff.child(`media/${projectId}/${mediaId}`);
+    mediaCollection(projectId).once("value", (snapshot) => {
+      let mediaName = snapshot.val()[mediaId].name;
+      const deleteRef = ref(storage, `projects/${projectId}/${mediaName}`);
+      deleteObject(deleteRef).then(() => {
+        mediaRef.remove((error) => {
+          if (error) {
+            res.status(500).json({ error: "could not be deleted" });
+          } else {
+            res.json("Media deleted successfully");
+          }
+        });
       });
-      res.json("done");
     });
   } catch (error) {
     console.log(error);

@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 var cors = require("cors");
+const fileUpload = require("express-fileupload");
 var options = {
   "origin": "*",
   "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -8,6 +9,8 @@ var options = {
   "optionsSuccessStatus": 204
 }
 app.use(cors(options));
+
+app.use(fileUpload());
 // const {verifyUser} = require("./middlewares/JWT");
 
 var firebase = require('firebase-admin')

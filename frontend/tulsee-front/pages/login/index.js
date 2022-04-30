@@ -67,7 +67,7 @@ export default function Login() {
           onClick={toggleColorMode}
         ></IconButton>
       </Flex>
-      <Center><img src="\Logo1.png" width={50} height={50}/>
+      <Center><img src="\Logo1.png" width={60} height={60}/>
         <Text
           className='typeWriter'
           bgGradient="linear(to-l, red, green)"
