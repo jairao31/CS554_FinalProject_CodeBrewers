@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     Table,
     Thead,
@@ -22,11 +22,18 @@ import { ProjectContext } from '../Contexts/ProjectContext';
 
 const InviteTable = () => {
 
+    const [currentInvites, setCurrentInvites] = useState()
+
     const {UserDetails} = useContext(UserContext)
     const {setGroupProjects} = useContext(ProjectContext)
     const {mutate: updateInvite, isLoading} = useAcceptRejectInvite();
 
     const toast = useToast();
+
+    useEffect(() => {
+        if(!UserDetails) return
+        setCurrentInvites(UserDetails.invites);
+    },[UserDetails])
 
     const handleUpdate = (projectId,status) => {
         updateInvite({
@@ -39,6 +46,13 @@ const InviteTable = () => {
                     setGroupProjects(prev => {
                         return [d,...prev]
                     })
+                }
+                let curr = currentInvites;
+                curr = curr.filter(i => i.publicId !== projectId);
+                if(curr.length > 0) {
+                    setCurrentInvites(curr)
+                }else{
+                    setCurrentInvites(null)
                 }
                 toast({title: `Invitation was ${status ? 'accepted' : 'rejected'} successfully`, status:'success', duration: 2000})
             },
@@ -63,8 +77,8 @@ const InviteTable = () => {
                     <Th >Accept/Reject</Th>
                 </Tr>
                 </Thead>
-                {UserDetails.invites ? <Tbody>
-                 {UserDetails.invites.map(i => <Tr key={i.publicId}>
+                {currentInvites ? <Tbody>
+                 {currentInvites.map(i => <Tr key={i.publicId}>
                     <Td>{i.name}</Td>
                     <Td>{i.createdBy.displayName}</Td>
                     <Td>{getDate(i.sentOn)}</Td>
