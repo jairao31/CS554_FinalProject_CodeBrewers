@@ -14,14 +14,15 @@
     "@emotion/styled": "^11",
     "@fontsource/lato": "^4.5.5",
     "axios": "^0.26.1",
+    "copy-to-clipboard": "^3.3.1",
     "firebase": "^9.6.11",
     "framer-motion": "^6",
     "next": "12.1.4",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-icons": "^4.3.1",
-    "uuid": "^8.3.2",
     "react-query": "^3.37.0",
-    "socket.io-client": "^4.4.1"
+    "socket.io-client": "^4.4.1",
+    "uuid": "^8.3.2"
   }
 }
