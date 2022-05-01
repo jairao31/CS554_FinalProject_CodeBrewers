@@ -7,13 +7,6 @@ body {
   background-color: rgb(245, 245, 245)!important;
 }
 
-.App-header{
-  text-align: center !important;
-  align-content: center !important;
-  display: flex !important;
-  background-color: aquamarine !important;
-  padding-left: 20% !important;
-}
 a {
   color: inherit;
   text-decoration: none;
@@ -21,7 +14,7 @@ a {
 
 * {
   box-sizing: border-box;
-  /* background-color: #87AAAA; */
+  /* background-color: #87AAAA; */ 
 }
 
 input::placeholder{

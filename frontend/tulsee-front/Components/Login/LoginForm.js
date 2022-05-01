@@ -10,6 +10,7 @@ import {
     InputLeftAddon,
     Stack,
     StylesProvider,
+    Checkbox,
     InputRightElement
   } from "@chakra-ui/react";
   import {MdEmail} from "react-icons/md";
@@ -17,34 +18,29 @@ import {
 import { UserContext } from '../Contexts/UserContext';
 
 const LoginForm = () => {
-    const [details, setDetails] = useState({
-      email:"",
-      password:""
-    });
-
-    const [show, setShow] = useState(false)
-    const handleClick = () => setShow(!show)
-
-    const {loginUser} = useContext(UserContext)
-
-    const handleChange = e => {
-      const {name,value} = e.target;
-      setDetails(prev => {
-        return {
-          ...prev,
-          [name]: value
-        }
-      })
+  const [details, setDetails] = useState({
+    email:"",
+    password:""
+  });
+  const [show, setShow] = useState(false)
+  const handleClick = () => setShow(!show)
+  const {loginUser} = useContext(UserContext)
+  const handleChange = e => {
+  const {name,value} = e.target;
+  setDetails(prev => {
+    return {
+      ...prev,
+      [name]: value
     }
-
-    const handleSubmit = e => {
-      e.preventDefault()
-      loginUser(details);
-      setDetails({})
-    }
-
-    return (
-        <form action='submit' onSubmit={handleSubmit}>
+  })
+  }
+  const handleSubmit = e => {
+    e.preventDefault()
+    loginUser(details);
+    setDetails({})
+  }
+  return (
+    <form action='submit' onSubmit={handleSubmit}>
           <Stack spacing={3}>
             <FormControl isRequired>
               <InputGroup>
@@ -88,7 +84,7 @@ const LoginForm = () => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-  
+            <Checkbox color={'white'} name="rememberMe" colorScheme={'green'}> Remember Me </Checkbox>
             <Button type='submit' boxShadow={'dark-lg'} className="button" variant="solid">
               Login
             </Button>

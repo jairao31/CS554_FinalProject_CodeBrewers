@@ -131,7 +131,7 @@ const RegisterForm = () => {
               </InputRightElement>
             </InputGroup>
           </FormControl>
-          <Checkbox color={'white'} colorScheme={'green'}> Remember Me </Checkbox>
+          <Checkbox color={'white'} colorScheme={'green'} onClick={() =>setCookies}> Remember Me </Checkbox>
           <Button
             className="button"
             type="submit"
