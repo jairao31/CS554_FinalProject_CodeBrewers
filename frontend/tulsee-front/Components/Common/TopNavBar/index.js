@@ -85,7 +85,7 @@ const TopNavBar = ({activePage, title}) => {
             </HStack> : <>loading</> :
             <></>
             } 
-            <Tooltip hasArrow  label={'setting'} placement='bottom'>
+            {query.projectId && <Tooltip hasArrow  label={'setting'} placement='bottom'>
                 <div>
                     <IconButton 
                         ms='auto'
@@ -98,7 +98,7 @@ const TopNavBar = ({activePage, title}) => {
                         onClick={() => push(`/project/${currentProject.publicId}/settings`)}
                     />
                 </div>
-            </Tooltip>               
+            </Tooltip>   }            
         </Flex>
     );
 };

@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import {createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut} from 'firebase/auth';
+import {createUserWithEmailAndPassword, EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, signInWithEmailAndPassword, signOut, updatePassword} from 'firebase/auth';
 import { useCreateUser } from '../../api/user/createUserMutation';
 import { useToast } from '@chakra-ui/react';
 import { useGetUser } from '../../api/user/getUser';
@@ -13,6 +13,9 @@ const UserContextProvider = ({children}) => {
     const [UserDetails, setUserDetails] = useState()
 
     const auth = getAuth()
+
+    const user = auth.currentUser
+
     const {push,pathname} = useRouter()
 
     const {mutate: addUser} = useCreateUser()
@@ -24,6 +27,10 @@ const UserContextProvider = ({children}) => {
     useEffect(() => {
         if(User) setUserDetails(User);
     },[User])
+ 
+    // useEffect(() => {
+    //     console.log('current user: ', user.email)
+    // },[user])
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -89,6 +96,24 @@ const UserContextProvider = ({children}) => {
         });
     }
 
+    const changePassword = (currentPassword, password) => {
+        const credential = EmailAuthProvider.credential(
+            user.email,
+            currentPassword
+        )
+        reauthenticateWithCredential(user,credential).then(() => {
+            console.log('user authenticated');
+            updatePassword(user, password).then(() => {
+                toast({title: 'Password changed successfully', status: "success", duration: 2000})
+            }).catch(e => {
+                toast({title: 'Something went wrong!', status: "error", duration: 2000})
+            })
+        }).catch(e => {
+            toast({title: 'Wrong current password!', status: "warning", duration: 2000})
+        })
+        
+    }
+
     const logout = () => {
         signOut(auth).then(
         () => {}
@@ -96,7 +121,7 @@ const UserContextProvider = ({children}) => {
     }
  
     return (
-        <UserContext.Provider value={{createUser,loginUser,UserDetails,userID,logout}}>
+        <UserContext.Provider value={{createUser,loginUser,UserDetails,userID,logout,setUserDetails,changePassword}}>
             {children}
         </UserContext.Provider>
     );
