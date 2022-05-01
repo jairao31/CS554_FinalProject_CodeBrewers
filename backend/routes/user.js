@@ -36,8 +36,8 @@ router.post('/signup', async(req,res) => {
                     const userData = {
                         publicId,
                         profilePhotoUrl:null, 
-                        firstName: firstName.trim(), 
-                        lastName: lastName.trim(),
+                        firstName: firstName.trim().toLowerCase(), 
+                        lastName: lastName.trim().toLowerCase(),
                         displayName: firstName.trim()[0].toUpperCase() + firstName.trim().slice(1),
                         email: email.trim(),
                         skills: [], 
@@ -99,9 +99,22 @@ router.patch('/:userId', async(req,res) => {
         const {userId} = req.params;
         const request = req.body;
         // var idToUpdate=task.getUserList(userName);
-        userCollection(userId).update(request)
+        userCollection(userId).update(request, error => {
+            if(error) {
+                res.status(500).json({error: "Could not update user"})
+                return
+            }
+            userCollection(userId).once('value', snapshot => {
+                if(!snapshot.val()) {
+                    res.status(500).json({error: "Could not get updated user"})
+                    return
+                }
+                res.json(snapshot.val())
+            })
+        })
         // console.log(result)
     } catch (error) {
+        console.log(error)
         res.status(500).json({error: error.message ?error.messsage: error})
     }
 })
@@ -165,7 +178,7 @@ router.get('/searchByFirstName',async(req,res)=>{
 
 router.get("/autoComplete/:query", async(req,res) => {
     const {query} = req.params
-    userCollection().orderByChild('firstName').startAt(query).endAt(query + '\uf8ff').once('value',snapshot => {
+    userCollection().orderByChild('firstName').startAt(query.toLowerCase()).endAt(query + '\uf8ff').once('value',snapshot => {
         let result = []
         for(key in snapshot.val()){
             if(snapshot.val()[key].firstName.indexOf(query) === 0) {

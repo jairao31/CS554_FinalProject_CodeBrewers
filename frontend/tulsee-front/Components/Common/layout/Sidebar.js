@@ -1,10 +1,12 @@
-import { Box, Button, Flex, Icon, IconButton, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, Text, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import {MdAdd, MdPerson,MdGroups} from 'react-icons/md'
 import { ProjectContext } from '../../Contexts/ProjectContext';
 import { UserContext } from '../../Contexts/UserContext';
 import {GoRequestChanges} from 'react-icons/go'
+import {HiMenu} from 'react-icons/hi'
+import { RiUserSettingsLine } from 'react-icons/ri';
 
 const Sidebar = () => {
 
@@ -21,7 +23,14 @@ const Sidebar = () => {
             </Flex>
             <Flex justifyContent={'space-between'}>
                 <Text pt={2} verticalAlign={'middle'}>Hi, {UserDetails ? UserDetails.firstName : ''}</Text>
-                <IconButton onClick={() => push("/invites")} fontWeight={'bold'} variant={'ghost'} size={'sm'} icon={<GoRequestChanges size={'18px'}/>}/>
+                {/* <IconButton onClick={() => push("/invites")} fontWeight={'bold'} variant={'ghost'} size={'sm'} icon={<GoRequestChanges size={'18px'}/>}/> */}
+                <Menu>
+                    <MenuButton as={IconButton} icon={<HiMenu/>} variant='ghost'/>
+                    <MenuList>
+                        <MenuItem onClick={() => push("/invites")} icon={<GoRequestChanges size={'18px'}/>}>Project invites</MenuItem>
+                        <MenuItem onClick={() => push("/settings")}  icon={<RiUserSettingsLine size={'18px'}/>}>User settings</MenuItem>
+                    </MenuList>
+                </Menu>
             </Flex>
             <Flex direction={'column'} h={'100%'}>
                 
