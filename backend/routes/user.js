@@ -22,7 +22,7 @@ router.post('/signup', async(req,res) => {
     try {
         const {publicId, password, firstName, lastName, email} = req.body;
         isPassword(password);
-        userCollection().orderByChild("email").equalTo(email).on('value', (snapshot) => {
+        userCollection().orderByChild("email").equalTo(email).once('value', (snapshot) => {
             try {
                 // console.log('entered')
                 let result = []
@@ -111,7 +111,7 @@ router.patch('/:userId', async(req,res) => {
 router.get('/searchByUserName',async(req,res)=>{
     try{
         const {userName} = req.body;
-        userCollection().orderByChild("userName").equalTo(userName).on('value', (snapshot) => {
+        userCollection().orderByChild("userName").equalTo(userName).once('value', (snapshot) => {
             let result = []
             for (var key in snapshot.val()) {
                 result.push({id: key, ...snapshot.val()[key]})
@@ -131,7 +131,7 @@ router.get('/searchByUserName',async(req,res)=>{
 router.get('/searchByFirstName',async(req,res)=>{
     try{
         const {firstName} = req.body;
-        userCollection().orderByChild("firstName").equalTo(firstName).on('value', (snapshot) => {
+        userCollection().orderByChild("firstName").equalTo(firstName).once('value', (snapshot) => {
             let result = []
             for (var key in snapshot.val()) {
                 result.push({id: key, ...snapshot.val()[key]})

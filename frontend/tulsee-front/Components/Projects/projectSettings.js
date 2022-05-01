@@ -5,6 +5,7 @@ import { useEditProject } from '../../api/project/editProject';
 import CommonInput from '../Common/CommonInput';
 import UserAutocomplete from '../Common/UserAutocomplete';
 import { ProjectContext } from '../Contexts/ProjectContext';
+import InviteParticipants from './inviteParticipants';
 import ManageParticipants from './manageParticipants';
 
 const ProjectSettings = () => {
@@ -59,7 +60,7 @@ const ProjectSettings = () => {
     }
 
     return (
-        <Box  p={5}>
+        <Box  p={5} maxH='100vh' overflowY='auto'>
             <Text fontSize={'lg'} fontWeight='bold' mb={4}>Basic Details</Text>
             <form style={{width:'40%', paddingBottom:'20px'}} onSubmit={handleSubmit}>
                 <CommonInput
@@ -74,11 +75,8 @@ const ProjectSettings = () => {
             <Divider/>
             <ManageParticipants/>
             <Divider/>
-
-            <Text fontSize={'lg'} fontWeight='bold'  my={4}>Invite participants</Text>
-            <form style={{width:'40%', paddingBottom:'20px'}}>
-                <UserAutocomplete label="Invite Users" handleSelect={handleSelect}/>
-            </form>
+            <InviteParticipants/>
+            <br/>
         </Box>
     );
 };

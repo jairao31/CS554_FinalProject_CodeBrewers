@@ -77,7 +77,6 @@ router.get('/byUser/:userId',async(req,res)=>{
             
             for (var key in snapshot.val()) {
                 if(snapshot.val()[key].participants) {
-                    console.log(snapshot.val()[key].participants)
                     let exist = snapshot.val()[key].participants.find(i => i.publicId === userId)
                     if(exist)  result.push({id: key, ...snapshot.val()[key]});
                 }
@@ -201,34 +200,47 @@ router.patch('/invite/:projectId', async(req,res) => {
                 }
                 projectCollection(projectId).update({
                     ...snapshot.val,
-                    requested: snapshot.val().requested ? [...snapshot.val().requested, ...users] : [users]
+                    requested: snapshot.val().requested ? [...snapshot.val().requested, ...users] : [...users]
                 }, async error => {
                     if(error) {
+                        console.log(error)
                         res.status(500).json({error: "Project could not be updated"})
                         return
                     }
                     await users.forEach(async (invitee, idx) => {
-                        // console.log(invitee)
+                        console.log('invitees', invitee)
                       
                         await userCollection(invitee.publicId).once('value', async userShot => {
                             // console.log(snapshot.val())
                             try {
-                                const {publicId, name, createdBy, createdOn} = snapshot.val() 
-                                let update = {
-                                    ...snapshot.val(),
-                                    invites: userShot.val().invites ? [...userShot.val().invites,{publicId, name, createdBy, sentOn: createdOn}]  : [{publicId, name, createdBy, sentOn: createdOn}]
+                                if(userShot.val()) {
+                                    console.log('userShot: ', userShot.val())
+                                    const {publicId, name, createdBy, createdOn} = snapshot.val() 
+                                    let update = {
+                                        invites: userShot.val().invites ? [...userShot.val().invites,{publicId, name, createdBy, sentOn: createdOn}]  : [{publicId, name, createdBy, sentOn: createdOn}]
+                                    }
+                                    await userCollection(invitee.publicId).update(update)
+                                }else{
+                                    res.status(500).json({error:"could not get the user"})
+                                    return;
                                 }
-                                await userCollection(invitee.publicId).update(update)
+
                             } catch (error) {
+                                console.log(error)
                                 res.status(500).json({error:"could not send invite to a user"})
                                 return;
                             }
                         })
-                        res.json("Invites were sent successfully")
+                        res.json({
+                            ...snapshot.val(),
+                            requested: snapshot.val().requested ? [...snapshot.val().requested, ...users] : [...users]
+                        })
                     });
                 })      
             }else{
+                console.log(error)
                 res.status(404).json({error:"Project could not be found!"})
+                return
             }
         })
 
