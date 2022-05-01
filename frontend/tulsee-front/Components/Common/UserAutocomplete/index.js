@@ -28,12 +28,12 @@ const UserAutocomplete = ({label, handleSelect}) => {
 
     const {isOpen, onClose, onOpen} = useDisclosure()
 
-    const {data: results} = useAutocompleteUser(query, !!(query.length > 3 ))
+    const {data: results} = useAutocompleteUser(query, !!(query.length > 2 ))
 
     const handleChange = e => {
         const {value} = e.target;
         setQuery(value)
-        if(value.length < 3) {
+        if(value.length < 2) {
             onClose()
         }
     }
@@ -58,7 +58,7 @@ const UserAutocomplete = ({label, handleSelect}) => {
         <Popover
         isLazy
         autoFocus={false}
-        isOpen={query.length > 3 && searchResults.length > 0}
+        isOpen={query.length > 2 && searchResults.length > 0}
         onClose={onClose}
         placement='bottom'
         closeOnBlur={false}
