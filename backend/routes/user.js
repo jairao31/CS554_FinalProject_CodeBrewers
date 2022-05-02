@@ -54,7 +54,7 @@ router.post("/signup", async (req, res) => {
               firstName: firstName.trim().toLowerCase(),
               lastName: lastName.trim().toLowerCase(),
               displayName:
-                firstName.trim()[0].toUpperCase() + firstName.trim().slice(1),
+                `${firstName.trim()[0].toUpperCase() + firstName.trim().slice(1)} ${lastName.trim()[0].toUpperCase() + lastName.trim().slice(1)}`,
               email: email.trim(),
               skills: [],
               requests: [],
@@ -114,7 +114,13 @@ router.get("/login/:publicId", async (req, res) => {
 router.patch("/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    const request = req.body;
+    let request = req.body;
+    request = {
+      ...request,
+      firstName: request.firstName.trim().toLowerCase(),
+      lastName: request.lastName.trim().toLowerCase(),
+      displayName: `${request.firstName.trim()[0].toUpperCase() + request.firstName.trim().slice(1)} ${request.lastName.trim()[0].toUpperCase() + request.lastName.trim().slice(1)}`
+    }
     // var idToUpdate=task.getUserList(userName);
     userCollection(userId).update(request, (error) => {
       if (error) {
@@ -223,9 +229,9 @@ router.get("/autoComplete/:query", async(req,res) => {
         let result = []
         for(key in snapshot.val()){
             if(snapshot.val()[key].firstName.indexOf(query) === 0) {
-                const {displayName, publicId} = snapshot.val()[key]
+                const {displayName, publicId, profilePhotoUrl} = snapshot.val()[key]
                 result.push({
-                    displayName, publicId
+                    displayName, publicId, profilePhotoUrl
                 })
             }
           }

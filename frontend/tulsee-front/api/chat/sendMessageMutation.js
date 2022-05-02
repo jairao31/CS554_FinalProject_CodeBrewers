@@ -4,7 +4,7 @@ import axios from 'axios'
 
 const sendMessage = async(payload) => {
     const {projectId, text,sender } = payload
-    const {data} = axios.post(`http://localhost:3001/messages/${projectId}`,{text,sender})
+    const {data} = await axios.post(`http://localhost:3001/messages/${projectId}`,{text,sender})
     return data;
 }
 
