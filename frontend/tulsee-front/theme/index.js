@@ -10,8 +10,8 @@ const overrides = {
         50:'FFFFFF',
       100: "#E5E3C9",
       300: "#B4CFB0",
-      500: "#94B49F",
-      700: "#789395",
+      500: "#45B39D",
+      700: "#148F77",
       900: "#000000",
     },
   },
@@ -47,15 +47,15 @@ const overrides = {
           }
         },
         'outline' : {
-          borderColor:'#789395',
+          borderColor:'brand.500',
           _hover:{
             backgroundColor:'rgba(180, 207, 176,0.3)'
           }
         },
         'solid': {
-          backgroundColor:'#789395',
+          backgroundColor:'brand.500',
           _hover:{
-            backgroundColor:'#94B49F'
+            backgroundColor:'#73C6B6'
           }
         }
       }
