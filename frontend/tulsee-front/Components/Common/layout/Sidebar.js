@@ -49,7 +49,7 @@ const Sidebar = () => {
                 <VStack textAlign={'left'} py={4} px={4} h={'100%'}>
                     <Text w={'100%'} fontWeight={'semibold'} mb={2} fontSize='lg'>Group</Text>
                     {
-                        groupProjects.map(i => <Button backgroundColor={'brand.700'} bg={'brand.700'} onClick={() => push(`/project/${i.publicId}/task`)} key={i.publicId} variant={'solid'} w='100%' leftIcon={<MdGroups/>}>
+                        groupProjects.map(i => <Button backgroundColor={'brand.700'}  onClick={() => push(`/project/${i.publicId}/task`)} key={i.publicId} variant={'solid'} w='100%' leftIcon={<MdGroups/>}>
                             {i.name}
                         </Button>)
                     }

@@ -1,10 +1,11 @@
-import { Button, Flex, HStack, Input, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Box, Button, Flex, HStack, Input, Text, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import { UserContext } from '../Contexts/UserContext';
 import { useRouter } from 'next/router';
 import { useSendMessage } from '../../api/chat/sendMessageMutation';
 import { useGetMessages } from '../../api/chat/getMessages';
+import { get24TimeFormat } from '../../helpers/dateFormat';
 
 const ChatBox = () => {
 
@@ -31,7 +32,11 @@ const ChatBox = () => {
         setUserId(UserDetails.publicId)
         setRoom(query.projectId)
         console.log(query)
-        socketRef.emit('user_join', UserDetails.firstName, UserDetails.publicId, query.projectId);
+        socketRef.emit('user_join', {sender:{
+            publicId: UserDetails.publicId,
+            name: UserDetails.displayName,
+            profilePhotoUrl: UserDetails.profilePhotoUrl
+        }, room: query.projectId});
         return () => {
             socketRef.disconnect();
         };
@@ -42,19 +47,21 @@ const ChatBox = () => {
     // },[room])
 
     useEffect(() => {
-        socketRef.on('message', ({name, sender, text}) => {
+        socketRef.on('message', ({sender, createdAt, text}) => {
           setChat(prev => {
             return [
                 ...prev,
-                {name, sender, text}
+                {sender, createdAt, text}
             ]
         });
         });
         socketRef.on('user_join', function (data) {
+            console.log(data);
+            const{sender, createdAt} = data
           setChat(prev => {
               return [
                   ...prev,
-                  {name: 'ChatBot', sender: data.userId, text: `${data.name} has joined the chat`}
+                  {sender, createdAt, text: `${sender.name} has joined the chat`}
               ]
           });
         });
@@ -67,13 +74,21 @@ const ChatBox = () => {
 
 
       const onMessageSubmit = () => {
-        sendMessage({projectId: room, text, sender: userId}, {
+        sendMessage({projectId: room, text, sender: {
+            publicId: userId,
+            name: UserDetails.displayName,
+            profilePhotoUrl: UserDetails.profilePhotoUrl
+        }}, {
             onSuccess: d => {
                 console.log(d)
                 socketRef.emit('message', {
                     room: room,
-                    name: UserDetails.firstName,
-                    sender: userId,
+                    sender: {
+                        publicId: userId,
+                        name: UserDetails.displayName,
+                        profilePhotoUrl: UserDetails.profilePhotoUrl
+                    },
+                    createdAt: d.createdAt,
                     text: text
                   });
                   setText('');
@@ -89,15 +104,19 @@ const ChatBox = () => {
         <VStack w={'100%'} p={5} h={'90%'} justifyContent='flex-end'>
             <VStack w={'100%'} h={'100%'} justifyContent='flex-end'>
                 {chat.map((i,idx) => 
-                <Flex key={idx}  w='100%' justifyContent={i.sender === userId ? 'flex-end' : 'flex-start'}>
-                    <Text 
-                        
-                        maxW='30%'
-                        bg={i.sender === userId ? 'brand.700' : 'brand.500'}
-                        p={2}
-                        borderRadius='md'
-                        color={'white'}
-                        >{i.text}</Text>
+                <Flex key={idx} gap={2}  w='100%' justifyContent={i.sender.publicId === userId ? 'flex-end' : 'flex-start'}>
+                    {i.sender.publicId !== userId && <Avatar size={'sm'} src={i.sender.profilePhotoUrl} name={i.sender.name} alt={`${i.sender.name}_dp`}/>}
+                    <Box>
+                        <Text 
+                            bg={i.sender.publicId === userId ? 'brand.700' : 'brand.500'}
+                            p={2}
+                            borderRadius='md'
+                            color={'white'}
+                            w={'fit-content'}
+                            maxW='400px'
+                            >{i.text}</Text>
+                        <Text fontSize={'xs'} color={'#99A3A4 '}>{i.sender.name} | {get24TimeFormat(i.createdAt)}</Text>
+                    </Box>
                 </Flex>
  )}
             </VStack>
