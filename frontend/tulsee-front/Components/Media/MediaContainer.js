@@ -98,7 +98,6 @@ const MediaContainer = () => {
                 boxShadow={"2xl"}
                 rounded={"lg"}
                 pos={"relative"}
-                zIndex={1}
                 mb={5}
               >
                 <Image
