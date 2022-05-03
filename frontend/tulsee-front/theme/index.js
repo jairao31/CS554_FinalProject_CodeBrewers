@@ -26,7 +26,7 @@ const overrides = {
       variants: {},
       // The default `size` or `variant` values
       defaultProps: {
-        size: "lg",
+        size: "md",
         focusBorderColor: "brand.900"
       },
     },

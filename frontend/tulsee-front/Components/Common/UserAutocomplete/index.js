@@ -68,8 +68,7 @@ const UserAutocomplete = ({label, handleSelect}) => {
                 <Input placeholder="Type user name here..." onChange={handleChange}/>
             {/* */}
             </PopoverTrigger>
-        </FormControlLayout> 
-        <Portal>
+        </FormControlLayout>
             <PopoverContent minW={'200px'} width='fit-content' px={3} py={1}>
             {searchResults && <VStack>
                 {searchResults.map(i => 
@@ -77,7 +76,6 @@ const UserAutocomplete = ({label, handleSelect}) => {
                 )}
             </VStack>}
             </PopoverContent>
-        </Portal>
 
       </Popover>
     );
