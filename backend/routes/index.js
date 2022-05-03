@@ -5,6 +5,7 @@ const projectRoutes=require('./projects');
 const mediaRoutes = require("./media");
 const messageRoutes = require('./messages')
 const meetRoutes = require('./meet')
+const searchRoutes = require('./search')
 
 const constructorMethod = (app) => {
   app.use('/task', tasks);
@@ -14,6 +15,7 @@ const constructorMethod = (app) => {
   app.use('/project',projectRoutes);
   app.use("/media", mediaRoutes);
   app.use('/messages', messageRoutes);
+  app.use('/search', searchRoutes);
   
   app.use('*', (req, res) => {
     res.redirect('/');
