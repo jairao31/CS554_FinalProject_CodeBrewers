@@ -85,10 +85,9 @@ const LoginForm = () => {
               </InputGroup>
             </FormControl>
             <Checkbox color={'white'} name="rememberMe" colorScheme={'green'}> Remember Me </Checkbox>
-            <Button type='submit' boxShadow={'dark-lg'} className="button" variant="solid">
+            <Button type='submit' bg={"brand.500"}  variant="solid">
               Login
             </Button>
-            <FormLabel>Welcome Home! 🏡</FormLabel>
           </Stack>
         </form>
     );

@@ -18,7 +18,7 @@ const Sidebar = () => {
     return (
         <Box p={2} h={'100%'}>
             <Flex justifyContent={'space-between'}>
-                <Text fontSize={'xl'} fontWeight='bold' mb={2} color='#E5E3C9' bg='#789395' w={'fit-content'} p={2} borderRadius={5}>TULSEE.io</Text>
+                <Text fontSize={'xl'} fontWeight='bold' mb={2} color='#ffff' bg='brand.700' w={'fit-content'} p={2} borderRadius={5}>TULSEE.io</Text>
                 <Button variant='ghost' onClick={() => logout()}>Logout</Button>
             </Flex>
             <Flex justifyContent={'space-between'}>
@@ -41,7 +41,7 @@ const Sidebar = () => {
                     <Text w={'100%'} fontWeight={'semibold'} mb={2} fontSize='lg'>Personal</Text>
 
                     {
-                        personalProjects.map(i => <Button onClick={() => push(`/project/${i.publicId}/task`)} key={i.publicId} variant={'solid'} w='100%' leftIcon={<MdPerson/>}>
+                        personalProjects.map(i => <Button backgroundColor={'brand.700'} onClick={() => push(`/project/${i.publicId}/task`)} key={i.publicId} variant={'solid'} w='100%' leftIcon={<MdPerson/>}>
                             {i.name}
                         </Button>)
                     }
@@ -49,7 +49,7 @@ const Sidebar = () => {
                 <VStack textAlign={'left'} py={4} px={4} h={'100%'}>
                     <Text w={'100%'} fontWeight={'semibold'} mb={2} fontSize='lg'>Group</Text>
                     {
-                        groupProjects.map(i => <Button onClick={() => push(`/project/${i.publicId}/task`)} key={i.publicId} variant={'solid'} w='100%' leftIcon={<MdGroups/>}>
+                        groupProjects.map(i => <Button backgroundColor={'brand.700'}  onClick={() => push(`/project/${i.publicId}/task`)} key={i.publicId} variant={'solid'} w='100%' leftIcon={<MdGroups/>}>
                             {i.name}
                         </Button>)
                     }

@@ -41,7 +41,7 @@ const ManageParticipants = () => {
                     return <Grid templateColumns='repeat(2, 1fr)' gap={2} key={i.publicId} w={'40%'} p={2}>
                         <GridItem>
                             <HStack>
-                                <Avatar size={'sm'}  name={i.displayName}/>
+                                <Avatar size={'sm'} src={i.profilePhotoUrl} name={i.displayName}/>
                                 <Text>{i.displayName}</Text>
                             </HStack>
                         </GridItem>

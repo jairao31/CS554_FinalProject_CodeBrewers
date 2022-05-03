@@ -101,7 +101,7 @@ const CreateNewForm = () => {
                 {
                     payload.requested && payload.requested.map(i => 
                     {return <HStack key={i.publicId} w={'100%'} p={2} >
-                        <Avatar size={'sm'}  name={i.displayName}/>
+                        <Avatar size={'sm'} src={i.profilePhotoUrl}  name={i.displayName}/>
                         <Text>{i.displayName}</Text>
                         <IconButton variant={'ghost'} icon={<RiCloseCircleFill/>} onClick={() => handleRemove(i.publicId)}/>
                     </HStack>}

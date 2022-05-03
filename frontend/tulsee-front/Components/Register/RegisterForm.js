@@ -136,7 +136,6 @@ const RegisterForm = () => {
             className="button"
             type="submit"
             variant="solid"
-            boxShadow={'dark-lg'}
             // boxShadow={'rgba(44, 187, 99, 0.35) 0 -25px 18px -14px inset,rgba(44, 187, 99, 0.25) 0 1px 2px, rgba(44, 187, 99, 0.25) 0 2px 4px,rgba(44, 187, 99, 0.25) 0 4px 8px, rgba(44, 187, 99, 0.25) 0 8px 16px, rgba(44, 187, 99, 0.25) 0 16px 32px'}
             // isLoading
             loadingText="Signing Up"

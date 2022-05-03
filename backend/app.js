@@ -71,17 +71,17 @@ configRoutes(app);
 io.on('connection', (socket) => {
   console.log('new client connected', socket.id);
 
-  socket.on('user_join', (name, userId, room) => {
-    console.log(name, room)
+  socket.on('user_join', ({sender, room}) => {
+    console.log(sender, room)
     socket.join(room)
-    io.to(room).emit('user_join', {name, userId});
+    io.to(room).emit('user_join', {sender, createdAt: new Date().toISOString()});
   });
 
   // socket.on()
 
-  socket.on('message', ({room, name, sender, text}) => {
+  socket.on('message', ({room, sender, createdAt, text}) => {
     // console.log(name, message, socket.id);
-    io.to(room).emit('message', {name, sender, text});
+    io.to(room).emit('message', {sender, createdAt, text});
   });
 
   socket.on('disconnect', () => {
