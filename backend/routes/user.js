@@ -225,7 +225,7 @@ router.get('/searchByFirstName',async(req,res)=>{
 
 router.get("/autoComplete/:query", async(req,res) => {
     const {query} = req.params
-    userCollection().orderByChild('firstName').startAt(query.toLowerCase()).endAt(query + '\uf8ff').once('value',snapshot => {
+    userCollection().orderByChild('firstName').startAt(query.toUpperCase()).endAt(query.toLowerCase() + '\uf8ff').once('value',snapshot => {
         let result = []
         for(key in snapshot.val()){
             if(snapshot.val()[key].firstName.indexOf(query) === 0) {
