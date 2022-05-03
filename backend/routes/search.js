@@ -1,7 +1,7 @@
 const express=require('express');
 const { getDatabase } = require('firebase-admin/database');
 const { v4 } = require('uuid');
-const { projectCollection, taskCollection } = require('../data/Refs');
+const { projectCollection, taskCollection, userCollection } = require('../data/Refs');
 const router=express.Router();
 
 router.get('/:query/:type',async(req,res)=>{
@@ -45,6 +45,25 @@ router.get('/:query/:type',async(req,res)=>{
                 }
                 if (result.length===0){
                     res.json("Sorry! No task found with "+query+" task title. Try Again!")
+                    return;
+                }
+                res.json(result)
+            })
+        }else if(type=== "user"){
+            userCollection().orderByChild('firstName').startAt(query).endAt(query + '\uf8ff').once('value',snapshot => {
+                let result = []
+                for(key in snapshot.val()){
+                    if(snapshot.val()[key].firstName.indexOf(query) === 0) {
+                        // const {description, projectId, title} = snapshot.val()[key]
+                        // console.log( projectId, title,"====================================")
+                        // result.push({
+                        //     description, projectId, title
+                        // })
+                        result.push({id: key, ...snapshot.val()[key]})
+                    }
+                }
+                if (result.length===0){
+                    res.json("Sorry! No user found with "+query+" user name. Try Again!")
                     return;
                 }
                 res.json(result)
