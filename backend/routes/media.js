@@ -17,9 +17,6 @@ router.post("/", async (req, res) => {
   try {
     const { uploadedBy, projectId } = req.body;
     const file = req.files.uploadData;
-    // console.log(file);
-    // console.log(req.files.uploadData);
-    // console.log(projectId);
     if (!uploadedBy || !projectId) {
       res.status(401).json({ error: "Insufficient data" });
       return;
