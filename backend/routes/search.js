@@ -21,7 +21,7 @@ router.get('/:query/:type',async(req,res)=>{
                         // result.push({
                         //     createdBy, name, participants
                         // })
-                        result.push({id: key, ...snapshot.val()[key]})
+                        result.push(snapshot.val())
                     }
                 }
                 if (result.length===0){
@@ -40,7 +40,7 @@ router.get('/:query/:type',async(req,res)=>{
                         // result.push({
                         //     description, projectId, title
                         // })
-                        result.push({id: key, ...snapshot.val()[key]})
+                        result.push(snapshot.val())
                     }
                 }
                 if (result.length===0){
