@@ -6,12 +6,12 @@ const router = express.Router();
 
 router.post('/', async(req,res) => {
     try {
-        const {projectId, title, description, assignee, createdBy} = req.body;
-        if(!projectId || !title || !description || !assignee || !createdBy) {
+        const {projectId, title, description, assignees, createdBy, status} = req.body;
+        if(!projectId || !title || !description  || !createdBy) {
             res.status(401).json({error:'Insufficient Funds'})
             return
         }
-        if(typeof projectId !== "string" || typeof title !== "string" || typeof description !== "string" || typeof assignee !== "string" || typeof createdBy !== "string") {
+        if(typeof projectId !== "string" || typeof title !== "string" ) {
             res.status(401).json({error:'Invalid data type'})
             return
         }
@@ -21,9 +21,9 @@ router.post('/', async(req,res) => {
             projectId,
             title,
             description,
-            assignee,
+            assignees: assignees || [],
             createdBy,
-            status: 0,
+            status: status,
             comments:[],
             createdOn: new Date().toISOString()
         }
@@ -32,11 +32,12 @@ router.post('/', async(req,res) => {
             if(error) {
                 res.status(500).json({error: "Task could not be added"})
             }else{
-                res.json('Task was added successfully');
+                res.json(taskData);
             }
         })
-        
+
     } catch (error) {
+        console.log(error)
         res.status(500).json({error: error.message ?error.messsage: error})
     }
 })
@@ -46,16 +47,17 @@ router.get('/project/:projectId', async(req,res) => {
         const {projectId} = req.params;
         taskCollection().orderByChild("projectId").equalTo(projectId).once('value', (snapshot) => {
             let result = []
-            for (var key in snapshot.val()) {
-                result.push(snapshot.val()[key])
-            }
-            if(result.length === 0) {
+            if(!snapshot.val()) {
                 res.status(500).json({error: 'Task could not be found for the given project ID'});
                 return;
+            }
+            for (var key in snapshot.val()) {
+                result.push(snapshot.val()[key])
             }
             res.json(result)
         })
     } catch (error) {
+        console.log(error)
         res.status(500).json({error: error.message ?error.messsage: error})
     }
 })
@@ -83,11 +85,37 @@ router.patch('/:taskId', async(req,res) => {
         taskCollection(taskId).update(request, error => {
             if(error) {
                 res.status(500).json({error:'Task could not be updated'})
+                return
             }else{
-                res.json('Task was updated successfully')
+                taskCollection(taskId).once('value', snapshot => {
+                    if(snapshot.val()) {
+                        res.json(snapshot.val())
+                    }else{
+                        res.status(500).json({error:'Could not get updated task'})
+                        return
+                    }
+                })
             }
         })
     } catch (error) {
+        console.log(error)
+        res.status(500).json({error: error.message ?error.messsage: error})
+    }
+})
+
+router.delete('/:taskId', async(req,res) => {
+    try {
+        const {taskId} = req.params
+        taskCollection(taskId).remove(error => {
+            if(error){
+                res.status(500).json({error:'Could not delete task'})
+                return
+            }else{
+                res.json('task deleted successfully')
+            }
+        })
+    } catch (error) {
+        console.log(error)
         res.status(500).json({error: error.message ?error.messsage: error})
     }
 })
