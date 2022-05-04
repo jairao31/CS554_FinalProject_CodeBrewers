@@ -11,6 +11,7 @@ import {AiOutlineClear} from 'react-icons/ai'
 import {ImLink} from 'react-icons/im'
 import {MdOutlineDownloadDone} from 'react-icons/md'
 import copy from "copy-to-clipboard";
+import ChatBox from '../../../Components/Chat/ChatBox';
 // import { useRouter } from 'next/router';
 
 const Meet = () => {
@@ -100,6 +101,9 @@ const Meet = () => {
                         
                         {urlState ? `${UserDetails.displayName} : ${urlState}` : '  '} <br /><br />
                         
+                        {urlState.length !== 0 ? <Button onClick={<ChatBox />}>
+                             Send to Chat
+                        </Button> : ''}
                         
                         {urlState.length !== 0 && !copyStatus ? <Button onClick={copyToClipboard} rightIcon={<ImLink />}>
                              Copy Link
