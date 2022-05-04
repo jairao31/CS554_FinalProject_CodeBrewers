@@ -1,14 +1,15 @@
-import {useQuery} from 'react-query'
-import axios from 'axios'
+import { useQuery } from "react-query";
+import axios from "axios";
 
+const searchQuery = async (query, type, publicId) => {
+  const { data } = await axios.get(
+    `http://localhost:3001/search/${query}/${type}/${publicId}`
+  );
+  return data;
+};
 
-const searchQuery = async (query,type) => {
-    const {data} = await axios.get(`http://localhost:3001/search/${query}/${type}`)
-    return data
-}
-
-export const useSearchQuery = (query,type,isEnabled) => {
-    return useQuery('searchQuery', () => searchQuery(query,type), {
-        enabled: isEnabled
-    })
-}
+export const useSearchQuery = (query, type, publicId, isEnabled) => {
+  return useQuery("searchQuery", () => searchQuery(query, type, publicId), {
+    enabled: isEnabled,
+  });
+};
