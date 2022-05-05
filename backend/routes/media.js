@@ -54,7 +54,7 @@ router.post("/", async (req, res) => {
             if (error) {
               res.status(500).json({ error: "Media could not be added" });
             } else {
-              res.json("Media was added successfully");
+              res.json(mediaData);
             }
           });
         });
@@ -100,13 +100,7 @@ router.get("/project/:projectId", async (req, res) => {
     mediaCollection(projectId).once("value", (snapshot) => {
       let result = [];
       for (var key in snapshot.val()) {
-        result.push({ id: key, ...snapshot.val()[key] });
-      }
-      if (result.length === 0) {
-        res.status(500).json({
-          error: "Media could not be found for the given projectId",
-        });
-        return;
+        result.push(snapshot.val()[key]);
       }
       res.json(result);
     });

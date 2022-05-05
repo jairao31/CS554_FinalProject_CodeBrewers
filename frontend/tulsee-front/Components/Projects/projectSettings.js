@@ -5,6 +5,8 @@ import { useEditProject } from '../../api/project/editProject';
 import CommonInput from '../Common/CommonInput';
 import UserAutocomplete from '../Common/UserAutocomplete';
 import { ProjectContext } from '../Contexts/ProjectContext';
+import { UserContext } from '../Contexts/UserContext';
+import ArchiveProject from './archiveProject';
 import InviteParticipants from './inviteParticipants';
 import ManageParticipants from './manageParticipants';
 
@@ -13,6 +15,8 @@ const ProjectSettings = () => {
     const [details, setDetails] = useState({})
 
     const {currentProject, setGroupProjects, setCurrentProject, setPersonalProjects} = useContext(ProjectContext)
+
+    const {userID} = useContext(UserContext);
 
     const {mutate: editProject, isLoading} = useEditProject()
 
@@ -55,10 +59,6 @@ const ProjectSettings = () => {
         })
     }
 
-    const handleSelect = user => {
-
-    }
-
     return (
         <Box  p={5} maxH='100vh' overflowY='auto'>
             <Text fontSize={'lg'} fontWeight='bold' mb={4}>Basic Details</Text>
@@ -76,6 +76,11 @@ const ProjectSettings = () => {
             <ManageParticipants/>
             <Divider/>
             <InviteParticipants/>
+           {currentProject && currentProject.createdBy.publicId === userID &&  <>
+                <Divider/>
+                <ArchiveProject/>
+            </>}
+            <br/>
             <br/>
         </Box>
     );

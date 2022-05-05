@@ -8,24 +8,30 @@ import { Box,
     Text,
     Button,
     useDisclosure,
+    Stack,
+    Skeleton,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { IoIosSquare } from 'react-icons/io';
 import { MdAdd } from 'react-icons/md';
 import { useGetTasksByProject } from '../../api/task/getTasksByProject';
+import { ProjectContext } from '../Contexts/ProjectContext';
 import TaskModal from './taskModal';
 import TaskTable from './taskTable';
 
 const TaskContainer = () => {
 
     const [taskList, setTaskList] = useState([])
+    const [change, setChange] = useState()
 
     const {query} = useRouter()
 
+    const {currentProject} = useContext(ProjectContext)
+
     const {projectId} = query
 
-    const {data: tasks} = useGetTasksByProject(projectId, !!projectId)
+    const {data: tasks, isLoading, isError} = useGetTasksByProject(projectId, !!projectId)
 
     const {isOpen, onOpen, onClose} = useDisclosure()
 
@@ -33,6 +39,21 @@ const TaskContainer = () => {
         if(!tasks) return
         setTaskList(tasks)
     },[tasks])
+
+    useEffect(() => {
+        if(projectId) setChange(projectId)
+        
+        // setTaskList([])
+    },[projectId])
+
+ 
+
+    useEffect(() => {
+        console.log(isError)
+        if(isError) {
+            setTaskList([])
+        }
+    },[isError])
 
     const updateTask = task => {
         if(!task) return
@@ -56,6 +77,10 @@ const TaskContainer = () => {
         })
     }
 
+    useEffect(() => {
+        console.log(taskList.filter(i => i.status === 'In Progress').length)
+    },[taskList])
+
     const AccordionSingle = ({title,icon}) => {
         return <AccordionItem>
         <AccordionButton>
@@ -66,6 +91,15 @@ const TaskContainer = () => {
                     </Box>
                     <Text fontWeight={'600'}>
                         {title}
+                    </Text>
+                    <Text>
+                        {title === 'Done' ?
+                    `(${taskList.filter(i => i.status === 'Done').length})` :
+                    title === 'Under Review' ?
+                    `(${taskList.filter(i => i.status === 'Under Review').length})` :
+                    title === 'In Progress' ?
+                    `(${taskList.filter(i => i.status === 'In Progress').length})` :
+                    `(${taskList.filter(i => i.status === 'Open' ).length})`}
                     </Text>
                 </Flex>
             </Box>
@@ -90,7 +124,7 @@ const TaskContainer = () => {
     }
 
     return (
-        <Box p={5}>
+        !isLoading ? <Box p={5}>
             <Flex justifyContent={'flex-end'}>
                 <Button onClick={onOpen} mb={2} size={'sm'} leftIcon={<MdAdd/>}>
                     Task
@@ -115,7 +149,12 @@ const TaskContainer = () => {
                 />
             </Accordion>
             <TaskModal isOpen={isOpen} onClose={onClose} insertTask={addTask}/>
-        </Box>
+        </Box>:
+        <Stack>
+            <Skeleton height='20px' />
+            <Skeleton height='20px' />
+            <Skeleton height='20px' />
+        </Stack>
     );
 };
 
