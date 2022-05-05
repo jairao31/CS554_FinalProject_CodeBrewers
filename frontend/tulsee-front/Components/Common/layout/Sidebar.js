@@ -7,10 +7,11 @@ import { UserContext } from '../../Contexts/UserContext';
 import {GoRequestChanges} from 'react-icons/go'
 import {HiMenu} from 'react-icons/hi'
 import { RiUserSettingsLine } from 'react-icons/ri';
+import { FiArchive } from 'react-icons/fi';
 
 const Sidebar = () => {
 
-    const {logout,UserDetails} = useContext(UserContext);
+    const {logout,UserDetails,loggingOut} = useContext(UserContext);
     const {groupProjects, personalProjects} = useContext(ProjectContext);
 
     const {push} = useRouter()
@@ -19,7 +20,7 @@ const Sidebar = () => {
         <Box p={2} h={'100%'}>
             <Flex justifyContent={'space-between'}>
                 <Text fontSize={'xl'} fontWeight='bold' mb={2} color='#ffff' bg='brand.700' w={'fit-content'} p={2} borderRadius={5}>TULSEE.io</Text>
-                <Button variant='ghost' onClick={() => logout()}>Logout</Button>
+                <Button isLoading={loggingOut} variant='ghost' onClick={() => logout()}>Logout</Button>
             </Flex>
             <Flex justifyContent={'space-between'}>
                 <Text pt={2} verticalAlign={'middle'}>Hi, {UserDetails ? UserDetails.firstName : ''}</Text>
@@ -29,6 +30,7 @@ const Sidebar = () => {
                     <MenuList>
                         <MenuItem onClick={() => push("/invites")} icon={<GoRequestChanges size={'18px'}/>}>Project invites</MenuItem>
                         <MenuItem onClick={() => push("/settings")}  icon={<RiUserSettingsLine size={'18px'}/>}>User settings</MenuItem>
+                        <MenuItem onClick={() => push("/archive")}  icon={<FiArchive size={'18px'}/>}>Archive</MenuItem>
                     </MenuList>
                 </Menu>
             </Flex>

@@ -4,6 +4,7 @@ import { useCreateUser } from '../../api/user/createUserMutation';
 import { useToast } from '@chakra-ui/react';
 import { useGetUser } from '../../api/user/getUser';
 import { useRouter } from 'next/router';
+import { useLogoutUser } from '../../api/user/logoutUser';
 
 export const UserContext = createContext()
 
@@ -19,6 +20,8 @@ const UserContextProvider = ({children}) => {
     const {push,pathname} = useRouter()
 
     const {mutate: addUser} = useCreateUser()
+
+    const {mutate: logoutUser, isLoading: loggingOut} = useLogoutUser()
 
     const toast = useToast();
 
@@ -115,13 +118,26 @@ const UserContextProvider = ({children}) => {
     }
 
     const logout = () => {
-        signOut(auth).then(
-        () => {}
-        ).catch((e) => console.log(e))
+        logoutUser(userID,{
+            onSuccess: d => {
+                signOut(auth).then(
+                    () => {
+                        toast({title: 'User logged out successfully', status: "success", duration: 2000})
+                    }
+                    ).catch((e) => {
+                        toast({title:"Something went wrong!", status: 'error', duration: 2000})
+                        console.log(e)
+                    })
+            },
+            onError: e => {
+                toast({title:"Something went wrong!", status: 'error', duration: 2000})
+            }
+        })
+
     }
  
     return (
-        <UserContext.Provider value={{createUser,loginUser,UserDetails,userID,logout,setUserDetails,changePassword}}>
+        <UserContext.Provider value={{createUser,loginUser,UserDetails,userID,logout,setUserDetails,changePassword,loggingOut}}>
             {children}
         </UserContext.Provider>
     );

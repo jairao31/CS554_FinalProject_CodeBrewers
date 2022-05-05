@@ -36,13 +36,14 @@ const CreateNewForm = () => {
     useEffect(() => {
         if(!UserDetails) return
         console.log(UserDetails)
-        const {publicId, displayName} = UserDetails
+        const {publicId, displayName, profilePhotoUrl} = UserDetails
         setPayload(prev => {
             return {
                 ...prev,
                 createdBy: {
                     publicId,
-                    displayName
+                    displayName,
+                    profilePhotoUrl
                 }
             }
         })

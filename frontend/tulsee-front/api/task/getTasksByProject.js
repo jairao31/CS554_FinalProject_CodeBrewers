@@ -3,12 +3,17 @@ import axios from 'axios'
 
 
 const getTasks = async publicId => {
-    const {data} = await axios.get(`http://localhost:3001/task/project/${publicId}`)
-    return data
+    try {
+        const {data} = await axios.get(`http://localhost:3001/task/project/${publicId}`)
+        return data
+    } catch (error) {
+        throw new Error('something went wrong')
+    }
+
 }
 
 export const useGetTasksByProject = (publicId,isEnabled) => {
-    return useQuery('getTasksByProject', () => getTasks(publicId), {
+    return useQuery(['getTasksByProject',publicId], () => getTasks(publicId), {
         enabled: isEnabled
     })
 }

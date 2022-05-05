@@ -84,9 +84,9 @@ const TaskTable = ({tasks, updateTask, deleteTask}) => {
                 </Thead>
                 <Tbody>
                     {
-                        tasks && tasks.map(i => 
+                        tasks && tasks.map((i,idx) => 
                             <SingleTask 
-                                key={i.publicId} 
+                                key={idx} 
                                 task={i}
                                 handleStatus={value => handleUpdate(i.publicId,{status: value})}
                                 isLoading={isLoading || deleting}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useEffect, useContext } from "react";
 import {
   Button,
@@ -9,43 +9,53 @@ import {
   Input,
   IconButton,
   Flex,
+  VStack,
+  HStack,
+  Divider,
+  FormLabel,
+  InputGroup,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { UserContext } from "../Contexts/UserContext";
 import { useUploadMedia } from "../../api/media/uploadMedia";
 import { useDeleteMedia } from "../../api/media/deleteMedia";
 import { useGetAllMedia } from "../../api/media/getAllMedia";
-import { MdSimCardDownload } from "react-icons/md";
+import { MdDownload, MdSimCardDownload, MdUpload } from "react-icons/md";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 
 const MediaContainer = () => {
-  const [fileUpload, setFileUpload] = useState(null);
+  const [mediaList, setMediaList] = useState([]);
 
   const { query, push } = useRouter();
+  const {projectId} = query
   const { UserDetails } = useContext(UserContext);
   const {
     data: Media,
-    refetch,
     isLoading,
-  } = useGetAllMedia(query.projectId, !!query.projectId);
+  } = useGetAllMedia(projectId, !!projectId);
 
   const { mutate: uploadMd } = useUploadMedia();
   const { mutate: deleteMedia } = useDeleteMedia();
 
   useEffect(() => {
-    // console.log(Media);
+    if(!Media) return
+    setMediaList(Media)
   }, [Media]);
 
-  const uploadFile = () => {
-    if (fileUpload == null) return;
+  const uploadFile = (file) => {
+  
+    if(!file) return
     const form = new FormData();
-    form.append("uploadData", fileUpload);
+    form.append("uploadData", file);
     form.append("projectId", query.projectId);
     form.append("uploadedBy", UserDetails.publicId);
     uploadMd(form, {
       onSuccess: (d) => {
         alert("Media Uploaded!");
-        refetch();
+        console.log(d)
+        setMediaList(prev => {
+          return [d,...prev]
+        })
       },
       onError: (e) => {
         console.log(e);
@@ -63,7 +73,9 @@ const MediaContainer = () => {
       {
         onSuccess: (d) => {
           alert("Media Deleted!");
-          refetch();
+          setMediaList(prev => {
+            return prev.filter(i => i.publicId !== mediaId)
+          })
         },
         onError: (e) => {
           console.log(e);
@@ -72,18 +84,58 @@ const MediaContainer = () => {
     );
   };
 
+
+
   return (
-    <Box maxH={"100vh"} overflowY="auto">
-      <Center>
+    <Box maxH={"100vh"} overflowY="auto" pt={2}>
+      <Flex px={'100px'} justifyContent={'flex-end'}>
         <Input
-          type="file"
-          onChange={(e) => {
-            setFileUpload(e.target.files[0]);
-          }}
-        />
-        <Button onClick={uploadFile}>Upload</Button>
-      </Center>
-      <Flex gap={2}>
+            id='media-upload-input'
+            display={'none'}
+            type="file"
+            onChange={(e) => {
+              uploadFile(e.target.files[0]);
+            }}
+          />
+        <FormLabel display={'flex'} color={'white'} borderRadius={'md'} p={2} bg={'brand.500'} for='media-upload-input'>
+          <MdUpload style={{marginTop:'5px'}}/>Upload
+        </FormLabel>
+      </Flex>
+
+
+      <VStack px={'100px'} mt={2}>
+        {Media && !isLoading ? (
+          mediaList.map(img => 
+            <Box w={'100%'}>
+              <Flex my={2} w={'100%'} justifyContent={'space-between'}>
+                <Image
+                  w={'80px'}
+                  src={img.url}
+                  borderRadius={'md'}
+                />
+                <HStack gap={2}>
+                  <IconButton
+                    variant={'outline'}
+                    size='sm'
+                    onClick={() => push(img.url)}
+                    icon={<MdDownload/>}
+                  />
+                  <IconButton
+                    variant={'outline'}
+                    size='sm'
+                    onClick={() => deleteFile(img.publicId)}
+                    icon={<RiDeleteBin6Fill/>}
+                  />
+                </HStack>
+              </Flex>
+              <Divider/>
+            </Box>
+            )
+        ) : (
+          <>loading...</>
+        )}
+      </VStack>
+      {/* <Flex gap={2}>
         {Media && !isLoading ? (
           Media.map((img) => {
             return (
@@ -124,9 +176,9 @@ const MediaContainer = () => {
         ) : (
           <>loading...</>
         )}
-      </Flex>
+      </Flex> */}
     </Box>
   );
-};;;;;;;;;;;;
+}
 
 export default MediaContainer;
