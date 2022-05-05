@@ -3,7 +3,7 @@ import axios from 'axios'
 
 
 const upload = async(payload) => {
-    const {data} = axios.post(`http://localhost:3001/media/`,payload)
+    const {data} = await axios.post(`http://localhost:3001/media/`,payload)
     return data;
 }
 

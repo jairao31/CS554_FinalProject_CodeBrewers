@@ -11,11 +11,12 @@ const ProjectContextProvider = ({children}) => {
 
     const [groupProjects, setGroupProjects] = useState([])
     const [personalProjects, setPersonalProjects] = useState([])
+    const [archivedProjects, setArchivedProjects] = useState([])
     const [currentProject, setCurrentProject] = useState()
 
     const toast = useToast()
 
-    const {query} = useRouter()
+    const {query,push} = useRouter()
 
     const {userID} = useContext(UserContext);
     
@@ -27,20 +28,47 @@ const ProjectContextProvider = ({children}) => {
         if(!query) return
         const {projectId} = query;
         if(!projectId || !Projects) return
-        const allProjects = [...groupProjects, ...personalProjects]
+        const allProjects = [...groupProjects, ...personalProjects, ...archivedProjects]
         const exist = allProjects.find(i => i.publicId === projectId);
         console.log(exist);
         if(exist) {
+            if(exist.archived) {
+                toast({title: "Owner has archived this project!", status: 'warning', duration: 2000});
+                push('/')
+                return
+            }
+            let userExist = exist.participants.find(i => i.publicId === userID);
+            if(!userExist) {
+                toast({title: "You don't have access to this project!", status: 'error', duration: 2000});
+                push('/')
+                return
+            }
             setCurrentProject(exist)
         }else{
-            console.log("No such project exists!");
+            toast({title: "Either such a project don't exist or you don't have authorization to access it!", status: 'error', duration: 3000});
+            push('/')
         }
-    },[query,groupProjects,personalProjects])
+    },[query,groupProjects,personalProjects, archivedProjects])
 
     useEffect(() => {
         if(!Projects) return
-        setGroupProjects(Projects.filter(i => i.type === 'Group'))
-        setPersonalProjects(Projects.filter(i => i.type === 'Personal'))
+        let a = []
+        let p = []
+        let g = []
+        Projects.forEach(project => {
+            if(project.archived && project.createdBy.publicId === userID) {
+                a.push(project)
+            }else{
+                if (project.type === 'Group') {
+                    g.push(project)
+                }else{
+                    p.push(project)
+                }
+            }
+        });
+        setArchivedProjects(a)
+        setGroupProjects(g)
+        setPersonalProjects(p)
     },[Projects])
 
     const addProject = payload => {
@@ -65,7 +93,49 @@ const ProjectContextProvider = ({children}) => {
         })
     }
  
-    return <ProjectContext.Provider value={{groupProjects, personalProjects, addProject, currentProject, setGroupProjects, setCurrentProject, setPersonalProjects}}>
+    const archiveProj = project => {
+        if(project.type === 'Group') {
+            setGroupProjects(prev => {
+                return prev.filter(i => i.publicId !== project.publicId)
+            })
+        }else{
+            setPersonalProjects(prev => {
+                return prev.filter(i => i.publicId !== project.publicId)
+            })
+        }
+        setArchivedProjects(prev =>  {
+            return [project,...prev]
+        })
+    }
+
+    const restoreProj = project => {
+        if(project.type === 'Group') {
+            setGroupProjects(prev => {
+                return [...prev, project]
+            })
+        }else{
+            setPersonalProjects(prev => {
+                return [...prev, project]
+            })
+        }
+        setArchivedProjects(prev =>  {
+            return prev.filter(i => i.publicId !== project.publicId)
+        })
+    }
+
+    return <ProjectContext.Provider 
+        value={{
+            groupProjects, 
+            personalProjects, 
+            archivedProjects,
+            addProject, 
+            currentProject, 
+            setGroupProjects, 
+            setCurrentProject, 
+            setPersonalProjects,
+            archiveProj,
+            restoreProj
+        }}>
         {children}
     </ProjectContext.Provider>
 }

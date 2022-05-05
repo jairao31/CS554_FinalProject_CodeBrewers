@@ -93,18 +93,27 @@ router.post("/signup", async (req, res) => {
 router.get("/login/:publicId", async (req, res) => {
   try {
     const { publicId } = req.params;
-    userCollection(publicId).once("value", (snapshot) => {
-      try {
-        if (!snapshot.val()) {
-          res.status(404).json("No username found");
-        } else {
-          res.json(snapshot.val());
-        }
-      } catch (error) {
-        res.status(500).json({ error: error.message ? error.messsage : error });
-        console.log(error);
+    userCollection(publicId).update({isActive: true}, error => {
+      if(error) {
+        res.status(404).json("No user found");
+        return
+      }else{
+        userCollection(publicId).once("value", (snapshot) => {
+          try {
+            if (!snapshot.val()) {
+              res.status(404).json("No username found");
+              return
+            } else {
+              res.json(snapshot.val());
+            }
+          } catch (error) {
+            res.status(500).json({ error: error.message ? error.messsage : error });
+            console.log(error);
+            return
+          }
+        });
       }
-    });
+    })
   } catch (error) {
     res.status(500).json({ error: error.message ? error.messsage : error });
   }
@@ -239,9 +248,17 @@ router.get("/autoComplete/:query", async(req,res) => {
     })
 })
 
-router.get("/logout", async (req, res) => {
+router.get("/logout/:userId", async (req, res) => {
     req.session.destroy();
-    res.json({loggedOut: true})
+    const {userId} = req.params;
+    userCollection(userId).update({isActive: false}, error => {
+      if(error) {
+        res.status(500).json('could not logout');
+        
+      }else{
+        res.json('logged out successfully!')
+      }
+    })
   });
 
 module.exports = router

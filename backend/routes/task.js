@@ -48,7 +48,7 @@ router.get('/project/:projectId', async(req,res) => {
         taskCollection().orderByChild("projectId").equalTo(projectId).once('value', (snapshot) => {
             let result = []
             if(!snapshot.val()) {
-                res.status(500).json({error: 'Task could not be found for the given project ID'});
+                res.json([]);
                 return;
             }
             for (var key in snapshot.val()) {

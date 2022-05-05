@@ -8,7 +8,7 @@ const getUser = async publicId => {
 }
 
 export const useGetUser = (publicId,isEnabled) => {
-    return useQuery('getUser', () => getUser(publicId), {
+    return useQuery(['getUser',publicId], () => getUser(publicId), {
         enabled: isEnabled
     })
 }
