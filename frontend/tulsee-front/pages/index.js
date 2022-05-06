@@ -1,4 +1,4 @@
-import { Box, Center } from "@chakra-ui/react";
+import { Avatar, Box, Center, HStack, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import Layout from "../Components/Common/layout";
@@ -8,14 +8,16 @@ import { BsSearch } from "react-icons/bs";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useSearchQuery } from "../api/search/searchQuery";
 import { MdClear } from "react-icons/md";
-
+import { Button } from "@chakra-ui/react";
 import styled from "styled-components";
 import { IoClose, IoSearch } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
 import { useClickOutside } from "react-click-outside-hook";
 import { useRef } from "react";
 import MoonLoader from "react-spinners/MoonLoader";
-
+import { ImPointLeft } from "react-icons/im";
+import { GrOverview } from "react-icons/gr";
+import { ImEnter } from "react-icons/im";
 const SearchBarContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
@@ -66,14 +68,15 @@ const SearchIcon = styled.span`
 `;
 
 const CloseIcon = styled(motion.span)`
-  color: #bebebe;
+  color: red;
   font-size: 23px;
   vertical-align: middle;
   transition: all 200ms ease-in-out;
   cursor: pointer;
 
   &:hover {
-    color: #357960;
+    cursor: "pointer";
+    color: red;
   }
 `;
 
@@ -88,6 +91,7 @@ const SearchContent = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  // background-color: #cff6cf;
   flex-direction: column;
   padding: 1em;
   overflow-y: auto;
@@ -111,7 +115,6 @@ const WarningMessage = styled.span`
 
 const containerVariants = {
   expanded: {
-    marginLeft: "10px",
     height: "30em",
   },
   collapsed: {
@@ -119,10 +122,11 @@ const containerVariants = {
   },
 };
 
-const containerTransition = { type: "spring", damping: 22, stiffness: 150 };
+const containerTransition = { type: "spring", damping: 40, stiffness: 150 };
 
 const Home = () => {
-  const { query, push } = useRouter();
+  const { push } = useRouter();
+  // const { query, push } = useRouter();
   const { userID } = useContext(UserContext);
   const [newCategory, setnew] = useState("");
   // const [searchTerm, setSearchTerm] = useState("");
@@ -145,6 +149,7 @@ const Home = () => {
   };
 
   const collapseContainer = () => {
+    var searchList = [];
     setExpanded(false);
     setSearchQuery("");
     setLoading1(false);
@@ -172,27 +177,27 @@ const Home = () => {
 
   useEffect(() => {}, [searchList]);
   console.log(searchList);
+
   return userID ? (
     <Layout>
-      <Center>
-        <InputGroup
-          boxShadow={"0px 2px 12px 3px rgba(0, 0, 0, 0.14)"}
-          color="#357960"
-          marginTop={"40px"}
-          marginLeft={"20px"}
-          width={"70%"}
-          outline={"1px solid"}
-          borderRadius={"5px"}
-        >
+      <>
+        <div>
           <Select
             // fontSize={'21px'}
+            display={"flex"}
+            style={{ boxShadow: "0px 2px 12px 3px rgba(0, 0, 0, 0.14)" }}
+            color="#357960"
             fontWeight={"500"}
+            marginLeft={"5.95%"}
+            marginTop={"40px"}
+            position={"fixed"}
             variant="filled"
+            _hover={{ cursor: "pointer" }}
             outline={"1px solid"}
             placeholder="Category"
-            borderRadius={0}
+            borderRadius={"5px 0 0 5px"}
             size={"md"}
-            width={"20%"}
+            width={"10%"}
             height={"3.5em"}
             icon={<IoMdArrowDropdown />}
             onChange={(e) => setnew(e.target.value)}
@@ -200,6 +205,16 @@ const Home = () => {
             <option value="project">Project</option>
             <option value="user">User</option>
           </Select>
+        </div>
+        <InputGroup
+          boxShadow={"0px 2px 12px 3px rgba(0, 0, 0, 0.14)"}
+          color="#357960"
+          marginTop={"40px"}
+          marginLeft={"20%"}
+          width={"70%"}
+          outline={"1px solid"}
+          borderRadius={"0 5px 5px 0"}
+        >
           <SearchBarContainer
             animate={isExpanded ? "expanded" : "collapsed"}
             variants={containerVariants}
@@ -226,8 +241,8 @@ const Home = () => {
               ) : (
                 <SearchInput
                   disabled={"true"}
-                  placeholder="👈 Please select a category to search"
-                />
+                  placeholder="Please select a category to search"
+                ></SearchInput>
               )}
               <AnimatePresence>
                 {isExpanded && (
@@ -246,27 +261,90 @@ const Home = () => {
             {isExpanded && (
               <SearchContent>
                 {/* {isLoading1 && (
-              <LoadingWrapper>
-                <MoonLoader loading color="#000" size={20} />
-              </LoadingWrapper>
-            )}
-            {!isLoading1 && isEmpty && (
-              <LoadingWrapper>
-                <WarningMessage>Start typing to Search</WarningMessage>
-              </LoadingWrapper>
-            )}
-            {!isLoading1 && (
-              <LoadingWrapper>
-                <WarningMessage>No Result!</WarningMessage>
-              </LoadingWrapper>
-            )} */}
-                {!isLoading1 && !isEmpty && (
-                  <>
-                    {searchList.map((i, idx) => {
-                      <p>Hi </p>;
-                    })}
-                  </>
+                  <LoadingWrapper>
+                    <MoonLoader loading color="#000" size={20} />
+                  </LoadingWrapper>
                 )}
+                {!isLoading1 && isEmpty && (
+                  <LoadingWrapper>
+                    <WarningMessage>Start typing to Search</WarningMessage>
+                  </LoadingWrapper>
+                )}
+                {!isLoading1 && (
+                  <LoadingWrapper>
+                    <WarningMessage>No Result!</WarningMessage>
+                  </LoadingWrapper>
+                )} */}
+                {searchList &&
+                  newCategory === "project" &&
+                  searchList.map((i) => {
+                    return (
+                      <div>
+                        <HStack
+                          _hover={{ cursor: "pointer" }}
+                          bg={"brand.500"}
+                          variant="solid"
+                          key={i.publicId}
+                          onClick={() => push(`/project/${i.publicId}/task`)}
+                          w={"100%"}
+                          margin={1}
+                          height="3em"
+                        >
+                          <Text color={"white"} p={2}>
+                            {i.name}
+                          </Text>
+                          <ImEnter color={"white"} size={"19px"} />
+                        </HStack>
+                        {/* <IconButton variant={'ghost'} icon={<RiCloseCircleFill/>} onClick={() => handleRemove(i.publicId)}/> */}
+                      </div>
+                    );
+                  })}
+
+                {!isLoading1 &&
+                  searchList &&
+                  newCategory === "user" &&
+                  searchList.map((i) => {
+                    return (
+                      <div>
+                        {/* <Button
+                          height="3em"
+                          rightIcon={<GrOverview />}
+                          bg={"brand.500"}
+                          variant="solid"
+                          width={"100%"}
+                          margin={1}
+                          value={i.publicId}
+                          onClick={() => push(`/user/${i.publicId}`)}
+                          key={i.publicId}
+
+                          // style={{ textAlign: "left  !important" }}
+                        > */}
+
+                        <HStack
+                          height="3em"
+                          _hover={{ cursor: "pointer" }}
+                          bg={"brand.500"}
+                          variant="solid"
+                          key={i.publicId}
+                          onClick={() => push(`/user/${i.publicId}`)}
+                          w={"100%"}
+                          p={2}
+                        >
+                          <Avatar
+                            size={"sm"}
+                            src={i.profilePhotoUrl}
+                            name={i.displayName}
+                          />
+                          <Text color={"white"} p={2}>
+                            {i.displayName}
+                          </Text>
+                          <GrOverview size={"19px"} />
+                        </HStack>
+                        {/* </Button> */}
+                        {/* <IconButton variant={'ghost'} icon={<RiCloseCircleFill/>} onClick={() => handleRemove(i.publicId)}/> */}
+                      </div>
+                    );
+                  })}
               </SearchContent>
             )}
           </SearchBarContainer>
@@ -324,7 +402,7 @@ const Home = () => {
             })}
         </ul>
       </Center> */}
-      </Center>
+      </>
     </Layout>
   ) : (
     <Box>
