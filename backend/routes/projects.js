@@ -30,6 +30,7 @@ router.post('/',async(req,res)=>{
         const projectData = {
             publicId: v4(),
             name: name,
+            searchQuery: name.toLowerCase(),
             type: type,
             createdBy: createdBy,
             createdOn: new Date().toISOString(),

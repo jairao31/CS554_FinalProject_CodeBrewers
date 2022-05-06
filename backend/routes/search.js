@@ -17,13 +17,14 @@ router.get("/:query/:type/:publicId", async (req, res) => {
     // If we have to just keep search by FIRST WORD recommendation then apply previous two lines of code
     if (type === "project") {
       projectCollection()
-        .orderByChild("name")
-        .startAt(query)
-        .endAt(query + "\uf8ff")
+        .orderByChild("searchQuery")
+        .startAt(query.toLowerCase())
+        .endAt(query.toLowerCase() + "\uf8ff")
         .once("value", (snapshot) => {
           let result = [];
+          console.log(snapshot.val())
           for (key in snapshot.val()) {
-            if (snapshot.val()[key].name.indexOf(query) === 0) {
+            if (snapshot.val()[key].searchQuery.indexOf(query.toLowerCase()) === 0) {
               const { participants } = snapshot.val()[key];
               let exist = participants.find((i) => i.publicId === publicId);
               if (exist) {
@@ -45,12 +46,12 @@ router.get("/:query/:type/:publicId", async (req, res) => {
       const paramPublicId = publicId;
       userCollection()
         .orderByChild("firstName")
-        .startAt(query)
-        .endAt(query + "\uf8ff")
+        .startAt(query.toLowerCase())
+        .endAt(query.toLowerCase() + "\uf8ff")
         .once("value", (snapshot) => {
           let result = [];
           for (key in snapshot.val()) {
-            if (snapshot.val()[key].firstName.indexOf(query) === 0) {
+            if (snapshot.val()[key].firstName.indexOf(query.toLowerCase()) === 0) {
               const { publicId } = snapshot.val()[key];
               if (publicId !== paramPublicId) {
                 result.push(snapshot.val()[key]);
