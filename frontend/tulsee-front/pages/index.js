@@ -130,7 +130,8 @@ const Home = () => {
   const { userID } = useContext(UserContext);
   const [newCategory, setnew] = useState("");
   // const [searchTerm, setSearchTerm] = useState("");
-  const [isdisable, setisDisable] = useState(false);
+  // const [isdisable, setisDisable] = useState(false);
+  const [searchResults, setSearchResults] = useState([])
 
   const [isExpanded, setExpanded] = useState(false);
   const [parentRef, isClickedOutside] = useClickOutside();
@@ -142,6 +143,9 @@ const Home = () => {
   const isEmpty = !tvShows || tvShows.length === 0;
 
   const handleSearch = (e) => {
+    if(e.target.value.trim().length === 0) {
+      setSearchResults([]);
+    }
     setSearchQuery(e.target.value);
   };
   const expandContainer = () => {
@@ -175,8 +179,12 @@ const Home = () => {
 
   console.log(searchQuery);
 
-  useEffect(() => {}, [searchList]);
-  console.log(searchList);
+  useEffect(() => {
+    if(searchList && typeof searchList === 'object' && searchList.length) {
+      setSearchResults(searchList)
+    }
+  }, [searchList]);
+ 
 
   return userID ? (
     <Layout>
@@ -275,9 +283,9 @@ const Home = () => {
                     <WarningMessage>No Result!</WarningMessage>
                   </LoadingWrapper>
                 )} */}
-                {searchList &&
+                {
                   newCategory === "project" &&
-                  searchList.map((i) => {
+                  searchResults.map((i) => {
                     return (
                       <div>
                         <HStack
@@ -301,9 +309,8 @@ const Home = () => {
                   })}
 
                 {!isLoading1 &&
-                  searchList &&
                   newCategory === "user" &&
-                  searchList.map((i) => {
+                  searchResults.map((i) => {
                     return (
                       <div>
                         {/* <Button
