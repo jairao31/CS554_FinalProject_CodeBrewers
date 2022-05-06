@@ -1,9 +1,17 @@
 import { Avatar, AvatarGroup, Flex, IconButton, Td, Text, Tooltip, Tr } from '@chakra-ui/react';
 import React from 'react';
 import { MdDelete, MdEdit, MdInfo } from 'react-icons/md';
+import {BiCommentDetail} from 'react-icons/bi'
 import CommonSelect from '../Common/CommonSelect';
 
-const SingleTask = ({task, handleStatus, isLoading, handleEdit, handleInfo, handleDelete}) => {
+const SingleTask = ({task, 
+    handleStatus, 
+    isLoading, 
+    handleEdit, 
+    handleInfo, 
+    handleDelete,
+    handleComment
+}) => {
     return (
         task && <Tr>
            <Td>
@@ -43,6 +51,15 @@ const SingleTask = ({task, handleStatus, isLoading, handleEdit, handleInfo, hand
                             onClick={() => handleInfo()}
                             disabled={isLoading}
                             icon={<MdInfo/>}
+                            variant='outline'
+                            size={'sm'}
+                        />
+                   </Tooltip>
+                   <Tooltip label='Comment' hasArrow>
+                        <IconButton
+                            onClick={() => handleComment()}
+                            disabled={isLoading}
+                            icon={<BiCommentDetail/>}
                             variant='outline'
                             size={'sm'}
                         />

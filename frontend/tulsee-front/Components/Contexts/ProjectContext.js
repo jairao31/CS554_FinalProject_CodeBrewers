@@ -56,8 +56,8 @@ const ProjectContextProvider = ({children}) => {
         let p = []
         let g = []
         Projects.forEach(project => {
-            if(project.archived && project.createdBy.publicId === userID) {
-                a.push(project)
+            if(project.archived ) {
+                if(project.createdBy.publicId === userID) a.push(project)
             }else{
                 if (project.type === 'Group') {
                     g.push(project)
