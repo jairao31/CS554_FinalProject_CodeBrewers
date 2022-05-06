@@ -103,6 +103,67 @@ router.patch('/:taskId', async(req,res) => {
     }
 })
 
+router.patch('/comment/:taskId', async(req,res) => {
+    try {
+        const {taskId} = req.params;
+        const comment = req.body;
+        const commentRequest = {
+            publicId: v4(),
+            createdOn: new Date().toISOString(),
+            ...comment
+        }
+        taskCollection(taskId).once('value', snapshot => {
+            if(!snapshot.val()) {
+                res.status(500).json({error:'Task could not be found'})
+                return
+            }
+            let finalComments = []
+            if(snapshot.val().comments) {
+                finalComments = [...snapshot.val().comments,commentRequest]
+            }else{
+                finalComments.push(commentRequest)
+            }
+            taskCollection(taskId).update({
+                comments: finalComments
+            }, error => {
+                if(error) {
+                    res.status(500).json({error: "could not update task"})
+                    return
+                }
+                res.json({
+                    ...snapshot.val(),
+                    comments: finalComments
+                })
+            })
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({error: error.message ?error.messsage: error})
+    }
+})
+
+router.delete('/comment/:taskId/:commentId', async(req,res) => {
+    const {taskId, commentId} = req.params
+    taskCollection(taskId).once('value', snapshot => {
+        if(!snapshot.val()) {
+            res.status(500).json({error:'Task could not be found'})
+            return
+        }
+        taskCollection(taskId).update({
+            comments: snapshot.val().comments.filter(i => i.publicId !== commentId)
+        }, error => {
+            if(error) {
+                res.status(500).json({error: "could not update task"})
+                return
+            }
+            res.json({
+                ...snapshot.val(),
+                comments: snapshot.val().comments.filter(i => i.publicId !== commentId)
+            })
+        })
+    })
+})
+
 router.delete('/:taskId', async(req,res) => {
     try {
         const {taskId} = req.params

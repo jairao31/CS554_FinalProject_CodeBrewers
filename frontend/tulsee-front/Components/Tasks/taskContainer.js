@@ -81,47 +81,7 @@ const TaskContainer = () => {
         console.log(taskList.filter(i => i.status === 'In Progress').length)
     },[taskList])
 
-    const AccordionSingle = ({title,icon}) => {
-        return <AccordionItem>
-        <AccordionButton>
-            <Box flex='1' textAlign='left'>
-                <Flex gap={2}>
-                    <Box pt={1}>
-                        {icon}
-                    </Box>
-                    <Text fontWeight={'600'}>
-                        {title}
-                    </Text>
-                    <Text>
-                        {title === 'Done' ?
-                    `(${taskList.filter(i => i.status === 'Done').length})` :
-                    title === 'Under Review' ?
-                    `(${taskList.filter(i => i.status === 'Under Review').length})` :
-                    title === 'In Progress' ?
-                    `(${taskList.filter(i => i.status === 'In Progress').length})` :
-                    `(${taskList.filter(i => i.status === 'Open' ).length})`}
-                    </Text>
-                </Flex>
-            </Box>
-            <AccordionIcon />
-        </AccordionButton>
-        <AccordionPanel pb={4}>
-            {taskList && <TaskTable
-                tasks={
-                    title === 'Done' ?
-                    taskList.map(i => i.status === 'Done' && i) :
-                    title === 'Under Review' ?
-                    taskList.map(i => i.status === 'Under Review' && i) :
-                    title === 'In Progress' ?
-                    taskList.map(i => i.status === 'In Progress' && i) :
-                    taskList.map(i => i.status === 'Open' && i)
-                }
-                updateTask={updateTask}
-                deleteTask={deleteTask}
-            />}
-        </AccordionPanel>
-    </AccordionItem>
-    }
+
 
     return (
         !isLoading ? <Box p={5}>
@@ -134,18 +94,30 @@ const TaskContainer = () => {
                 <AccordionSingle
                     title="Done"
                     icon={<IoIosSquare color='green'/>}
+                    taskList={taskList.map(i => i.status === 'Done' && i)}
+                    updateTask={updateTask}
+                    deleteTask={deleteTask}
                 />
                 <AccordionSingle
                     title="Under Review"
                     icon={<IoIosSquare color='orange'/>}
+                    taskList={taskList.map(i => i.status === 'Under Review' && i)}
+                    updateTask={updateTask}
+                    deleteTask={deleteTask}
                 />
                 <AccordionSingle
                     title="In Progress"
                     icon={<IoIosSquare color='#F1C40F'/>}
+                    taskList={taskList.map(i => i.status === 'In Progress' && i)}
+                    updateTask={updateTask}
+                    deleteTask={deleteTask}
                 />
                 <AccordionSingle
                     title="Open"
                     icon={<IoIosSquare color='#3498DB' />}
+                    taskList={taskList.map(i => i.status === 'Open' && i)}
+                    updateTask={updateTask}
+                    deleteTask={deleteTask}
                 />
             </Accordion>
             <TaskModal isOpen={isOpen} onClose={onClose} insertTask={addTask}/>
@@ -157,5 +129,39 @@ const TaskContainer = () => {
         </Stack>
     );
 };
+
+const AccordionSingle = ({title,icon,updateTask,deleteTask,taskList}) => {
+    return <AccordionItem>
+    <AccordionButton>
+        <Box flex='1' textAlign='left'>
+            <Flex gap={2}>
+                <Box pt={1}>
+                    {icon}
+                </Box>
+                <Text fontWeight={'600'}>
+                    {title}
+                </Text>
+                <Text>
+                    {title === 'Done' ?
+                `(${taskList.filter(i => i.status === 'Done').length})` :
+                title === 'Under Review' ?
+                `(${taskList.filter(i => i.status === 'Under Review').length})` :
+                title === 'In Progress' ?
+                `(${taskList.filter(i => i.status === 'In Progress').length})` :
+                `(${taskList.filter(i => i.status === 'Open' ).length})`}
+                </Text>
+            </Flex>
+        </Box>
+        <AccordionIcon />
+    </AccordionButton>
+    <AccordionPanel pb={4}>
+        <TaskTable
+            tasks={taskList}
+            updateTask={task => updateTask(task)}
+            deleteTask={id => deleteTask(id)}
+        />
+    </AccordionPanel>
+</AccordionItem>
+}
 
 export default TaskContainer;
