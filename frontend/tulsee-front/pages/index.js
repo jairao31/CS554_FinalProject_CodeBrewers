@@ -18,17 +18,20 @@ import MoonLoader from "react-spinners/MoonLoader";
 import { ImPointLeft } from "react-icons/im";
 import { GrOverview } from "react-icons/gr";
 import { ImEnter } from "react-icons/im";
+
 const SearchBarContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 3.4em;
+  border-radius: 0 5px 0 0;
   background-color: #fff;
-  border-radius: 5px;
+  // border-radius: 5px;
 `;
 
 const SearchInputContainer = styled.div`
   width: 100%;
+  border-radius: 0 5px 0 0;
   min-height: 3.5em;
   display: flex;
   align-items: center;
@@ -44,7 +47,7 @@ const SearchInput = styled.input`
   font-size: 21px;
   color: #357960;
   font-weight: 500;
-  border-radius: 6px;
+  border-radius: 0 5px 0 0;
   background-color: transparent;
 
   &:focus {
@@ -62,6 +65,7 @@ const SearchInput = styled.input`
 
 const SearchIcon = styled.span`
   color: #357960;
+  border-radius: 0 5px 0 0;
   font-size: 27px;
   margin-right: 10px;
   vertical-align: middle;
@@ -126,13 +130,9 @@ const containerTransition = { type: "spring", damping: 40, stiffness: 150 };
 
 const Home = () => {
   const { push } = useRouter();
-  // const { query, push } = useRouter();
   const { userID } = useContext(UserContext);
   const [newCategory, setnew] = useState("");
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const [isdisable, setisDisable] = useState(false);
-  const [searchResults, setSearchResults] = useState([])
-
+  const [searchResults, setSearchResults] = useState([]);
   const [isExpanded, setExpanded] = useState(false);
   const [parentRef, isClickedOutside] = useClickOutside();
   const inputRef = useRef();
@@ -143,7 +143,7 @@ const Home = () => {
   const isEmpty = !tvShows || tvShows.length === 0;
 
   const handleSearch = (e) => {
-    if(e.target.value.trim().length === 0) {
+    if (e.target.value.trim().length === 0) {
       setSearchResults([]);
     }
     setSearchQuery(e.target.value);
@@ -180,11 +180,10 @@ const Home = () => {
   console.log(searchQuery);
 
   useEffect(() => {
-    if(searchList && typeof searchList === 'object' && searchList.length) {
-      setSearchResults(searchList)
+    if (searchList && typeof searchList === "object" && searchList.length) {
+      setSearchResults(searchList);
     }
   }, [searchList]);
- 
 
   return userID ? (
     <Layout>
@@ -221,7 +220,7 @@ const Home = () => {
           marginLeft={"20%"}
           width={"70%"}
           outline={"1px solid"}
-          borderRadius={"0 5px 5px 0"}
+          borderRadius={"0 5px 0 0"}
         >
           <SearchBarContainer
             animate={isExpanded ? "expanded" : "collapsed"}
@@ -283,8 +282,7 @@ const Home = () => {
                     <WarningMessage>No Result!</WarningMessage>
                   </LoadingWrapper>
                 )} */}
-                {
-                  newCategory === "project" &&
+                {newCategory === "project" &&
                   searchResults.map((i) => {
                     return (
                       <div>
