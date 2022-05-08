@@ -13,6 +13,7 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { useEditUser } from "../../api/user/editUser";
 import CommonInput from "../Common/CommonInput";
+import CommonTextarea from '../Common/CommonTextarea';
 import { UserContext } from "../Contexts/UserContext";
 import ChangePassword from "./changePassword";
 import { AiFillCamera } from "react-icons/ai";
@@ -31,13 +32,7 @@ const UserSettings = () => {
 
   useEffect(() => {
     if (!UserDetails) return;
-    const { firstName, lastName, profilePhotoUrl, displayName } = UserDetails;
-    setDetails({
-      firstName: firstName.split("")[0].toUpperCase() + firstName.slice(1),
-      lastName: lastName.split("")[0].toUpperCase() + lastName.slice(1),
-      profilePhotoUrl,
-      displayName
-    });
+    setDetails(UserDetails);
   }, [UserDetails]);
 
   const profileImg = e => {
@@ -159,13 +154,19 @@ const UserSettings = () => {
           onChange={handleChange}
           isRequired
         />
-
         <CommonInput
           label="Last Name"
           name="lastName"
           value={details.lastName || ""}
           onChange={handleChange}
           isRequired
+        />
+        <CommonTextarea
+          label={'Bio'}
+          name="description"
+          placeholder={"Write something about yourself..."}
+          value={details.description || ''}
+          onChange={handleChange}
         />
         <Button type="submit" variant={"outline"} isLoading={isLoading}>
           Save Changes

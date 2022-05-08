@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Layout from "../../../Components/Common/layout";
 import TopNavBar from "../../../Components/Common/TopNavBar";
 import { UserContext } from "../../../Components/Contexts/UserContext";
+import {useGetUser} from '../../../api/user/getUser';
 
 import {
   Container,
@@ -14,10 +15,29 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 const User = () => {
+
+  const [data, setData] = useState({})
+
+  const {query} = useRouter();
+
+  const {userId} = query
+
   const { UserDetails } = useContext(UserContext);
-  console.log(UserDetails);
+
+  const {data: user} = useGetUser(userId, !!userId)
+
+  useEffect(() => {
+    if(!userId || !user || !UserDetails) return
+    if(userId === UserDetails.publicId) {
+      setData(UserDetails)
+    }else{
+      setData(user)
+    }
+  },[userId,user,UserDetails])
+
 
   return (
     <Layout>
@@ -42,14 +62,13 @@ const User = () => {
               <Wrap spacing={{ base: 20, sm: 3, md: 5, lg: 20 }}>
                 <WrapItem>
                   <Box>
-                    <Heading>{UserDetails.displayName}</Heading>
+                    <Heading>{data.displayName || ''}</Heading>
                     <Text mt={{ sm: 3, md: 3, lg: 5 }} color="brand.900">
-                      {UserDetails.email}
+                      {data.email || ''}
                     </Text>
                     <Box py={{ base: 5, sm: 5, md: 8, lg: 10 }}>
                       <VStack pl={0} spacing={3} alignItems="flex-start">
-                        <Text>User Bio</Text>
-                        {/* <Text>{UserDetails.bio}</Text> */}
+                        <Text maxW={'250px'}>{data.description || ''}</Text>
                       </VStack>
                     </Box>
                   </Box>
@@ -60,8 +79,8 @@ const User = () => {
                       <VStack spacing={3}>
                         <Box boxSize="150px">
                           <Image
-                            src={UserDetails.profilePhotoUrl}
-                            alt={UserDetails.displayName}
+                            src={data.profilePhotoUrl || ''}
+                            alt={data.displayName || ''}
                           />
                         </Box>
                       </VStack>

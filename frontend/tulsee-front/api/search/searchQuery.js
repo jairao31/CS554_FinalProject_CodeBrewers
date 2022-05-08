@@ -9,7 +9,7 @@ const searchQuery = async (query, type, publicId) => {
 };
 
 export const useSearchQuery = (query, type, publicId, isEnabled) => {
-  return useQuery("searchQuery", () => searchQuery(query, type, publicId), {
+  return useQuery(["searchQuery",isEnabled], () => searchQuery(query, type, publicId), {
     enabled: isEnabled,
   });
 };
