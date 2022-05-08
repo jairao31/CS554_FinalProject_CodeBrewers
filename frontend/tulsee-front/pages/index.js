@@ -179,10 +179,10 @@ const Home = () => {
     !!(searchQuery.length > 1)
   );
 
-  console.log(searchQuery);
 
   useEffect(() => {
     if (searchList && typeof searchList === "object" && searchList.length) {
+      console.log('searched')
       setSearchResults(searchList);
     }
   }, [searchList]);
