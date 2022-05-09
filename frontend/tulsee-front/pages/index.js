@@ -176,16 +176,24 @@ const Home = () => {
     searchQuery,
     newCategory,
     userID,
-    !!(searchQuery.length > 1)
+    !!(userID && searchQuery && searchQuery.length > 1)
   );
 
 
   useEffect(() => {
-    if (searchList && typeof searchList === "object" && searchList.length) {
+    // console.log(searchQuery,':',searchList.length)
+    if (searchList && typeof searchList === "object" && (!!searchList.length || searchList.length === 0)) {
       console.log('searched')
+      console.log(searchQuery,':',searchList)
       setSearchResults(searchList);
     }
   }, [searchList]);
+
+  useEffect(() => {
+    if(searchQuery.length > 1 && searchList) {
+      refetch()
+    }
+  },[searchQuery])
 
   return userID ? (
     <Layout>
@@ -275,9 +283,14 @@ const Home = () => {
                     <WarningMessage>No Result!</WarningMessage>
                   </LoadingWrapper>
                 )} */}
-                {!isEmpty && searchResults.length === 0 && (
+                {!isEmpty && isLoading && (
                   <LoadingWrapper>
                     <MoonLoader loading color="Green" size={40} />
+                  </LoadingWrapper>
+                )}
+                {!isEmpty && searchResults.length === 0 && (
+                  <LoadingWrapper>
+                    <WarningMessage>No results found for "{searchQuery}"</WarningMessage>
                   </LoadingWrapper>
                 )}
                 {isEmpty && (
