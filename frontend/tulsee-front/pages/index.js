@@ -142,10 +142,10 @@ const Home = () => {
   const isEmpty = !searchQuery || searchQuery.length === 0;
 
   const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
     if (e.target.value.trim().length === 0) {
       setSearchResults([]);
     }
-    setSearchQuery(e.target.value);
   };
   const expandContainer = () => {
     // setSearchResults([]);
@@ -176,13 +176,13 @@ const Home = () => {
     searchQuery,
     newCategory,
     userID,
-    !!(userID && searchQuery && searchQuery.length > 1)
+    !!(searchQuery.length > 1)
   );
 
 
   useEffect(() => {
-    // console.log(searchQuery,':',searchList.length)
-    if (searchList && typeof searchList === "object" && (!!searchList.length || searchList.length === 0)) {
+    console.log(searchQuery,':',searchList)
+    if (searchList && typeof searchList === "object" && (searchList.length || searchList.length === 0)) {
       console.log('searched')
       console.log(searchQuery,':',searchList)
       setSearchResults(searchList);
@@ -190,7 +190,8 @@ const Home = () => {
   }, [searchList]);
 
   useEffect(() => {
-    if(searchQuery.length > 1 && searchList) {
+    if(searchQuery.length > 1 && searchResults) {
+      console.log('fetching')
       refetch()
     }
   },[searchQuery])

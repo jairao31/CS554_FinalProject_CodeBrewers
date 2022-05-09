@@ -17,10 +17,15 @@ import {
     Text,
     VStack,
     Portal,
+    Flex,
+    Spinner,
+    Button,
   } from '@chakra-ui/react'
 import { useAutocompleteUser } from '../../../api/user/autocompleteUser';
 import FormControlLayout from '../FormControlLayout';
 import { UserContext } from '../../Contexts/UserContext';
+import { SiMinutemailer } from 'react-icons/si';
+import InviteUserModal from './inviteUserModal';
 
 const UserAutocomplete = ({label, handleSelect, options}) => {
 
@@ -29,10 +34,12 @@ const UserAutocomplete = ({label, handleSelect, options}) => {
 
     const {UserDetails} = useContext(UserContext)
 
+    const {isOpen, onOpen, onClose: onInviteClose} = useDisclosure()
+
 
     const {onClose} = useDisclosure()
 
-    const {data: results} = useAutocompleteUser(query, !!(query.length > 2 && !options))
+    const {data: results,refetch, isLoading} = useAutocompleteUser(query, !!(query.length > 2 && !options))
 
     const handleChange = e => {
         const {value} = e.target;
@@ -48,9 +55,17 @@ const UserAutocomplete = ({label, handleSelect, options}) => {
     }
 
     useEffect(() => {
+        console.log(results);
         if(!results) return;
+        console.log(results);
         setSearchResults(results.filter(i => i.publicId !== UserDetails.publicId))
     },[results])
+
+    useEffect(() => {
+        if(query.length > 2 && searchResults) {
+            refetch()
+        }
+    },[query])
 
 
 
@@ -66,7 +81,7 @@ const UserAutocomplete = ({label, handleSelect, options}) => {
         <Popover
         isLazy
         autoFocus={false}
-        isOpen={query.length > 2 && searchResults.length > 0}
+        isOpen={query.length > 2}
         placement='bottom'
         closeOnBlur={false}
       ><FormControlLayout label={label}>
@@ -77,13 +92,17 @@ const UserAutocomplete = ({label, handleSelect, options}) => {
             </PopoverTrigger>
         </FormControlLayout>
             <PopoverContent minW={'200px'} width='fit-content' px={3} py={1}>
-            {searchResults && <VStack>
+            {!isLoading && searchResults && <VStack>
+                {searchResults.length === 0 && <Button onClick={() => onOpen()} w={'100%'} leftIcon={<SiMinutemailer/>} variant='ghost'>Invite {query}</Button>}
                 {searchResults.map(i => 
                     <ResultEntry key={i.publicId} name={i.displayName} src={i.profilePhotoUrl} handleSelect={() => {handleSelect(i); setQuery('')}}/>
                 )}
             </VStack>}
+            {isLoading && <Flex justifyContent={'center'}>
+                    <Spinner/>
+                </Flex>}
             </PopoverContent>
-
+            <InviteUserModal isOpen={isOpen} onClose={onInviteClose}/>
       </Popover>
     );
 };
