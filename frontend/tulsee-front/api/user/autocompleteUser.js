@@ -4,6 +4,7 @@ import axios from 'axios'
 
 const getUsers = async query => {
     const {data} = await axios.get(`http://localhost:3001/user/autoComplete/${query}`)
+    console.log(data)
     return data
 }
 

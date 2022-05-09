@@ -5,7 +5,7 @@ import {BiTask} from 'react-icons/bi'
 import {IoMdChatboxes} from 'react-icons/io'
 import {SiGooglemeet} from 'react-icons/si'
 import {VscFileMedia} from 'react-icons/vsc'
-import {MdArrowBackIosNew} from 'react-icons/md'
+import {MdArrowBackIosNew, MdHome} from 'react-icons/md'
 import {MdSettings} from 'react-icons/md'
 import { ProjectContext } from '../../Contexts/ProjectContext';
 import IconButton from '../IconButton';
@@ -64,6 +64,11 @@ const TopNavBar = ({activePage, title}) => {
             borderBottom={'1px solid #D5D8DC'}
         >
             <HStack>
+                <Tooltip hasArrow  label={'Home'} placement='bottom'>
+                    <div>
+                        <IconButton onClick={() => push('/')} variant={'ghost'} icon={<MdHome size={'20px'}/>}/>
+                    </div>
+                </Tooltip>
                 <IconButton variant={'ghost'} icon={<MdArrowBackIosNew size={'20px'}/>} onClick={() => back()}/>
                 <Text mt={'8px!important'} fontSize={'lg'} fontWeight={500} minW={'100px'} alignSelf={'flex-start'}>{title}</Text>
             </HStack>

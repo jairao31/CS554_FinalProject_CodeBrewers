@@ -32,14 +32,15 @@ router.get("/:query/:type/:publicId", async (req, res) => {
               }
             }
           }
-          if (result.length === 0) {
-            res.json(
-              "Sorry! No Project found with " +
-                query +
-                " project name. Try Again!"
-            );
-            return;
-          }
+          // if (result.length === 0) {
+          //   res.json([]);
+          //   // res.json(
+          //   //   "Sorry! No Project found with " +
+          //   //     query +
+          //   //     " project name. Try Again!"
+          //   // );
+          //   return;
+          // }
           res.json(result);
         });
     } else if (type === "user") {
@@ -58,12 +59,13 @@ router.get("/:query/:type/:publicId", async (req, res) => {
               }
             }
           }
-          if (result.length === 0) {
-            res.json(
-              "Sorry! No user found with " + query + " user name. Try Again!"
-            );
-            return;
-          }
+          // if (result.length === 0) {
+          //   res.json([]);
+          //   // res.json(
+          //   //   "Sorry! No user found with " + query + " user name. Try Again!"
+          //   // );
+          //   return;
+          // }
           res.json(result);
         });
     }

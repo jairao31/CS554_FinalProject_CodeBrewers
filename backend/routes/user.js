@@ -1,8 +1,6 @@
 const express = require('express');
-const { getDatabase } = require('firebase-admin/database');
 const { userCollection } = require('../data/Refs');
 const router = express.Router();
-const bcrypt = require("bcrypt");
 const { v4 } = require('uuid');
 const { storage } = require("../data/firebase");
 const {
@@ -12,7 +10,8 @@ const {
   getMetadata,
   deleteObject,
 } = require("firebase/storage");
-const saltRounds = 12;
+const nodemailer = require('nodemailer')
+
 
 // "isPassword" function used to check pass
 function isPassword(str) {
@@ -259,6 +258,49 @@ router.get("/logout/:userId", async (req, res) => {
         res.json('logged out successfully!')
       }
     })
-  });
+});
+
+router.post("/invite/email", async(req,res) => {
+  try {
+    const {reciever,sender} = req.body
+
+    const output = `<div>
+      <p><strong>${sender.displayName}</strong> invites you to join <strong>TULSEE</strong></p>
+    </div>`
+
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: process.env.AUTH_USERNAME,
+        pass: process.env.AUTH_PASSWORD,
+        clientId: process.env.AUTH_CLIENT_ID,
+        clientSecret: process.env.AUTH_SECRET,
+        refreshToken: process.env.AUTH_REFRESH_TOKEN
+      }
+    });
+
+    let info = await transporter.sendMail({
+      from: `smane2@stevens.edu`, // sender address
+      to: reciever, // list of receivers
+      subject: "Invite to TULSEE", // Subject line
+      text: `Hello, you've been invited to join TULSEE by ${sender.displayName}`, // plain text body
+      html: output, // html body
+    });
+
+    res.json({messageId: info.messageId})
+    // userCollection(reciever).once('value', snapshot => {
+    //   if(!snapshot.val()) {
+    //     res.status(500).json({error: "Could not get reciever info"});
+    //     return;
+    //   }
+
+    // })
+
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({error:"Could not send email to the user"})
+  }
+})
 
 module.exports = router
