@@ -272,8 +272,8 @@ router.post("/invite/email", async(req,res) => {
       service: 'gmail',
       auth: {
         type: 'OAuth2',
-        user: 'smane2@stevens.edu',
-        pass: 'Stevens479049',
+        user: process.env.AUTH_USERNAME,
+        pass: process.env.AUTH_PASSWORD,
         clientId: process.env.AUTH_CLIENT_ID,
         clientSecret: process.env.AUTH_SECRET,
         refreshToken: process.env.AUTH_REFRESH_TOKEN
