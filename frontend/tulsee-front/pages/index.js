@@ -11,6 +11,7 @@ import { MdClear } from "react-icons/md";
 import { Button } from "@chakra-ui/react";
 import styled from "styled-components";
 import { IoClose, IoSearch } from "react-icons/io5";
+import { GrClose } from "react-icons/gr";
 import { AnimatePresence, motion } from "framer-motion";
 import { useClickOutside } from "react-click-outside-hook";
 import { useRef } from "react";
@@ -72,16 +73,16 @@ const SearchIcon = styled.span`
 `;
 
 const CloseIcon = styled(motion.span)`
-  color: red;
+  // color: red;
   font-size: 23px;
   vertical-align: middle;
   transition: all 200ms ease-in-out;
-  cursor: pointer;
+  // cursor: pointer;
 
-  &:hover {
-    cursor: "pointer";
-    color: red;
-  }
+  // &:hover {
+  //   cursor: "pointer";
+  //   color: red;
+  // }
 `;
 
 const LineSeperator = styled.span`
@@ -138,9 +139,7 @@ const Home = () => {
   const inputRef = useRef();
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading1, setLoading1] = useState(false);
-  const [tvShows, setTvShows] = useState([]);
-  const [noTvShows, setNoTvShows] = useState(false);
-  const isEmpty = !tvShows || tvShows.length === 0;
+  const isEmpty = !searchQuery || searchQuery.length === 0;
 
   const handleSearch = (e) => {
     if (e.target.value.trim().length === 0) {
@@ -149,16 +148,19 @@ const Home = () => {
     setSearchQuery(e.target.value);
   };
   const expandContainer = () => {
+    // setSearchResults([]);
+
     setExpanded(true);
   };
 
   const collapseContainer = () => {
-    var searchList = [];
+    // var searchList = [];
     setExpanded(false);
+    setSearchResults([]);
+
     setSearchQuery("");
     setLoading1(false);
-    setNoTvShows(false);
-    setTvShows([]);
+
     if (inputRef.current) inputRef.current.value = "";
   };
 
@@ -251,7 +253,7 @@ const Home = () => {
                   placeholder="Please select a category to search"
                 ></SearchInput>
               )}
-              <AnimatePresence>
+              {/* <AnimatePresence>
                 {isExpanded && (
                   <CloseIcon
                     key="close-icon"
@@ -262,26 +264,27 @@ const Home = () => {
                     transition={{ duration: 0.2 }}
                   ></CloseIcon>
                 )}
-              </AnimatePresence>
+              </AnimatePresence> */}
             </SearchInputContainer>
             {isExpanded && <LineSeperator />}
             {isExpanded && (
               <SearchContent>
-                {/* {isLoading1 && (
-                  <LoadingWrapper>
-                    <MoonLoader loading color="#000" size={20} />
-                  </LoadingWrapper>
-                )}
-                {!isLoading1 && isEmpty && (
-                  <LoadingWrapper>
-                    <WarningMessage>Start typing to Search</WarningMessage>
-                  </LoadingWrapper>
-                )}
-                {!isLoading1 && (
+                {/* 
+                {isLoading1 && (
                   <LoadingWrapper>
                     <WarningMessage>No Result!</WarningMessage>
                   </LoadingWrapper>
                 )} */}
+                {!isEmpty && searchResults.length === 0 && (
+                  <LoadingWrapper>
+                    <MoonLoader loading color="Green" size={40} />
+                  </LoadingWrapper>
+                )}
+                {isEmpty && (
+                  <LoadingWrapper>
+                    <WarningMessage>Start typing to Search</WarningMessage>
+                  </LoadingWrapper>
+                )}
                 {newCategory === "project" &&
                   searchResults.map((i) => {
                     return (
@@ -305,7 +308,6 @@ const Home = () => {
                       </div>
                     );
                   })}
-
                 {!isLoading1 &&
                   newCategory === "user" &&
                   searchResults.map((i) => {
