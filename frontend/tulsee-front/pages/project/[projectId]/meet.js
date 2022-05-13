@@ -5,7 +5,7 @@ import ProjectLayout from "../../../Components/Common/ProjectLayout";
 import { FiExternalLink } from "react-icons/fi";
 import React, { useState, useContext } from "react";
 import axios from "axios";
-import { Button, Input } from "@chakra-ui/react";
+import { Button, Image, Input } from "@chakra-ui/react";
 import { UserContext } from "../../../Components/Contexts/UserContext";
 import { AiOutlineClear } from "react-icons/ai";
 import { ImLink } from "react-icons/im";
@@ -167,15 +167,12 @@ const Meet = () => {
               )}{" "}
               <br />
             </div>
-            <img
-              src="\meeting.png"
-              height="230px"
-              width="200px"
-              style={{
-                margin: "10px",
-                borderRadius: "50px",
-              }}
-              alt=""
+            <Image
+              alt='zoom'
+              mx='auto'
+              mt='100px'
+              width={'600px'}
+              src='/zoomTu.svg'
             />
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import {createUserWithEmailAndPassword, EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, signInWithEmailAndPassword, signOut, updatePassword} from 'firebase/auth';
 import { useCreateUser } from '../../api/user/createUserMutation';
-import { useToast } from '@chakra-ui/react';
+import { useColorMode, useToast } from '@chakra-ui/react';
 import { useGetUser } from '../../api/user/getUser';
 import { useRouter } from 'next/router';
 import { useLogoutUser } from '../../api/user/logoutUser';
@@ -26,6 +26,8 @@ const UserContextProvider = ({children}) => {
     const toast = useToast();
 
     const {data: User} = useGetUser(userID, !!userID);
+
+    const { colorMode, toggleColorMode } = useColorMode();
 
     useEffect(() => {
         if(User) setUserDetails(User);
@@ -122,6 +124,7 @@ const UserContextProvider = ({children}) => {
             onSuccess: d => {
                 signOut(auth).then(
                     () => {
+                        if(colorMode === "dark") toggleColorMode();
                         toast({title: 'User logged out successfully', status: "success", duration: 2000})
                     }
                     ).catch((e) => {

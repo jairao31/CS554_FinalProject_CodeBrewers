@@ -27,7 +27,7 @@ const Sidebar = () => {
   //   const { colorMode, toggleColorMode } = useColorMode();
   //   const isDark = colorMode === "dark";
   const { logout, UserDetails, loggingOut } = useContext(UserContext);
-  const { groupProjects, personalProjects } = useContext(ProjectContext);
+  const { groupProjects, personalProjects, currentProject } = useContext(ProjectContext);
 
   const { push } = useRouter();
 
@@ -101,10 +101,10 @@ const Sidebar = () => {
 
           {personalProjects.map((i) => (
             <Button
-              backgroundColor={"brand.700"}
+              backgroundColor={currentProject && currentProject.publicId !== i.publicId && "brand.700"}
               onClick={() => push(`/project/${i.publicId}/task`)}
               key={i.publicId}
-              variant={"solid"}
+              variant={currentProject && currentProject.publicId === i.publicId ? "outline" : "solid"}
               w="100%"
               leftIcon={<MdPerson />}
             >
@@ -118,10 +118,10 @@ const Sidebar = () => {
           </Text>
           {groupProjects.map((i) => (
             <Button
-              backgroundColor={"brand.700"}
+              backgroundColor={currentProject && currentProject.publicId !== i.publicId && "brand.700"}
               onClick={() => push(`/project/${i.publicId}/task`)}
               key={i.publicId}
-              variant={"solid"}
+              variant={currentProject && currentProject.publicId === i.publicId ? "outline" : "solid"}
               w="100%"
               leftIcon={<MdGroups />}
             >
