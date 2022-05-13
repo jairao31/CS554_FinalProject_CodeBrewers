@@ -1,9 +1,8 @@
 import { useColorMode } from "@chakra-ui/react";
-import React, { useContext } from "react";
-import { FaSun, FaMoon, FaGithub } from "react-icons/fa";
+import React from "react";
+import { FaSun, FaMoon } from "react-icons/fa";
 import { IconButton } from "@chakra-ui/react";
 // import { useRouter } from "next/router";
-import { FcAbout } from "react-icons/fc";
 import styled from "styled-components";
 // const Footer = () => {
 //   const { colorMode, toggleColorMode } = useColorMode();

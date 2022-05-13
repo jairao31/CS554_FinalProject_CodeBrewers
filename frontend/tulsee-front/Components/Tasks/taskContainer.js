@@ -12,22 +12,18 @@ import { Box,
     Skeleton,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoIosSquare } from 'react-icons/io';
 import { MdAdd } from 'react-icons/md';
 import { useGetTasksByProject } from '../../api/task/getTasksByProject';
-import { ProjectContext } from '../Contexts/ProjectContext';
 import TaskModal from './taskModal';
 import TaskTable from './taskTable';
 
 const TaskContainer = () => {
 
     const [taskList, setTaskList] = useState([])
-    const [change, setChange] = useState()
 
     const {query} = useRouter()
-
-    const {currentProject} = useContext(ProjectContext)
 
     const {projectId} = query
 
@@ -40,11 +36,7 @@ const TaskContainer = () => {
         setTaskList(tasks)
     },[tasks])
 
-    useEffect(() => {
-        if(projectId) setChange(projectId)
-        
-        // setTaskList([])
-    },[projectId])
+
 
  
 

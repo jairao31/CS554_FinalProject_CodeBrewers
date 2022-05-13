@@ -9,6 +9,8 @@ import { useLogoutUser } from '../../api/user/logoutUser';
 export const UserContext = createContext()
 
 const UserContextProvider = ({children}) => {
+    console.log('firebaseId: ', process.env.FIREBASE_AUTH_DOMAIN)
+
 
     const [userID, setUserID] = useState();
     const [UserDetails, setUserDetails] = useState()
@@ -57,7 +59,7 @@ const UserContextProvider = ({children}) => {
               // ...
             }
           });
-    },[])
+    },[user])
 
 
     const createUser = details => {

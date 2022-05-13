@@ -12,7 +12,6 @@ import {  motion } from "framer-motion";
 import { useClickOutside } from "react-click-outside-hook";
 import { useRef } from "react";
 import MoonLoader from "react-spinners/MoonLoader";
-import { ImPointLeft } from "react-icons/im";
 import { GrOverview } from "react-icons/gr";
 import { ImEnter } from "react-icons/im";
 
@@ -254,7 +253,7 @@ const Home = () => {
                 </>
               ) : (
                 <SearchInput
-                  disabled={"true"}
+                  disabled={true}
                   placeholder="Please select a category to search"
                 ></SearchInput>
               )}

@@ -1,5 +1,4 @@
-import { useRouter } from 'next/dist/client/router';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Layout from '../../../Components/Common/layout';
 import TopNavBar from '../../../Components/Common/TopNavBar';
 import { ProjectContext } from '../../../Components/Contexts/ProjectContext';

@@ -1,11 +1,8 @@
 import React, { useRef } from "react";
 import { useState, useEffect, useContext } from "react";
 import {
-  Button,
   Box,
   Image,
-  useColorModeValue,
-  Center,
   Input,
   IconButton,
   Flex,
@@ -13,14 +10,13 @@ import {
   HStack,
   Divider,
   FormLabel,
-  InputGroup,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { UserContext } from "../Contexts/UserContext";
 import { useUploadMedia } from "../../api/media/uploadMedia";
 import { useDeleteMedia } from "../../api/media/deleteMedia";
 import { useGetAllMedia } from "../../api/media/getAllMedia";
-import { MdDownload, MdSimCardDownload, MdUpload } from "react-icons/md";
+import { MdDownload, MdUpload } from "react-icons/md";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 
 const MediaContainer = () => {
