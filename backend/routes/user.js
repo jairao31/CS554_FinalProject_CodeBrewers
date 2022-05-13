@@ -69,7 +69,7 @@ router.post("/signup", async (req, res) => {
                   .status(500)
                   .json({ error: "User could not be registered!" });
               } else {
-                res.json(userName + " successfully Registered");
+                res.json(userData.displayName + " successfully Registered");
               }
             });
           }
