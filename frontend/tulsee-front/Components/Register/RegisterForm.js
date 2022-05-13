@@ -117,7 +117,7 @@ const RegisterForm = () => {
             <InputGroup>
               <InputLeftAddon children={<RiLockPasswordFill />} />
               <Input
-                type={show ? 'text' : 'password'}
+                type={confirmShow ? 'text' : 'password'}
                 placeholder="Confirm Password"
                 aria-label="Confirm Password"
                 name='confirmPassword'

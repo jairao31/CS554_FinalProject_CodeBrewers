@@ -27,7 +27,10 @@ const ProjectContextProvider = ({children}) => {
     useEffect(() => {
         if(!query) return
         const {projectId} = query;
-        if(!projectId || !Projects) return
+        if(!projectId || !Projects) {
+            setCurrentProject(null);
+            return;
+        }
         const allProjects = [...groupProjects, ...personalProjects, ...archivedProjects]
         const exist = allProjects.find(i => i.publicId === projectId);
         console.log(exist);

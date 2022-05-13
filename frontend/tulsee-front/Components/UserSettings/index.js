@@ -9,8 +9,9 @@ import {
   Avatar,
   FormLabel,
   Spinner,
+  useDisclosure,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useEditUser } from "../../api/user/editUser";
 import CommonInput from "../Common/CommonInput";
 import CommonTextarea from '../Common/CommonTextarea';
@@ -18,15 +19,20 @@ import { UserContext } from "../Contexts/UserContext";
 import ChangePassword from "./changePassword";
 import { AiFillCamera } from "react-icons/ai";
 import { useUploadProfilePhoto } from "../../api/user/uploadProfilePhoto";
+import PhotoCropModal from "./photoCropModal";
+import Cropper from "react-easy-crop";
 
 const UserSettings = () => {
   const [details, setDetails] = useState({});
   const [profilePic, setProfilePic] = useState(null);
 
+
   const { UserDetails, setUserDetails } = useContext(UserContext);
 
   const { mutate: editUser, isLoading } = useEditUser();
   const { mutate: uploadProfilePic , isLoading:dpLoading} = useUploadProfilePhoto()
+
+  const {isOpen, onOpen, onClose} = useDisclosure()
 
   const toast = useToast();
 
@@ -36,28 +42,38 @@ const UserSettings = () => {
   }, [UserDetails]);
 
   const profileImg = e => {
-    const formData = new FormData();
-    formData.append("profilePic", e.target.files[0]);
-    uploadProfilePic({
-        userId: UserDetails.publicId, 
-        formData
-      },
-      {
-        onSuccess: d => {
-          setUserDetails(prev => {
-            return {
-              ...prev,
-              profilePhotoUrl: d
-            }
-          })
-          toast({title:"profile photo uploaded successfully", status:'success', duration: 2000});
-        },
-        onError: e => {
-          console.log(e)
-          toast({title:"Something went wrong!", status:'error', duration: 2000});
-        }
-      }
-    )
+    // const formData = new FormData();
+    // formData.append("profilePic", e.target.files[0]);
+    // onOpen()
+    if (e.target.files && e.target.files.length > 0) {
+			const reader = new FileReader();
+			reader.readAsDataURL(e.target.files[0]);
+			reader.addEventListener("load", () => {
+        console.log(reader.result)
+				setProfilePic(reader.result);
+        onOpen()
+			});
+		}
+    // uploadProfilePic({
+    //     userId: UserDetails.publicId, 
+    //     formData
+    //   },
+    //   {
+    //     onSuccess: d => {
+    //       setUserDetails(prev => {
+    //         return {
+    //           ...prev,
+    //           profilePhotoUrl: d
+    //         }
+    //       })
+    //       toast({title:"profile photo uploaded successfully", status:'success', duration: 2000});
+    //     },
+    //     onError: e => {
+    //       console.log(e)
+    //       toast({title:"Something went wrong!", status:'error', duration: 2000});
+    //     }
+    //   }
+    // )
   };
 
   const handleChange = (value, name) => {
@@ -116,6 +132,7 @@ const UserSettings = () => {
       <Box mb={4} w='fit-content' position={'relative'}>
         <input id='profile_photo_input' type='file' style={{display:'none'}} onChange={profileImg}/>
         <Avatar size={'lg'} src={details.profilePhotoUrl} alt={`${details.firstName}_dp`} name={details.displayName}/>
+        {/* Write user crop feature */}
         <Box 
           w={'64px'} 
           h='64px' 
@@ -174,6 +191,8 @@ const UserSettings = () => {
       </form>
       <Divider />
       <ChangePassword />
+    
+      <PhotoCropModal isOpen={isOpen} onClose={onClose} photo={profilePic}/>
     </Box>
   );
 };

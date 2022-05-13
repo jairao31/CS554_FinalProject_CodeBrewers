@@ -1,18 +1,14 @@
-import { Avatar, Box, Center, HStack, Text } from "@chakra-ui/react";
+import { Avatar, Box, Flex, HStack, Image, Spinner, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import Layout from "../Components/Common/layout";
 import { UserContext } from "../Components/Contexts/UserContext";
-import { Input, InputGroup, InputLeftAddon, Select } from "@chakra-ui/react";
-import { BsSearch } from "react-icons/bs";
+import { InputGroup, Select } from "@chakra-ui/react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useSearchQuery } from "../api/search/searchQuery";
-import { MdClear } from "react-icons/md";
-import { Button } from "@chakra-ui/react";
 import styled from "styled-components";
-import { IoClose, IoSearch } from "react-icons/io5";
-import { GrClose } from "react-icons/gr";
-import { AnimatePresence, motion } from "framer-motion";
+import { IoSearch } from "react-icons/io5";
+import {  motion } from "framer-motion";
 import { useClickOutside } from "react-click-outside-hook";
 import { useRef } from "react";
 import MoonLoader from "react-spinners/MoonLoader";
@@ -370,6 +366,16 @@ const Home = () => {
             )}
           </SearchBarContainer>
         </InputGroup>
+        <Flex h='100%' justifyContent={'center'}>
+              <Box py='15%'>
+                <Image
+                  alt='home'
+                  w='600px'
+                  src={'/home.svg'}
+                />
+                <Text textAlign={'center'} fontSize={'2xl'} fontWeight='bold' mt={'40px'}>Welcome! Let's get some work done!</Text>
+              </Box>
+        </Flex>
         {/* <Center>
         <InputGroup
           boxShadow={"0px 2px 12px 3px rgba(0, 0, 0, 0.14)"}
@@ -426,9 +432,12 @@ const Home = () => {
       </>
     </Layout>
   ) : (
-    <Box>
-      <p>you are being logged out!</p>
-    </Box>
+    <Flex direction='column' justifyContent={'center'} w='100vw' h='100vh'>
+      <Box mx='auto' textAlign={'center'}>
+        <Spinner color='brand.500'/>
+        <Text>Authenticating, please wait....</Text>
+      </Box>
+    </Flex>
   );
 };
 

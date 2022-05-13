@@ -1,6 +1,6 @@
 import { Flex, Select, Tag, TagCloseButton, TagLabel } from '@chakra-ui/react';
 import React from 'react';
-import FormControlLayout from '../formControlLayout';
+import FormControlLayout from '../FormControlLayout';
 
 const CommonSelect = ({isRequired, label, options, isError, onSelect, value, name,multiple, handleRemove, helperText, defaultValue, size, disabled}) => {
     return (
