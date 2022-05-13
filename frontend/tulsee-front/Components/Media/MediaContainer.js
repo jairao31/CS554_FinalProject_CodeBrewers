@@ -14,6 +14,7 @@ import {
   Divider,
   FormLabel,
   InputGroup,
+  Text
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { UserContext } from "../Contexts/UserContext";
@@ -84,8 +85,6 @@ const MediaContainer = () => {
     );
   };
 
-
-
   return (
     <Box maxH={"100vh"} overflowY="auto" pt={2}>
       <Flex px={'100px'} justifyContent={'flex-end'}>
@@ -113,6 +112,7 @@ const MediaContainer = () => {
                   src={img.url}
                   borderRadius={'md'}
                 />
+                <Text>{img.name}</Text>
                 <HStack gap={2}>
                   <IconButton
                     variant={'outline'}
