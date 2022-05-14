@@ -42,7 +42,7 @@ app.use(cors());
 
 const io = new Server(http, {
   cors: {
-    origin: (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? "http://localhost:3000" : 'http://54.159.158.150:3000',
+    origin: (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? "http://localhost:3000" : 'http://34.238.51.139:3000',
     methods: ["GET", "POST"],
   },
 });
