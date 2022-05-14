@@ -122,7 +122,9 @@ const MediaContainer = () => {
                 ) : (
                   <Image w={"80px"} src={"/docpdf.png"} borderRadius={"md"} />
                 )}
-                <Text style={{ display: "flex" }}>{img.name}</Text>
+                <Text style={{ textAlign: "center", margin: "auto" }}>
+                  {img.name}
+                </Text>
                 <HStack gap={2}>
                   <IconButton
                     variant={"outline"}
