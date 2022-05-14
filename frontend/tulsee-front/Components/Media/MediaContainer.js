@@ -10,6 +10,8 @@ import {
   HStack,
   Divider,
   FormLabel,
+  InputGroup,
+  Text
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { UserContext } from "../Contexts/UserContext";
@@ -80,53 +82,62 @@ const MediaContainer = () => {
     );
   };
 
-
-
   return (
     <Box maxH={"100vh"} overflowY="auto" pt={2}>
-      <Flex px={'100px'} justifyContent={'flex-end'}>
+      <Flex px={"100px"} justifyContent={"flex-end"}>
         <Input
-            id='media-upload-input'
-            display={'none'}
-            type="file"
-            onChange={(e) => {
-              uploadFile(e.target.files[0]);
-            }}
-          />
-        <FormLabel display={'flex'} color={'white'} borderRadius={'md'} p={2} bg={'brand.500'} for='media-upload-input'>
-          <MdUpload style={{marginTop:'5px'}}/>Upload
+          id="media-upload-input"
+          display={"none"}
+          type="file"
+          onChange={(e) => {
+            uploadFile(e.target.files[0]);
+          }}
+        />
+        <FormLabel
+          display={"flex"}
+          color={"white"}
+          borderRadius={"md"}
+          p={2}
+          bg={"brand.500"}
+          for="media-upload-input"
+        >
+          <MdUpload style={{ marginTop: "5px" }} />
+          Upload
         </FormLabel>
       </Flex>
 
-
-      <VStack px={'100px'} mt={2}>
+      <VStack px={"100px"} mt={2}>
         {Media && !isLoading ? (
-          mediaList.map(img => 
-            <Box w={'100%'}>
-              <Flex my={2} w={'100%'} justifyContent={'space-between'}>
-                <Image
-                  w={'80px'}
-                  src={img.url}
-                  borderRadius={'md'}
-                />
+          mediaList.map((img) => (
+            <Box w={"100%"}>
+              <Flex my={2} w={"100%"} justifyContent={"space-between"}>
+                {img.name.split(".")[1] === "jpeg" ||
+                img.name.split(".")[1] === "jpg" ||
+                img.name.split(".")[1] === "png" ||
+                img.name.split(".")[1] === "webp" ? (
+                  <Image w={"80px"} src={img.url} borderRadius={"md"} />
+                ) : (
+                  <Image w={"80px"} src={"/docpdf.png"} borderRadius={"md"} />
+                )}
+                <Text style={{ display: "flex" }}>{img.name}</Text>
                 <HStack gap={2}>
                   <IconButton
-                    variant={'outline'}
-                    size='sm'
+                    variant={"outline"}
+                    size="sm"
                     onClick={() => push(img.url)}
-                    icon={<MdDownload/>}
+                    icon={<MdDownload />}
                   />
                   <IconButton
-                    variant={'outline'}
-                    size='sm'
+                    variant={"outline"}
+                    size="sm"
                     onClick={() => deleteFile(img.publicId)}
-                    icon={<RiDeleteBin6Fill/>}
+                    icon={<RiDeleteBin6Fill />}
                   />
                 </HStack>
               </Flex>
-              <Divider/>
+              <Divider />
             </Box>
-            )
+          ))
         ) : (
           <>loading...</>
         )}
