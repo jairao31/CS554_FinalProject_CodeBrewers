@@ -86,7 +86,7 @@ const Sidebar = () => {
         </Menu>
       </Flex>
       <Flex direction={"column"} h={"100%"}>
-        <VStack
+        <Box
           textAlign={"left"}
           py={4}
           px={4}
@@ -104,8 +104,9 @@ const Sidebar = () => {
           <Text w={"100%"} fontWeight={"semibold"} mb={2} fontSize="lg">
             Personal
           </Text>
-
+          <VStack maxH={'300px'} overflowY='auto'>
           {personalProjects.map((i) => (
+            <Box  w='100%'>
             <Button
               backgroundColor={
                 currentProject &&
@@ -124,34 +125,43 @@ const Sidebar = () => {
             >
               {i.name}
             </Button>
+            </Box>
+            
           ))}
-        </VStack>
-        <VStack textAlign={"left"} py={4} px={4} h={"100%"}>
+          </VStack>
+        </Box>
+        <Box textAlign={"left"} py={4} px={4} h={"100%"}>
           <Text w={"100%"} fontWeight={"semibold"} mb={2} fontSize="lg">
             Group
           </Text>
-          {groupProjects.map((i) => (
-            <Button
-              backgroundColor={
-                currentProject &&
-                currentProject.publicId !== i.publicId &&
-                "brand.700"
-              }
-              onClick={() => push(`/project/${i.publicId}/task`)}
-              key={i.publicId}
-              variant={
-                currentProject && currentProject.publicId === i.publicId
-                  ? "outline"
-                  : "solid"
-              }
-              w="100%"
-              leftIcon={<MdGroups />}
-            >
-              {i.name}
-            </Button>
+          <VStack maxH={'300px'} overflowY='auto'>
+            {groupProjects.map((i) => (
+              <Box w='100%'>
+              <Button
+                backgroundColor={
+                  currentProject &&
+                  currentProject.publicId !== i.publicId &&
+                  "brand.700"
+                }
+                onClick={() => push(`/project/${i.publicId}/task`)}
+                key={i.publicId}
+                variant={
+                  currentProject && currentProject.publicId === i.publicId
+                    ? "outline"
+                    : "solid"
+                }
+                w="100%"
+                leftIcon={<MdGroups />}
+              >
+                {i.name}
+              </Button>
+              </Box>
+
           ))}
+          </VStack>
+          
           <Footer />
-        </VStack>
+        </Box>
       </Flex>
     </Box>
   );
