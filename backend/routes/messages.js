@@ -9,6 +9,17 @@ router.post('/:projectId', (req,res) => {
     try {
         const {text, sender } = req.body
         const {projectId} = req.params;
+
+        if(!text || !sender || !projectId) {
+            res.status(400).json({error: "Insufficient inputs"});
+            return
+        }
+
+        if(typeof text !== "string" || typeof sender !== "object" || typeof projectId !== "string") {
+            res.status(400).json({error: "Invalid inputs"});
+            return
+        }
+
         console.log(projectId)
         const requestBody = {
             publicId:uuidv4(),
@@ -32,7 +43,11 @@ router.post('/:projectId', (req,res) => {
 router.get("/:projectId", (req,res) => {
     try {
         const {projectId} = req.params
-        console.log(projectId)
+        
+        if(!projectId) {
+            res.status(400).json({error: "Please provide a project ID"});
+            return
+        }
 
         messageCollection(projectId).once('value', snapshot => {
             if(snapshot.val()) {

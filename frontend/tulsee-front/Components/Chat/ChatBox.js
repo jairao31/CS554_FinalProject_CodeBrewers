@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { useSendMessage } from "../../api/chat/sendMessageMutation";
 import { useGetMessages } from "../../api/chat/getMessages";
 import { get24TimeFormat } from "../../helpers/dateFormat";
+import { getBaseUrl } from "../../api/base";
 
 const ChatBox = () => {
   const [text, setText] = useState();
@@ -27,7 +28,7 @@ const ChatBox = () => {
   const { query } = useRouter();
 
   // const socketRef = useRef();
-  const socketRef = io.connect("http://localhost:3001");
+  const socketRef = io.connect(getBaseUrl());
 
   const { data: messages } = useGetMessages(query.projectId, !!query.projectId);
   const { mutate: sendMessage, isLoading } = useSendMessage();
