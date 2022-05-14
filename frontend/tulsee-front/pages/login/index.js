@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { Image } from "@chakra-ui/react";
 import { useColorMode } from "@chakra-ui/react";
 import RegisterForm from "../../Components/Register/RegisterForm";
-import LoginForm from "../../Components/Login/loginForm";
+import LoginForm from "../../Components/Login/LoginForm";
 import { UserContext } from "../../Components/Contexts/UserContext";
 
 

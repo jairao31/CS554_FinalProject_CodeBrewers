@@ -116,9 +116,11 @@ const WarningMessage = styled.span`
 const containerVariants = {
   expanded: {
     height: "30em",
+    zIndex: "999"
   },
   collapsed: {
     height: "3.5em",
+    zIndex: "999"
   },
 };
 
@@ -227,6 +229,7 @@ const Home = () => {
           width={"70%"}
           outline={"1px solid"}
           borderRadius={"0 5px 0 0"}
+          zIndex={2}
         >
           <SearchBarContainer
             animate={isExpanded ? "expanded" : "collapsed"}
@@ -365,7 +368,7 @@ const Home = () => {
             )}
           </SearchBarContainer>
         </InputGroup>
-        <Flex h='100%' justifyContent={'center'}>
+        <Flex h='100%' justifyContent={'center'} zIndex={1}>
               <Box py='15%'>
                 <Image
                   alt='home'
