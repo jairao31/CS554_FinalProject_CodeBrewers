@@ -1,5 +1,4 @@
 const express = require('express');
-const { getDatabase } = require('firebase-admin/database');
 const { messageCollection } = require('../data/Refs');
 const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
@@ -64,7 +63,6 @@ router.get("/:projectId", (req,res) => {
             }
         })
     } catch (error) {
-        log(error)
         res.status(500).json({error: error.message ? error.message : "Internal Server Error"})
     }
 })
