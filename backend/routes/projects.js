@@ -1,5 +1,4 @@
 const express=require('express');
-const { getDatabase } = require('firebase-admin/database');
 const { v4 } = require('uuid');
 const { projectCollection, userCollection } = require('../data/Refs');
 const router=express.Router();
@@ -46,7 +45,7 @@ router.post('/',async(req,res)=>{
                 return
             }else{
                 if(type === "Group") {
-                    await projectData.requested.forEach(async (invitee, idx) => {
+                    await projectData.requested.forEach(async (invitee) => {
                         // console.log(invitee)
                         await userCollection(invitee.publicId).once('value', async snapshot => {
                             // console.log(snapshot.val())
@@ -115,7 +114,6 @@ router.get('/:projectId',async(req,res)=>{
                 console.log('value found');
                 res.json({id:projectId,...snapshot.val()});
             }else{
-                console.log(error);
                 res.status(500).json({error: "Project not found for the given id"});
                 return;
             }
@@ -174,7 +172,7 @@ router.patch('/participant/remove/:projectId/:userId', async(req,res) => {
                     res.status(404).json({error:"Project could not be found!"})
                 }
             } catch (error) {
-                
+                res.status(404).json({error:"Project could not be found!"})
             }
         })
     } catch (error) {
@@ -227,7 +225,7 @@ router.patch('/invite/:projectId', async(req,res) => {
                         res.status(500).json({error: "Project could not be updated"})
                         return
                     }
-                    await users.forEach(async (invitee, idx) => {
+                    await users.forEach(async (invitee) => {
                         console.log('invitees', invitee)
                       
                         await userCollection(invitee.publicId).once('value', async userShot => {
@@ -258,7 +256,6 @@ router.patch('/invite/:projectId', async(req,res) => {
                     });
                 })      
             }else{
-                console.log(error)
                 res.status(404).json({error:"Project could not be found!"})
                 return
             }

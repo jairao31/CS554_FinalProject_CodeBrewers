@@ -1,5 +1,4 @@
 const express = require('express');
-const { getDatabase } = require('firebase-admin/database');
 const { v4 } = require('uuid');
 const { taskCollection } = require('../data/Refs');
 const router = express.Router();

@@ -2,10 +2,15 @@
   "name": "tulsee-backend",
   "version": "1.0.0",
   "description": "This is the backend for TULSEE app",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "cross-env PORT=3001 nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "cross-env PORT=3001 node src/app.js",
+    "start:dev": "cross-env PORT=3001 nodemon src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint ./",
+    "eslint-fix": "eslint ./ --fix",
+    "build": "webpack",
+    "prod": "node dist/api.bundle.js"
   },
   "repository": {
     "type": "git",
@@ -34,9 +39,14 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "socket.io": "^4.4.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2"
   },
   "engines": {
     "node": "14.x"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0"
   }
 }

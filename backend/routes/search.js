@@ -1,9 +1,6 @@
 const express = require("express");
-const { getDatabase } = require("firebase-admin/database");
-const { v4 } = require("uuid");
 const {
   projectCollection,
-  taskCollection,
   userCollection,
 } = require("../data/Refs");
 const router = express.Router();
@@ -28,7 +25,7 @@ router.get("/:query/:type/:publicId", async (req, res) => {
         .once("value", (snapshot) => {
           let result = [];
           console.log(snapshot.val())
-          for (key in snapshot.val()) {
+          for (let key in snapshot.val()) {
             if (snapshot.val()[key].searchQuery.indexOf(query.toLowerCase()) === 0) {
               const { participants } = snapshot.val()[key];
               let exist = participants.find((i) => i.publicId === publicId);
@@ -56,7 +53,7 @@ router.get("/:query/:type/:publicId", async (req, res) => {
         .endAt(query.toLowerCase() + "\uf8ff")
         .once("value", (snapshot) => {
           let result = [];
-          for (key in snapshot.val()) {
+          for (let key in snapshot.val()) {
             if (snapshot.val()[key].firstName.indexOf(query.toLowerCase()) === 0) {
               const { publicId } = snapshot.val()[key];
               if (publicId !== paramPublicId) {

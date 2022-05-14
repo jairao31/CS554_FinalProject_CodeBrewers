@@ -7,8 +7,6 @@ const {
   ref,
   uploadBytes,
   getDownloadURL,
-  getMetadata,
-  deleteObject,
 } = require("firebase/storage");
 const nodemailer = require('nodemailer')
 
@@ -297,7 +295,7 @@ router.get("/autoComplete/:query", async(req,res) => {
   }
     userCollection().orderByChild('firstName').startAt(query.toUpperCase()).endAt(query.toLowerCase() + '\uf8ff').once('value',snapshot => {
         let result = []
-        for(key in snapshot.val()){
+        for(let key in snapshot.val()){
             if(snapshot.val()[key].firstName.indexOf(query.toLowerCase()) === 0) {
                 const {displayName, publicId, profilePhotoUrl} = snapshot.val()[key]
                 result.push({
