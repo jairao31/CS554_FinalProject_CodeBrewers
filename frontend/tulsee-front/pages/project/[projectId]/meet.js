@@ -11,6 +11,7 @@ import { AiOutlineClear } from "react-icons/ai";
 import { ImLink } from "react-icons/im";
 import { MdOutlineDownloadDone } from "react-icons/md";
 import copy from "copy-to-clipboard";
+import { getBaseUrl } from "../../../api/base";
 // import ChatBox from "../../../Components/Chat/ChatBox";
 // import { useRouter } from 'next/router';
 
@@ -31,7 +32,7 @@ const Meet = () => {
       email: "tulsee4ever@gmail.com",
     };
     axios
-      .post(`http://localhost:3001/meet`, data)
+      .post(`${getBaseUrl()}/meet`, data)
       .then((response) => {
         console.log(
           UserDetails.displayName,
