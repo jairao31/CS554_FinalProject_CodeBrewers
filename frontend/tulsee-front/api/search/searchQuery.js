@@ -1,9 +1,10 @@
 import { useQuery } from "react-query";
 import axios from "axios";
+import { getBaseUrl } from "../base";
 
 const searchQuery = async (query, type, publicId) => {
   const { data } = await axios.get(
-    `http://localhost:3001/search/${query}/${type}/${publicId}`
+    `${getBaseUrl()}/search/${query}/${type}/${publicId}`
   );
   return data;
 };

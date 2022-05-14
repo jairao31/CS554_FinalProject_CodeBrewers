@@ -1,9 +1,10 @@
 import {useMutation} from 'react-query'
 import axios from 'axios'
+import { getBaseUrl } from '../base';
 
 
 const createProject = async(payload) => {
-    const {data} = await axios.post(`http://localhost:3001/project/`,payload)
+    const {data} = await axios.post(`${getBaseUrl()}/project/`,payload)
     return data;
 }
 

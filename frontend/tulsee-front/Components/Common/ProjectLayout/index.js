@@ -10,7 +10,9 @@ const ProjectLayout = ({activePage, children}) => {
     return (
         <Box h={'100%'}>
             <TopNavBar activePage={activePage} title={currentProject ? currentProject.name : ''}/>
-            {children}
+            <Box h={'100%'}>
+                {children}
+            </Box>
         </Box>
     );
 };

@@ -1,10 +1,11 @@
 import {useQuery} from 'react-query'
 import axios from 'axios'
+import { getBaseUrl } from '../base'
 
 
 const getTasks = async publicId => {
     try {
-        const {data} = await axios.get(`http://localhost:3001/task/project/${publicId}`)
+        const {data} = await axios.get(`${getBaseUrl()}/task/project/${publicId}`)
         return data
     } catch (error) {
         throw new Error('something went wrong')

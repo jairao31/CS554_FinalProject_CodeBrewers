@@ -1,9 +1,10 @@
 import {useMutation} from 'react-query'
 import axios from 'axios'
+import { getBaseUrl } from '../base';
 
 
 const upload = async(payload) => {
-    const {data} = await axios.post(`http://localhost:3001/media/`,payload)
+    const {data} = await axios.post(`${getBaseUrl()}/media/`,payload)
     return data;
 }
 
