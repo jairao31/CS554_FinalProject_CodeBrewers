@@ -81,7 +81,7 @@ io.on('connection', (socket) => {
   // socket.on()
 
   socket.on('message', ({room, sender, createdAt, text}) => {
-    // console.log(name, message, socket.id);
+    console.log('emmiting message');
     io.to(room).emit('message', {sender, createdAt, text});
   });
 

@@ -27,7 +27,24 @@ function isPassword(str) {
 // "SIGNUP" Router calling "CreateUser"
 router.post("/signup", async (req, res) => {
   try {
-    const { publicId, password, firstName, lastName, email } = req.body;
+    const { publicId, password, firstName, lastName, email, profilePhotoUrl } = req.body;
+
+    if(!publicId || !email || !password || !firstName || !lastName) {
+        res.status(400).json({error: "Insufficient inputs"});
+        return
+    }
+
+    if( typeof email !== "string" || 
+        typeof publicId !== "string" || 
+        typeof password !== "string" || 
+        typeof firstName !== "string" ||
+        typeof lastName !== "string" ||
+        password.trim().length < 6
+        ) {
+      res.status(400).json({error: "Invalid input"});
+      return
+  }
+
     isPassword(password);
     userCollection()
       .orderByChild("email")
@@ -49,7 +66,7 @@ router.post("/signup", async (req, res) => {
           } else {
             const userData = {
               publicId,
-              profilePhotoUrl: null,
+              profilePhotoUrl: profilePhotoUrl ||  null,
               firstName: firstName.trim().toLowerCase(),
               lastName: lastName.trim().toLowerCase(),
               displayName:
@@ -69,7 +86,7 @@ router.post("/signup", async (req, res) => {
                   .status(500)
                   .json({ error: "User could not be registered!" });
               } else {
-                res.json(userData.displayName + " successfully Registered");
+                res.json(userData);
               }
             });
           }
@@ -92,27 +109,37 @@ router.post("/signup", async (req, res) => {
 router.get("/login/:publicId", async (req, res) => {
   try {
     const { publicId } = req.params;
-    userCollection(publicId).update({isActive: true}, error => {
-      if(error) {
-        res.status(404).json("No user found");
-        return
-      }else{
-        userCollection(publicId).once("value", (snapshot) => {
-          try {
-            if (!snapshot.val()) {
-              res.status(404).json("No username found");
-              return
-            } else {
-              res.json(snapshot.val());
+
+    if(!publicId) {
+      res.status(400).json({error: "Please provide a user ID"});
+      return
+    }
+
+    userCollection(publicId).once("value", (snapshot) => {
+      try {
+        if (!snapshot.val()) {
+          res.status(404).json("No username found");
+          return
+        } else {
+          if(snapshot.val()) {
+            userCollection(publicId).update({isActive: true}, error => {
+              if(error) {
+                res.status(404).json("No user found");
+                return
+              }else{
+            res.json({...snapshot.val(),isActive: true});
             }
-          } catch (error) {
-            res.status(500).json({ error: error.message ? error.messsage : error });
-            console.log(error);
-            return
+          });
           }
-        });
       }
-    })
+      } catch (error) {
+        res.status(500).json({ error: error.message ? error.messsage : error });
+        console.log(error);
+        return
+      }
+  
+  })
+    // })
   } catch (error) {
     res.status(500).json({ error: error.message ? error.messsage : error });
   }
@@ -122,7 +149,15 @@ router.get("/login/:publicId", async (req, res) => {
 router.patch("/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
+    if(!userId) {
+      res.status(400).json({error: "Please provide a user ID"});
+      return
+    }
     let request = req.body;
+    if(!request) {
+      res.status(400).json({error: "Please provide data"});
+      return
+    }
     request = {
       ...request,
       firstName: request.firstName.trim().toLowerCase(),
@@ -153,8 +188,15 @@ router.patch("/:userId", async (req, res) => {
 router.patch("/profileImage/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
+    if(!userId) {
+      res.status(400).json({error: "Please provide a userID"});
+      return
+  }
     const profileImg = req.files.profilePic;
-
+    if(!profileImg) {
+      res.status(400).json({error: "Please provide a profile Pic"});
+      return
+  }
     const imageRef = ref(storage, `userProfile/${userId}/${v4()}`);
     uploadBytes(imageRef, profileImg.data).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
@@ -179,6 +221,14 @@ router.patch("/profileImage/:userId", async (req, res) => {
 router.get('/searchByUserName',async(req,res)=>{
     try{
         const {userName} = req.body;
+        if(!userName) {
+          res.status(400).json({error: "Please provide a userName"});
+          return
+      }
+      if(typeof userName !== "string") {
+        res.status(400).json({error: "Invalid username"});
+        return
+    }
         userCollection().orderByChild("userName").equalTo(userName).once('value', (snapshot) => {
             let result = []
             for (var key in snapshot.val()) {
@@ -199,6 +249,14 @@ router.get('/searchByUserName',async(req,res)=>{
 router.get('/searchByFirstName',async(req,res)=>{
     try{
         const {firstName} = req.body;
+        if(!firstName) {
+          res.status(400).json({error: "Please provide a firstName"});
+          return
+      }
+      if(typeof firstName !== "string") {
+        res.status(400).json({error: "Invalid request"});
+        return
+    }
         userCollection().orderByChild("firstName").equalTo(firstName).once('value', (snapshot) => {
             let result = []
             for (var key in snapshot.val()) {
@@ -233,6 +291,10 @@ router.get('/searchByFirstName',async(req,res)=>{
 
 router.get("/autoComplete/:query", async(req,res) => {
     const {query} = req.params
+    if(!query) {
+      res.status(400).json({error: "Please provide a query"});
+      return
+  }
     userCollection().orderByChild('firstName').startAt(query.toUpperCase()).endAt(query.toLowerCase() + '\uf8ff').once('value',snapshot => {
         let result = []
         for(key in snapshot.val()){
@@ -250,20 +312,45 @@ router.get("/autoComplete/:query", async(req,res) => {
 router.get("/logout/:userId", async (req, res) => {
     req.session.destroy();
     const {userId} = req.params;
-    userCollection(userId).update({isActive: false}, error => {
-      if(error) {
-        res.status(500).json('could not logout');
-        
-      }else{
-        res.json('logged out successfully!')
+    if(!userId) {
+      res.status(400).json({error: "Please provide a userId"});
+      return
+  }
+    userCollection(userId).once("value", (snapshot) => {
+      try {
+        if (!snapshot.val()) {
+          res.json("No username found");
+          return
+        } else {
+          if(snapshot.val()) {
+            userCollection(userId).update({isActive: false}, error => {
+              if(error) {
+                res.status(500).json('could not logout');
+                
+              }else{
+                res.json('logged out successfully!')
+              }
+            })
+          }
       }
-    })
+      } catch (error) {
+        res.status(500).json({ error: error.message ? error.messsage : error });
+        console.log(error);
+        return
+      }
+  
+  })
+  
 });
 
 router.post("/invite/email", async(req,res) => {
   try {
     const {reciever,sender} = req.body
-
+    if(!reciever || !sender) {
+      res.status(400).json({error: "Insufficent inputs"});
+      return
+  }
+  
     const output = `<div>
       <p><strong>${sender.displayName}</strong> invites you to join <strong>TULSEE</strong></p>
     </div>`

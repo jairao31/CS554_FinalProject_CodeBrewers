@@ -12,6 +12,11 @@ router.get("/:query/:type/:publicId", async (req, res) => {
   try {
     // const{}=req.body
     const { query, type, publicId } = req.params;
+
+    if(!query || !type || !publicId) {
+      res.status(400).json({error: "Insufficient inputs"});
+      return
+    }
     // if (/\s/g.test(query))   newQuery= query.split(" ")[0]
     // else newQuery=query
     // If we have to just keep search by FIRST WORD recommendation then apply previous two lines of code

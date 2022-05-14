@@ -73,6 +73,12 @@ router.post('/',async(req,res)=>{
 router.get('/byUser/:userId',async(req,res)=>{
     try {
         const {userId} = req.params;
+        
+        if(!userId) {
+            res.status(400).json({error: "Please provide a user ID"});
+            return
+        }
+
         projectCollection().once('value', (snapshot) => {
             let result = []
             
@@ -95,7 +101,12 @@ router.get('/:projectId',async(req,res)=>{
     try {
         // console.log("inside the projecid route");
         const {projectId} = req.params;
-        // console.log(req.params);
+
+        if(!projectId) {
+            res.status(400).json({error: "Please provide a projectID"});
+            return
+        }
+         // console.log(req.params);
         projectCollection(projectId).once('value', (snapshot) => {
             console.log(snapshot.val());
             console.log("inside query");
@@ -120,6 +131,10 @@ router.put('/:projectId', async(req,res) => {
     try {
         const {projectId} = req.params;
         const request = req.body;
+        if(!projectId || !request) {
+            res.status(400).json({error: "Insufficient input"});
+            return
+        }
         projectCollection(projectId).update(request, error => {
             if(error) {
                 res.status(500).json({error:'Project could not be updated'});
@@ -136,6 +151,10 @@ router.put('/:projectId', async(req,res) => {
 router.patch('/participant/remove/:projectId/:userId', async(req,res) => {
     try {
         const {projectId, userId} = req.params
+        if(!projectId || !userId) {
+            res.status(400).json({error: "Insufficient input"});
+            return
+        }
         projectCollection(projectId).once('value', snapshot => {
             try {
                 if(snapshot.val()) {

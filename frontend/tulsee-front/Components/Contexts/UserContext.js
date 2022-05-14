@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import {createUserWithEmailAndPassword, EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, signInWithEmailAndPassword, signOut, updatePassword} from 'firebase/auth';
+import {createUserWithEmailAndPassword, EmailAuthProvider, getAuth, GoogleAuthProvider, onAuthStateChanged, reauthenticateWithCredential, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword} from 'firebase/auth';
 import { useCreateUser } from '../../api/user/createUserMutation';
 import { useColorMode, useToast } from '@chakra-ui/react';
 import { useGetUser } from '../../api/user/getUser';
@@ -12,8 +12,10 @@ const UserContextProvider = ({children}) => {
     console.log('firebaseId: ', process.env.FIREBASE_AUTH_DOMAIN)
 
 
-    const [userID, setUserID] = useState();
+    const [userID, setUserID] = useState(null);
     const [UserDetails, setUserDetails] = useState()
+    const [google, setGoogle] = useState(false);
+    // const [login]
 
     const auth = getAuth()
 
@@ -21,19 +23,45 @@ const UserContextProvider = ({children}) => {
 
     const {push,pathname} = useRouter()
 
-    const {mutate: addUser} = useCreateUser()
+    const {mutate: addUser, isLoading: isRegistering} = useCreateUser()
 
     const {mutate: logoutUser, isLoading: loggingOut} = useLogoutUser()
 
     const toast = useToast();
 
-    const {data: User} = useGetUser(userID, !!userID);
+    const {data: User, isError, isLoading: isLoggingIn} = useGetUser(userID, !!userID);
 
     const { colorMode, toggleColorMode } = useColorMode();
 
+    const googleProvider = new GoogleAuthProvider();
+
     useEffect(() => {
-        if(User) setUserDetails(User);
+        if(User) {
+            setUserDetails(User);
+        } 
     },[User])
+
+    useEffect(() => {
+        if(google && isError) {
+            let request = {
+                publicId: user.uid,
+                firstName: user.displayName.split(' ')[0],
+                lastName: user.displayName.split(' ')[1],
+                email: user.email,
+                profilePhotoUrl: user.photoURL,
+                password:`${user.displayName.split(' ')[0]}1234`
+            }
+            addUser(request,{
+                onSuccess: d =>  {
+                    setUserDetails(d)
+                    toast({title:'User logged in successfully!', status:'success', duration: 2000});
+                },
+                onError: e => {
+                    toast({title:'Either the email or password is incorrect', status:'error', duration: 2000});
+                }
+            })
+        }
+    },[google,isError])
  
     // useEffect(() => {
     //     console.log('current user: ', user.email)
@@ -45,14 +73,17 @@ const UserContextProvider = ({children}) => {
               // User is signed in, see docs for a list of available properties
               // https://firebase.google.com/docs/reference/js/firebase.User
               const uid = user.uid;
-              console.log(uid)
-              setUserID(uid);
+              console.log(user)
+                setUserID(uid);
+                if(user.providerData[0].providerId !== 'password') {
+                setGoogle(true)
+              }
               // ...
             } else {
-                console.log("user is logged out")
                 if(pathname !== '/login') {
                     setUserDetails(null)
                     setUserID(null)
+                    setGoogle(false)
                     push('/login')
                 }
               // User is signed out
@@ -88,7 +119,6 @@ const UserContextProvider = ({children}) => {
 
     const loginUser = details => {
         const {email, password} = details
-        console.log('logging in...')
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in 
@@ -101,6 +131,17 @@ const UserContextProvider = ({children}) => {
             console.log(e);
             toast({title:'Either the email or password is incorrect', status:'error', duration: 2000});
         });
+    }
+
+    const googleSignIn = () => {
+        signInWithPopup(auth,googleProvider).then(result => {
+            setGoogle(true)
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            const user = result.user;
+        }).catch(e => {
+            toast({title: e.message, status: 'error', duration: 2000})
+        })
     }
 
     const changePassword = (currentPassword, password) => {
@@ -124,6 +165,7 @@ const UserContextProvider = ({children}) => {
     const logout = () => {
         logoutUser(userID,{
             onSuccess: d => {
+                console.log('logout successfull')
                 signOut(auth).then(
                     () => {
                         if(colorMode === "dark") toggleColorMode();
@@ -142,7 +184,7 @@ const UserContextProvider = ({children}) => {
     }
  
     return (
-        <UserContext.Provider value={{createUser,loginUser,UserDetails,userID,logout,setUserDetails,changePassword,loggingOut}}>
+        <UserContext.Provider value={{createUser,loginUser,UserDetails,userID,logout,setUserDetails,changePassword,loggingOut,googleSignIn, isLoggingIn, isRegistering}}>
             {children}
         </UserContext.Provider>
     );
