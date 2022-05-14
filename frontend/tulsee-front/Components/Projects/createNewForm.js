@@ -4,6 +4,7 @@ import { Flex,
     Avatar,
     Text,
     Button,
+    useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import CommonInput from '../Common/CommonInput';
@@ -24,6 +25,8 @@ const CreateNewForm = () => {
     const {addProject} = useContext(ProjectContext)
 
     const {isLoading} = useCreateProject();
+
+    const toast = useToast();
     
 
     useEffect(() => {
@@ -71,8 +74,15 @@ const CreateNewForm = () => {
 
     const handleCreate = e => {
         e.preventDefault()
+        const {name,createdBy,type} = payload
+        if(!name || !createdBy || !type) {
+            toast({title: "Insufficient fields", status:'warning', duration: 2000})
+            return
+        }
         addProject(payload)
-        setPayload({})
+        setPayload(prev => {
+            return {createdBy: prev.createdBy}
+        })
     }
 
     return (

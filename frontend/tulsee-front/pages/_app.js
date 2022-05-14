@@ -5,6 +5,7 @@ import { initializeApp } from "firebase/app";
 import UserContextProvider from '../Components/Contexts/UserContext';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import ProjectContextProvider from '../Components/Contexts/ProjectContext';
+import ErrorBoundary from '../Components/ErrorBoundary';
 
 
 
@@ -37,11 +38,13 @@ const MyApp = ({Component, PageProps}) => {
     return (
         <QueryClientProvider client={queryClient}>
             <ChakraProvider theme={theme}>
-                <UserContextProvider>
-                    <ProjectContextProvider>
-                        <Component {...PageProps}/>
-                    </ProjectContextProvider>
-                </UserContextProvider>
+                <ErrorBoundary>
+                    <UserContextProvider>
+                        <ProjectContextProvider>
+                            <Component {...PageProps}/>
+                        </ProjectContextProvider>
+                    </UserContextProvider>
+                </ErrorBoundary>
             </ChakraProvider>
         </QueryClientProvider>
 
