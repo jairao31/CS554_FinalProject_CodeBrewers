@@ -83,7 +83,7 @@ const MediaContainer = () => {
   };
 
   return (
-    <Box maxH={"88%"} overflowY="auto" pt={3} pb={3}>
+    <Box maxH={"100vh"} overflowY="auto" pt={2}>
       <Flex px={"100px"} justifyContent={"flex-end"}>
         <Input
           id="media-upload-input"
@@ -140,10 +140,8 @@ const MediaContainer = () => {
               <Divider />
             </Box>
           ))
-        ) : isLoading ? (
-          <>loading...</>
         ) : (
-          <>No Media found!</>
+          <>No Media Found!</>
         )}
       </VStack>
       {/* <Flex gap={2}>
