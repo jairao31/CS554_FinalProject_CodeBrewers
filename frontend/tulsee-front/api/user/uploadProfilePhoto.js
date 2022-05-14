@@ -1,10 +1,11 @@
 import {useMutation} from 'react-query'
 import axios from 'axios'
+import { getBaseUrl } from '../base'
 
 
 const uploadPhoto = async(payload) => {
     const {userId, formData} = payload
-    const {data} = await axios.patch(`http://localhost:3001/user/profileImage/${userId}`,formData)
+    const {data} = await axios.patch(`${getBaseUrl()}/user/profileImage/${userId}`,formData)
     return data;
 }
 

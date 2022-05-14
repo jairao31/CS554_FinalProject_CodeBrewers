@@ -99,7 +99,7 @@ const UserContextProvider = ({children}) => {
         })
         .catch((e) => {
             console.log(e);
-            toast({title:e.message?e.message:'User could not login', status:'error', duration: 2000});
+            toast({title:'Either the email or password is incorrect', status:'error', duration: 2000});
         });
     }
 

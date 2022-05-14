@@ -1,9 +1,10 @@
 import {useQuery} from 'react-query'
 import axios from 'axios'
+import { getBaseUrl } from '../base'
 
 
 const getUsers = async query => {
-    const {data} = await axios.get(`http://localhost:3001/user/autoComplete/${query}`)
+    const {data} = await axios.get(`${getBaseUrl()}/user/autoComplete/${query}`)
     console.log(data)
     return data
 }

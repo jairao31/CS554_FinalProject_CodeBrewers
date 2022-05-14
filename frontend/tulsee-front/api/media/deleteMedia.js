@@ -1,10 +1,11 @@
 import {useMutation} from 'react-query'
 import axios from 'axios'
+import { getBaseUrl } from '../base'
 
 
 const deleteMedia = async(payload) => {
     const {projectId, mediaId} = payload
-    const {data} = await axios.delete(`http://localhost:3001/media/project/${projectId}/${mediaId}`)
+    const {data} = await axios.delete(`${getBaseUrl()}/media/project/${projectId}/${mediaId}`)
     return data;
 }
 
