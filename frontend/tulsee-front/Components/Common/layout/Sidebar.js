@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   IconButton,
+  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -23,17 +24,16 @@ import { FiArchive } from "react-icons/fi";
 import Footer from "../SideFooter/Footer";
 
 const Sidebar = () => {
-  //   const { colorMode, toggleColorMode } = useColorMode();
-  //   const isDark = colorMode === "dark";
   const { logout, UserDetails, loggingOut } = useContext(UserContext);
-  const { groupProjects, personalProjects, currentProject } = useContext(ProjectContext);
+  const { groupProjects, personalProjects, currentProject } =
+    useContext(ProjectContext);
 
   const { push } = useRouter();
 
   return (
     <Box p={2} h={"100%"}>
       <Flex justifyContent={"space-between"}>
-        <Text
+        {/* <Text
           fontSize={"xl"}
           fontWeight="bold"
           mb={2}
@@ -44,13 +44,20 @@ const Sidebar = () => {
           borderRadius={5}
         >
           TULSEE.io
-        </Text>
+        </Text> */}
+        <Image
+          onClick={() => push(`/`)}
+          w={"80px"}
+          src={"/Logo1.png"}
+          width={"70px"}
+          marginLeft={"5px"}
+        />
         <Button isLoading={loggingOut} variant="ghost" onClick={() => logout()}>
           Logout
         </Button>
       </Flex>
       <Flex justifyContent={"space-between"}>
-        <Text pt={2} verticalAlign={"middle"}>
+        <Text pt={2} marginLeft={"10px"} verticalAlign={"middle"}>
           Hi, {UserDetails ? UserDetails.firstName : ""}
         </Text>
         {/* <IconButton onClick={() => push("/invites")} fontWeight={'bold'} variant={'ghost'} size={'sm'} icon={<GoRequestChanges size={'18px'}/>}/> */}
@@ -100,10 +107,18 @@ const Sidebar = () => {
 
           {personalProjects.map((i) => (
             <Button
-              backgroundColor={currentProject && currentProject.publicId !== i.publicId && "brand.700"}
+              backgroundColor={
+                currentProject &&
+                currentProject.publicId !== i.publicId &&
+                "brand.700"
+              }
               onClick={() => push(`/project/${i.publicId}/task`)}
               key={i.publicId}
-              variant={currentProject && currentProject.publicId === i.publicId ? "outline" : "solid"}
+              variant={
+                currentProject && currentProject.publicId === i.publicId
+                  ? "outline"
+                  : "solid"
+              }
               w="100%"
               leftIcon={<MdPerson />}
             >
@@ -117,10 +132,18 @@ const Sidebar = () => {
           </Text>
           {groupProjects.map((i) => (
             <Button
-              backgroundColor={currentProject && currentProject.publicId !== i.publicId && "brand.700"}
+              backgroundColor={
+                currentProject &&
+                currentProject.publicId !== i.publicId &&
+                "brand.700"
+              }
               onClick={() => push(`/project/${i.publicId}/task`)}
               key={i.publicId}
-              variant={currentProject && currentProject.publicId === i.publicId ? "outline" : "solid"}
+              variant={
+                currentProject && currentProject.publicId === i.publicId
+                  ? "outline"
+                  : "solid"
+              }
               w="100%"
               leftIcon={<MdGroups />}
             >
