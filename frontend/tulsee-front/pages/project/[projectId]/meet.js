@@ -11,7 +11,8 @@ import { AiOutlineClear } from "react-icons/ai";
 import { ImLink } from "react-icons/im";
 import { MdOutlineDownloadDone } from "react-icons/md";
 import copy from "copy-to-clipboard";
-import ChatBox from "../../../Components/Chat/ChatBox";
+import { getBaseUrl } from "../../../api/base";
+// import ChatBox from "../../../Components/Chat/ChatBox";
 // import { useRouter } from 'next/router';
 
 const Meet = () => {
@@ -28,10 +29,10 @@ const Meet = () => {
 
   const zoomMeeting = () => {
     const data = {
-      email: "saurabhmane7120@outlook.com",
+      email: "tulsee4ever@gmail.com",
     };
     axios
-      .post(`http://localhost:3001/meet`, data)
+      .post(`${getBaseUrl()}/meet`, data)
       .then((response) => {
         console.log(
           UserDetails.displayName,
@@ -163,11 +164,11 @@ const Meet = () => {
               <br />
             </div>
             <Image
-              alt='zoom'
-              mx='auto'
-              mt='100px'
-              width={'600px'}
-              src='/zoomTu.svg'
+              alt="zoom"
+              mx="auto"
+              mt="100px"
+              width={"600px"}
+              src="/zoomTu.svg"
             />
           </div>
         </div>

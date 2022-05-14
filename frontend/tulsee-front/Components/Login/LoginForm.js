@@ -10,10 +10,12 @@ import {
   Stack,
   Checkbox,
   InputRightElement,
+  Text,
 } from "@chakra-ui/react";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { UserContext } from "../Contexts/UserContext";
+import {FcGoogle} from 'react-icons/fc'
 
 const LoginForm = () => {
   const [details, setDetails] = useState({
@@ -22,7 +24,7 @@ const LoginForm = () => {
   });
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
-  const { loginUser } = useContext(UserContext);
+  const { loginUser, googleSignIn, isLoggingIn, isRegistering } = useContext(UserContext);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDetails((prev) => {
@@ -81,13 +83,15 @@ const LoginForm = () => {
             </InputRightElement>
           </InputGroup>
         </FormControl>
-        <Checkbox color={"white"} name="rememberMe" colorScheme={"green"}>
+        {/* <Checkbox color={"white"} name="rememberMe" colorScheme={"green"}>
           {" "}
           Remember Me{" "}
-        </Checkbox>
+        </Checkbox> */}
         <Button type="submit" bg={"brand.500"} variant="solid">
           Login
         </Button>
+        <Text textAlign={'center'}> OR </Text>
+        <Button variant={'outline'} isLoading={isLoggingIn || isRegistering} leftIcon={<FcGoogle/>} onClick={() => googleSignIn()}>Login with google</Button>
       </Stack>
     </form>
   );

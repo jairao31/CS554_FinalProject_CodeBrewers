@@ -83,7 +83,7 @@ const MediaContainer = () => {
   };
 
   return (
-    <Box maxH={"100vh"} overflowY="auto" pt={2}>
+    <Box maxH={"88%"} overflowY="auto" pt={3} pb={3}>
       <Flex px={"100px"} justifyContent={"flex-end"}>
         <Input
           id="media-upload-input"

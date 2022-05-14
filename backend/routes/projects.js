@@ -1,5 +1,4 @@
 const express=require('express');
-const { getDatabase } = require('firebase-admin/database');
 const { v4 } = require('uuid');
 const { projectCollection, userCollection } = require('../data/Refs');
 const router=express.Router();
@@ -46,7 +45,7 @@ router.post('/',async(req,res)=>{
                 return
             }else{
                 if(type === "Group") {
-                    await projectData.requested.forEach(async (invitee, idx) => {
+                    await projectData.requested.forEach(async (invitee) => {
                         // console.log(invitee)
                         await userCollection(invitee.publicId).once('value', async snapshot => {
                             // console.log(snapshot.val())
@@ -73,6 +72,12 @@ router.post('/',async(req,res)=>{
 router.get('/byUser/:userId',async(req,res)=>{
     try {
         const {userId} = req.params;
+        
+        if(!userId) {
+            res.status(400).json({error: "Please provide a user ID"});
+            return
+        }
+
         projectCollection().once('value', (snapshot) => {
             let result = []
             
@@ -95,7 +100,12 @@ router.get('/:projectId',async(req,res)=>{
     try {
         // console.log("inside the projecid route");
         const {projectId} = req.params;
-        // console.log(req.params);
+
+        if(!projectId) {
+            res.status(400).json({error: "Please provide a projectID"});
+            return
+        }
+         // console.log(req.params);
         projectCollection(projectId).once('value', (snapshot) => {
             console.log(snapshot.val());
             console.log("inside query");
@@ -104,7 +114,6 @@ router.get('/:projectId',async(req,res)=>{
                 console.log('value found');
                 res.json({id:projectId,...snapshot.val()});
             }else{
-                console.log(error);
                 res.status(500).json({error: "Project not found for the given id"});
                 return;
             }
@@ -120,6 +129,10 @@ router.put('/:projectId', async(req,res) => {
     try {
         const {projectId} = req.params;
         const request = req.body;
+        if(!projectId || !request) {
+            res.status(400).json({error: "Insufficient input"});
+            return
+        }
         projectCollection(projectId).update(request, error => {
             if(error) {
                 res.status(500).json({error:'Project could not be updated'});
@@ -136,6 +149,10 @@ router.put('/:projectId', async(req,res) => {
 router.patch('/participant/remove/:projectId/:userId', async(req,res) => {
     try {
         const {projectId, userId} = req.params
+        if(!projectId || !userId) {
+            res.status(400).json({error: "Insufficient input"});
+            return
+        }
         projectCollection(projectId).once('value', snapshot => {
             try {
                 if(snapshot.val()) {
@@ -155,7 +172,7 @@ router.patch('/participant/remove/:projectId/:userId', async(req,res) => {
                     res.status(404).json({error:"Project could not be found!"})
                 }
             } catch (error) {
-                
+                res.status(404).json({error:"Project could not be found!"})
             }
         })
     } catch (error) {
@@ -208,7 +225,7 @@ router.patch('/invite/:projectId', async(req,res) => {
                         res.status(500).json({error: "Project could not be updated"})
                         return
                     }
-                    await users.forEach(async (invitee, idx) => {
+                    await users.forEach(async (invitee) => {
                         console.log('invitees', invitee)
                       
                         await userCollection(invitee.publicId).once('value', async userShot => {
@@ -239,7 +256,6 @@ router.patch('/invite/:projectId', async(req,res) => {
                     });
                 })      
             }else{
-                console.log(error)
                 res.status(404).json({error:"Project could not be found!"})
                 return
             }

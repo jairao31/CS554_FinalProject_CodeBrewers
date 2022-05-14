@@ -1,5 +1,4 @@
 const express = require('express');
-const { getDatabase } = require('firebase-admin/database');
 const { v4 } = require('uuid');
 const { taskCollection } = require('../data/Refs');
 const router = express.Router();
@@ -7,11 +6,11 @@ const router = express.Router();
 router.post('/', async(req,res) => {
     try {
         const {projectId, title, description, assignees, createdBy, status} = req.body;
-        if(!projectId || !title || !description  || !createdBy) {
+        if(!projectId || !title   || !createdBy) {
             res.status(401).json({error:'Insufficient Funds'})
             return
         }
-        if(typeof projectId !== "string" || typeof title !== "string" ) {
+        if(typeof projectId !== "string" || typeof title !== "string" || typeof createdBy !== "string" ) {
             res.status(401).json({error:'Invalid data type'})
             return
         }
@@ -20,7 +19,7 @@ router.post('/', async(req,res) => {
             publicId: v4(),
             projectId,
             title,
-            description,
+            description: description || "",
             assignees: assignees || [],
             createdBy,
             status: status,
@@ -45,6 +44,10 @@ router.post('/', async(req,res) => {
 router.get('/project/:projectId', async(req,res) => {
     try {
         const {projectId} = req.params;
+        if(!projectId) {
+            res.status(400).json({error: "Please provide a projectID"});
+            return
+        }
         taskCollection().orderByChild("projectId").equalTo(projectId).once('value', (snapshot) => {
             let result = []
             if(!snapshot.val()) {
@@ -65,6 +68,10 @@ router.get('/project/:projectId', async(req,res) => {
 router.get('/:taskId', async(req,res) => {
     try {
         const {taskId} = req.params;
+        if(!taskId) {
+            res.status(400).json({error: "Please provide a task ID"});
+            return
+        }
         taskCollection(taskId).once('value', (snapshot) => {
             if(snapshot.val()) {
                 res.json(snapshot.val())
@@ -81,6 +88,10 @@ router.get('/:taskId', async(req,res) => {
 router.patch('/:taskId', async(req,res) => {
     try {
         const {taskId} = req.params;
+        if(!taskId) {
+            res.status(400).json({error: "Please provide a taskID"});
+            return
+        }
         const request = req.body;
         taskCollection(taskId).update(request, error => {
             if(error) {
@@ -106,7 +117,15 @@ router.patch('/:taskId', async(req,res) => {
 router.patch('/comment/:taskId', async(req,res) => {
     try {
         const {taskId} = req.params;
+        if(!taskId) {
+            res.status(400).json({error: "Please provide a taskID"});
+            return
+        }
         const comment = req.body;
+        if(!comment) {
+            res.status(400).json({error: "Please provide a comment"});
+            return
+        }
         const commentRequest = {
             publicId: v4(),
             createdOn: new Date().toISOString(),
@@ -144,6 +163,10 @@ router.patch('/comment/:taskId', async(req,res) => {
 
 router.delete('/comment/:taskId/:commentId', async(req,res) => {
     const {taskId, commentId} = req.params
+    if(!taskId || commentId) {
+        res.status(400).json({error: "Insufficient funds"});
+        return
+    }
     taskCollection(taskId).once('value', snapshot => {
         if(!snapshot.val()) {
             res.status(500).json({error:'Task could not be found'})
@@ -167,6 +190,10 @@ router.delete('/comment/:taskId/:commentId', async(req,res) => {
 router.delete('/:taskId', async(req,res) => {
     try {
         const {taskId} = req.params
+        if(!taskId) {
+            res.status(400).json({error: "Please provide a task ID"});
+            return
+        }
         taskCollection(taskId).remove(error => {
             if(error){
                 res.status(500).json({error:'Could not delete task'})

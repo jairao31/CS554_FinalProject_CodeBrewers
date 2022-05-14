@@ -18,16 +18,21 @@ router.post("/", async (req, res) => {
     const { uploadedBy, projectId } = req.body;
     const file = req.files.uploadData;
     if (!uploadedBy || !projectId) {
-      res.status(401).json({ error: "Insufficient data" });
+      res.status(400).json({ error: "Insufficient data" });
       return;
     }
     if (typeof uploadedBy !== "string" || typeof projectId !== "string") {
-      res.status(401).json({ error: "Invalid data type" });
+      res.status(400).json({ error: "Invalid data type" });
       return;
     }
 
     if (uploadedBy.trim().length === 0 || projectId.trim().length === 0) {
-      res.status(401).json({ error: "empty space as input detected" });
+      res.status(400).json({ error: "empty space as input detected" });
+      return;
+    }
+
+    if(!file) {
+      res.status(400).json({ error: "please send a file" });
       return;
     }
 
@@ -71,6 +76,16 @@ router.delete("/project/:projectId/:mediaId", async (req, res) => {
   try {
     const { projectId, mediaId } = req.params;
 
+    if(!projectId || !mediaId) {
+      res.status(400).json({error: "Insufficient inputs"});
+      return
+    }
+
+    if(typeof projectId !== "string" || typeof mediaId !== "string") {
+      res.status(400).json({error: "Invalid inputs"});
+      return
+    }
+
     const db = getDatabase();
     const reff = db.ref("server/tulsee");
     const mediaRef = reff.child(`media/${projectId}/${mediaId}`);
@@ -97,6 +112,10 @@ router.delete("/project/:projectId/:mediaId", async (req, res) => {
 router.get("/project/:projectId", async (req, res) => {
   try {
     const { projectId } = req.params;
+    if(!projectId) {
+      res.status(400).json({error: "Please send a project ID"});
+      return
+    }
     mediaCollection(projectId).once("value", (snapshot) => {
       let result = [];
       for (var key in snapshot.val()) {
