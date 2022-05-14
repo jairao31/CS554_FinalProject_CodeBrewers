@@ -13,7 +13,7 @@ import {
     Text,
   } from '@chakra-ui/react'
   import Cropper from 'react-easy-crop'
-import getCroppedImg, { dataUrlToFile } from '../../helpers/cropImage';
+import getCroppedImg from '../../helpers/cropImage';
 import { useUploadProfilePhoto } from '../../api/user/uploadProfilePhoto';
 import { UserContext } from '../Contexts/UserContext';
 

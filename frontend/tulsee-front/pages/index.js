@@ -12,7 +12,6 @@ import {  motion } from "framer-motion";
 import { useClickOutside } from "react-click-outside-hook";
 import { useRef } from "react";
 import MoonLoader from "react-spinners/MoonLoader";
-import { ImPointLeft } from "react-icons/im";
 import { GrOverview } from "react-icons/gr";
 import { ImEnter } from "react-icons/im";
 
@@ -117,9 +116,11 @@ const WarningMessage = styled.span`
 const containerVariants = {
   expanded: {
     height: "30em",
+    zIndex: "999"
   },
   collapsed: {
     height: "3.5em",
+    zIndex: "999"
   },
 };
 
@@ -228,6 +229,7 @@ const Home = () => {
           width={"70%"}
           outline={"1px solid"}
           borderRadius={"0 5px 0 0"}
+          zIndex={2}
         >
           <SearchBarContainer
             animate={isExpanded ? "expanded" : "collapsed"}
@@ -254,7 +256,7 @@ const Home = () => {
                 </>
               ) : (
                 <SearchInput
-                  disabled={"true"}
+                  disabled={true}
                   placeholder="Please select a category to search"
                 ></SearchInput>
               )}
@@ -366,7 +368,7 @@ const Home = () => {
             )}
           </SearchBarContainer>
         </InputGroup>
-        <Flex h='100%' justifyContent={'center'}>
+        <Flex h='100%' justifyContent={'center'} zIndex={1}>
               <Box py='15%'>
                 <Image
                   alt='home'

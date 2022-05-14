@@ -1,15 +1,9 @@
 import { Flex,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Input,
     IconButton,
     HStack,
     Avatar,
     Text,
     Button,
-    useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import CommonInput from '../Common/CommonInput';
@@ -29,9 +23,8 @@ const CreateNewForm = () => {
     const {UserDetails} = useContext(UserContext);
     const {addProject} = useContext(ProjectContext)
 
-    const {mutate: createProject, isLoading} = useCreateProject();
+    const {isLoading} = useCreateProject();
     
-    const toast = useToast();
 
     useEffect(() => {
         if(!UserDetails) return

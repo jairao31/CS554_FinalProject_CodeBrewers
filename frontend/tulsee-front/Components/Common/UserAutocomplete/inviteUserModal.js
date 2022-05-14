@@ -7,7 +7,6 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    Text,
     Button,
     useToast,
   } from '@chakra-ui/react'

@@ -1,6 +1,5 @@
-import { Avatar, Box, Button, Grid, GridItem, HStack, IconButton, Text, useToast } from '@chakra-ui/react';
+import { Avatar, Box, Button, Grid, GridItem, HStack, Text, useToast } from '@chakra-ui/react';
 import React, { useContext } from 'react';
-import { RiCloseCircleFill } from 'react-icons/ri';
 import { useRemoveParticipant } from '../../api/project/removeParticipant';
 import { ProjectContext } from '../Contexts/ProjectContext';
 import { UserContext } from '../Contexts/UserContext';
