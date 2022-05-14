@@ -140,8 +140,10 @@ const MediaContainer = () => {
               <Divider />
             </Box>
           ))
-        ) : (
+        ) : isLoading ? (
           <>loading...</>
+        ) : (
+          <>No Media found!</>
         )}
       </VStack>
       {/* <Flex gap={2}>
