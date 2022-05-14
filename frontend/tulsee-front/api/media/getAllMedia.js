@@ -1,9 +1,10 @@
 import { useQuery } from "react-query";
 import axios from "axios";
+import { getBaseUrl } from "../base";
 
 const getMedia = async (projectId) => {
   const { data } = await axios.get(
-    `http://localhost:3001/media/project/${projectId}`
+    `${getBaseUrl()}/media/project/${projectId}`
   );
   return data;
 };

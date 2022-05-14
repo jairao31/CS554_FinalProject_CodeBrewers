@@ -1,10 +1,11 @@
 import {useMutation} from 'react-query'
 import axios from 'axios'
+import { getBaseUrl } from '../base'
 
 
 const inviteUsers = async(payload) => {
     const {users,projectId} = payload
-    const {data} = await axios.patch(`http://localhost:3001/project/invite/${projectId}`,{users})
+    const {data} = await axios.patch(`${getBaseUrl()}/project/invite/${projectId}`,{users})
     return data;
 }
 

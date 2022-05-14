@@ -79,7 +79,7 @@ const UserAutocomplete = ({label, handleSelect, options}) => {
       ><FormControlLayout label={label}>
             <PopoverTrigger>
             {/*  */}
-                <Input placeholder="Type user name here..." onChange={handleChange}/>
+                <Input value={query} placeholder="Type user name here..." onChange={handleChange}/>
             {/* */}
             </PopoverTrigger>
         </FormControlLayout>

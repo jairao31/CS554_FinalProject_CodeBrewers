@@ -1,9 +1,10 @@
 import {useQuery} from 'react-query'
 import axios from 'axios'
+import { getBaseUrl } from '../base'
 
 
 const getProjects = async userId => {
-    const {data} = await axios.get(`http://localhost:3001/project/byUser/${userId}`)
+    const {data} = await axios.get(`${getBaseUrl()}/project/byUser/${userId}`)
     return data
 }
 

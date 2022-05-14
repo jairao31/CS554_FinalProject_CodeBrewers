@@ -2,7 +2,7 @@ import { Input } from '@chakra-ui/react';
 import React from 'react';
 import FormControlLayout from '../FormControlLayout';
 
-const CommonInput = ({label,onChange,type,helperText,value,name,isError,isRequired,size,placeholder}) => {
+const CommonInput = ({label,onChange,type,helperText,value,name,isError,isRequired,size,placeholder,onKeyPress}) => {
     return (
         <FormControlLayout
         label={label}
@@ -18,6 +18,7 @@ const CommonInput = ({label,onChange,type,helperText,value,name,isError,isRequir
                 name={name}
                 size={size}
                 placeholder={placeholder}
+                onKeyUp={e => e.keyCode === 13 && onKeyPress ? onKeyPress() : onChange(e.target.value,e.target.name)}
             />
         </FormControlLayout>
     );

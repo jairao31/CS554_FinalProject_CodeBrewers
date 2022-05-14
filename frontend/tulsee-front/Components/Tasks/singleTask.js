@@ -32,7 +32,7 @@ const SingleTask = ({task,
            <Td>
                <AvatarGroup size={'sm'} max={2}>
                     {
-                        task.assignees.map(i => 
+                        task.assignees && task.assignees.map(i => 
                             <Avatar  key={i.publicId} src={i.profilePhotoUrl} name={i.displayName}/>    
                         )
                     }

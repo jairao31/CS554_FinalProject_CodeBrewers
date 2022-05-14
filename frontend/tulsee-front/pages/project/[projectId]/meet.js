@@ -126,11 +126,6 @@ const Meet = () => {
                 : "  "}{" "}
               <br />
               <br />
-              {urlState.length !== 0 ? (
-                <Button onClick={<ChatBox />}>Send to Chat</Button>
-              ) : (
-                ""
-              )}
               {urlState.length !== 0 && !copyStatus ? (
                 <Button onClick={copyToClipboard} rightIcon={<ImLink />}>
                   Copy Link

@@ -1,10 +1,11 @@
 import {useMutation} from 'react-query'
 import axios from 'axios'
+import { getBaseUrl } from '../base'
 
 
 const editUser = async(payload) => {
     const {id, details} = payload
-    const {data} = await axios.patch(`http://localhost:3001/user/${id}`,details)
+    const {data} = await axios.patch(`${getBaseUrl()}/user/${id}`,details)
     return data;
 }
 

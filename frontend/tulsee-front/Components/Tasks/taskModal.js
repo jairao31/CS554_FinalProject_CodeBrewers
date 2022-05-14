@@ -73,13 +73,18 @@ const TaskModal = ({isOpen, onClose, selected, mode , insertTask, updateTask, lo
 
     const handleSubmit = e => {
         e.preventDefault();
-        const {title,description,assignees,status} = details
+        const {title,description,status} = details
         if(mode !== 'edit') {
             addTask({
                 projectId: currentProject.publicId,
                 title,
                 description,
-                assignees,
+                assignees: details.assignees ? details.assignees : 
+                currentProject.type === 'Group'? [] : [{
+                    publicId: UserDetails.publicId,
+                    name: UserDetails.displayName,
+                    profilePhotoUrl: UserDetails.profilePhotoUrl
+                }],
                 status,
                 createdBy: {
                     publicId: UserDetails.publicId,
@@ -125,7 +130,7 @@ const TaskModal = ({isOpen, onClose, selected, mode , insertTask, updateTask, lo
                     name='description'
                     onChange={handleChange}
                 />
-                {currentProject && <UserAutocomplete label="Assignees" handleSelect={handleSelect} options={currentProject.participants}/>}
+                {currentProject && currentProject.type === "Group" && <UserAutocomplete label="Assignees" handleSelect={handleSelect} options={currentProject.participants}/>}
                 {
                     details.assignees && details.assignees.map(i => 
                     {return <HStack key={i.publicId} w={'100%'} p={2} >

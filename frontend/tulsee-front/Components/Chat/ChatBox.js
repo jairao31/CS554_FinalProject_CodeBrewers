@@ -109,10 +109,12 @@ const ChatBox = () => {
   };
 
   return (
-    <VStack w={"100%"} p={5} h={"90%"} justifyContent="flex-end">
-      <VStack w={"100%"} h={"100%"} justifyContent="flex-end">
+    <Box display={'flex'} justifyContent='end' w={"100%"} p={5} h={"90%"} >
+      <Flex h='100%' w={'100%'} direction='column' justifyContent={'space-between'}>
+      <VStack mb='auto'  w={"100%"} minH={'calc(100% - 280px)'} maxH={'calc(100vh - 140px)'} overflowY='auto'>
         {chat.map((i, idx) => (
           <Flex
+            minW={0}
             key={idx}
             gap={2}
             w="100%"
@@ -128,8 +130,10 @@ const ChatBox = () => {
                 alt={`${i.sender.name}_dp`}
               />
             )}
-            <Box>
-              <Text
+            <Box   >
+                <Text
+                ml={i.sender.publicId === userId && 'auto'}
+                mr={i.sender.publicId !== userId && 'auto'}
                 bg={i.sender.publicId === userId ? "brand.700" : "brand.500"}
                 p={2}
                 borderRadius="md"
@@ -139,24 +143,31 @@ const ChatBox = () => {
               >
                 {i.text}
               </Text>
-              <Text fontSize={"xs"} color={"#99A3A4 "}>
+              <Text    
+                w={'fit-content'}            
+                ml={i.sender.publicId === userId && 'auto'}
+                mr={i.sender.publicId !== userId && 'auto'} 
+                fontSize={"xs"} 
+                color={"#99A3A4 "}>
                 {i.sender.name} | {get24TimeFormat(i.createdAt)}
               </Text>
             </Box>
           </Flex>
         ))}
       </VStack>
-      <HStack gap="10px" w={"100%"}>
+      <HStack gap="10px">
         <Input
           placeholder="type message here..."
           value={text || ""}
           onChange={(e) => setText(e.target.value)}
+          onKeyUp={e => e.keyCode === 13 ? onMessageSubmit() : setText(e.target.value)}
         />
         <Button onClick={onMessageSubmit} isLoading={isLoading}>
           Send
         </Button>
       </HStack>
-    </VStack>
+      </Flex>
+    </Box>
   );
 };
 

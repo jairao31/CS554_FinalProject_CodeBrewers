@@ -231,6 +231,7 @@ const CommentSection = ({task,isOpen, onClose, handleSend, commenting, handleDel
 
     const handleSubmit = e => {
         handleSend(text)
+        setText('')
     }
 
  
@@ -247,8 +248,8 @@ const CommentSection = ({task,isOpen, onClose, handleSend, commenting, handleDel
         <DrawerCloseButton />
         <DrawerHeader>{task.title}</DrawerHeader>
         <DrawerBody  >
-            <Flex h={'100%'} flexDirection='column' overflowY='auto' justifyContent={'flex-end'}>
-                {comments.map(i => <SingleComment key={i.publicId} comment={i} handleDelete={() => handleDelete(i.publicId)} deleting={deleting}/>) }
+            <Flex h={'100%'} flexDirection='column' overflowY='auto'>
+                {comments.map((i,idx) => <SingleComment key={i.publicId} mt={idx === 0 && 'auto'} comment={i} handleDelete={() => handleDelete(i.publicId)} deleting={deleting}/>) }
                 <div id='last-element' ref={last}>
                 </div>
             </Flex>
@@ -259,6 +260,7 @@ const CommentSection = ({task,isOpen, onClose, handleSend, commenting, handleDel
                         placeholder='Type here...' 
                         value={text}
                         onChange={handleChange}
+                        onKeyPress={handleSubmit}
                     />
                     <Button onClick={handleSubmit} isLoading={commenting}  mt={2} colorScheme='blue'>Send</Button>
                 </Flex>
