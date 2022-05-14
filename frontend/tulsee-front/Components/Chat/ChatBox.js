@@ -22,20 +22,22 @@ const ChatBox = () => {
   const [chat, setChat] = useState([]);
   const [room, setRoom] = useState("room1");
   const [userId, setUserId] = useState();
+  const [socket, setSocket] = useState(null)
 
   const { UserDetails } = useContext(UserContext);
 
   const { query } = useRouter();
 
   // const socketRef = useRef();
-  const socketRef = io.connect(getBaseUrl());
+  
 
   const { data: messages } = useGetMessages(query.projectId, !!query.projectId);
   const { mutate: sendMessage, isLoading } = useSendMessage();
 
   useEffect(() => {
 
-    if (!socketRef || !UserDetails) return;
+    if ( !UserDetails) return;
+    const socketRef = io.connect(getBaseUrl());
     setUserId(UserDetails.publicId);
     setRoom(query.projectId);
     console.log(query);
@@ -47,19 +49,19 @@ const ChatBox = () => {
       },
       room: query.projectId,
     });
-    return () => {
-      socketRef.disconnect();
-    };
+    setSocket(socketRef)
+    return () =>  socketRef.disconnect()
   }, [UserDetails]);
 
 
   useEffect(() => {
-    socketRef.on("message", ({ sender, createdAt, text }) => {
+    if(!socket) return
+    socket.on("message", ({ sender, createdAt, text }) => {
       setChat((prev) => {
         return [...prev, { sender, createdAt, text }];
       });
     });
-    socketRef.on("user_join", function (data) {
+    socket.on("user_join", function (data) {
       console.log(data);
       const { sender, createdAt } = data;
       setChat((prev) => {
@@ -69,7 +71,7 @@ const ChatBox = () => {
         ];
       });
     });
-  }, [socketRef]);
+  }, [socket]);
 
   useEffect(() => {
     if (!messages) return;
@@ -90,7 +92,7 @@ const ChatBox = () => {
       {
         onSuccess: (d) => {
           console.log(d);
-          socketRef.emit("message", {
+          socket.emit("message", {
             room: room,
             sender: {
               publicId: userId,
