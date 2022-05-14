@@ -1,6 +1,5 @@
-import { Alert, AlertIcon, Avatar, AvatarGroup, Box, Button, Flex, Grid, GridItem, HStack, IconButton, Text, useToast } from '@chakra-ui/react';
+import { Alert, AlertIcon, Avatar, AvatarGroup, Box, Button,Grid, GridItem, HStack, Text, useToast } from '@chakra-ui/react';
 import React, { useContext } from 'react';
-import { MdInfo, MdRestorePage } from 'react-icons/md';
 import { useEditProject } from '../../api/project/editProject';
 import { ProjectContext } from '../Contexts/ProjectContext';
 

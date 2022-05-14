@@ -8,7 +8,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import io from "socket.io-client";
 import { UserContext } from "../Contexts/UserContext";
 import { useRouter } from "next/router";
@@ -33,7 +33,7 @@ const ChatBox = () => {
   const { mutate: sendMessage, isLoading } = useSendMessage();
 
   useEffect(() => {
-    // socketRef.current = io('/');
+
     if (!socketRef || !UserDetails) return;
     setUserId(UserDetails.publicId);
     setRoom(query.projectId);
@@ -51,9 +51,6 @@ const ChatBox = () => {
     };
   }, [UserDetails]);
 
-  // useEffect(() => {
-
-  // },[room])
 
   useEffect(() => {
     socketRef.on("message", ({ sender, createdAt, text }) => {

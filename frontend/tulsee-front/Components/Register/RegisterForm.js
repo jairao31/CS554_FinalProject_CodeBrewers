@@ -8,9 +8,8 @@ import {
     InputGroup,
     InputLeftAddon,
     Stack,
-    StylesProvider,
     InputRightElement,
-    Checkbox, CheckboxGroup 
+    Checkbox
   } from "@chakra-ui/react";
 import {MdEmail} from "react-icons/md";
 import { IoInformationCircle } from "react-icons/io5";

@@ -1,9 +1,7 @@
-import { Avatar, Box, Button, Divider, HStack, IconButton, Text, useToast } from '@chakra-ui/react';
+import {Box, Button, Divider, Text, useToast } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
-import { RiCloseCircleFill } from 'react-icons/ri';
 import { useEditProject } from '../../api/project/editProject';
 import CommonInput from '../Common/CommonInput';
-import UserAutocomplete from '../Common/UserAutocomplete';
 import { ProjectContext } from '../Contexts/ProjectContext';
 import { UserContext } from '../Contexts/UserContext';
 import ArchiveProject from './archiveProject';

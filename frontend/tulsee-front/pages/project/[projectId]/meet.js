@@ -5,7 +5,7 @@ import ProjectLayout from "../../../Components/Common/ProjectLayout";
 import { FiExternalLink } from "react-icons/fi";
 import React, { useState, useContext } from "react";
 import axios from "axios";
-import { Button, Image, Input } from "@chakra-ui/react";
+import { Button, Image } from "@chakra-ui/react";
 import { UserContext } from "../../../Components/Contexts/UserContext";
 import { AiOutlineClear } from "react-icons/ai";
 import { ImLink } from "react-icons/im";

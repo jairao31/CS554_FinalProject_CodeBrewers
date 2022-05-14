@@ -8,7 +8,6 @@ import {
     ModalBody,
     ModalCloseButton,
     Text,
-    VStack,
     Avatar,
     Flex,
     Button,
