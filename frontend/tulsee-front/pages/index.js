@@ -1,4 +1,13 @@
-import { Avatar, Box, Flex, HStack, Image, Spinner, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Image,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import Layout from "../Components/Common/layout";
@@ -8,10 +17,11 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { useSearchQuery } from "../api/search/searchQuery";
 import styled from "styled-components";
 import { IoSearch } from "react-icons/io5";
-import {  motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useClickOutside } from "react-click-outside-hook";
 import { useRef } from "react";
 import MoonLoader from "react-spinners/MoonLoader";
+import BeatLoader from "react-spinners/BeatLoader";
 import { GrOverview } from "react-icons/gr";
 import { ImEnter } from "react-icons/im";
 
@@ -116,11 +126,11 @@ const WarningMessage = styled.span`
 const containerVariants = {
   expanded: {
     height: "30em",
-    zIndex: "999"
+    zIndex: "999",
   },
   collapsed: {
     height: "3.5em",
-    zIndex: "999"
+    zIndex: "999",
   },
 };
 
@@ -145,13 +155,10 @@ const Home = () => {
     }
   };
   const expandContainer = () => {
-    // setSearchResults([]);
-
     setExpanded(true);
   };
 
   const collapseContainer = () => {
-    // var searchList = [];
     setExpanded(false);
     setSearchResults([]);
 
@@ -176,22 +183,25 @@ const Home = () => {
     !!(searchQuery.length > 1)
   );
 
-
   useEffect(() => {
-    console.log(searchQuery,':',searchList)
-    if (searchList && typeof searchList === "object" && (searchList.length || searchList.length === 0)) {
-      console.log('searched')
-      console.log(searchQuery,':',searchList)
+    console.log(searchQuery, ":", searchList);
+    if (
+      searchList &&
+      typeof searchList === "object" &&
+      (searchList.length || searchList.length === 0)
+    ) {
+      console.log("searched");
+      console.log(searchQuery, ":", searchList);
       setSearchResults(searchList);
     }
   }, [searchList]);
 
   useEffect(() => {
-    if(searchQuery.length > 1 && searchResults) {
-      console.log('fetching')
-      refetch()
+    if (searchQuery.length > 1 && searchResults) {
+      console.log("fetching");
+      refetch();
     }
-  },[searchQuery])
+  }, [searchQuery]);
 
   return userID ? (
     <Layout>
@@ -289,7 +299,9 @@ const Home = () => {
                 )}
                 {!isEmpty && searchResults.length === 0 && (
                   <LoadingWrapper>
-                    <WarningMessage>No results found for "{searchQuery}"</WarningMessage>
+                    <WarningMessage>
+                      No results found for "{searchQuery}"
+                    </WarningMessage>
                   </LoadingWrapper>
                 )}
                 {isEmpty && (
@@ -368,15 +380,36 @@ const Home = () => {
             )}
           </SearchBarContainer>
         </InputGroup>
-        <Flex h='100%' justifyContent={'center'} zIndex={1}>
-              <Box py='15%'>
+        <Flex h="100%" justifyContent={"center"} zIndex={1}>
+          <Box py="15%">
+            {isExpanded ? (
+              <Button
+                width={"170px"}
+                isLoading
+                colorScheme="blue"
+                spinner={<BeatLoader size={18} color="white" />}
+              >
+                TULSEE
+              </Button>
+            ) : (
+              <>
                 <Image
-                  alt='home'
-                  w='600px'
-                  src={'/home.svg'}
-                />
-                <Text textAlign={'center'} fontSize={'2xl'} fontWeight='bold' mt={'40px'}>Welcome! Let's get some work done!</Text>
-              </Box>
+                  position="fixed"
+                  alt="home"
+                  w="600px"
+                  src={"/home.svg"}
+                />{" "}
+                <Text
+                  textAlign={"center"}
+                  fontSize={"2xl"}
+                  fontWeight="bold"
+                  mt={"40px"}
+                >
+                  Welcome! Let's get some work done!
+                </Text>
+              </>
+            )}
+          </Box>
         </Flex>
         {/* <Center>
         <InputGroup
@@ -434,9 +467,9 @@ const Home = () => {
       </>
     </Layout>
   ) : (
-    <Flex direction='column' justifyContent={'center'} w='100vw' h='100vh'>
-      <Box mx='auto' textAlign={'center'}>
-        <Spinner color='brand.500'/>
+    <Flex direction="column" justifyContent={"center"} w="100vw" h="100vh">
+      <Box mx="auto" textAlign={"center"}>
+        <Spinner color="brand.500" />
         <Text>Authenticating, please wait....</Text>
       </Box>
     </Flex>

@@ -83,11 +83,11 @@ const LoginForm = () => {
             </InputRightElement>
           </InputGroup>
         </FormControl>
-        <Checkbox color={"white"} name="rememberMe" colorScheme={"green"}>
+        {/* <Checkbox color={"white"} name="rememberMe" colorScheme={"green"}>
           {" "}
           Remember Me{" "}
-        </Checkbox>
-        <Button type="submit" bg={"brand.500"} variant="solid" isLoading={isLoggingIn || isRegistering}>
+        </Checkbox> */}
+        <Button type="submit" bg={"brand.500"} variant="solid">
           Login
         </Button>
         <Text textAlign={'center'}> OR </Text>
