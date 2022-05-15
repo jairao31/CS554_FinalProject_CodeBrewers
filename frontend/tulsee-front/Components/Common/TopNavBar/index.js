@@ -1,4 +1,4 @@
-import { Flex, HStack,Text, Tooltip } from '@chakra-ui/react';
+import { Flex, HStack,Text, Tooltip, useColorMode } from '@chakra-ui/react';
 import { useRouter } from 'next/dist/client/router';
 import React, { useContext, useEffect, useState } from 'react';
 import {BiTask} from 'react-icons/bi'
@@ -9,6 +9,7 @@ import {MdArrowBackIosNew, MdHome} from 'react-icons/md'
 import {MdSettings} from 'react-icons/md'
 import { ProjectContext } from '../../Contexts/ProjectContext';
 import IconButton from '../IconButton';
+import { FaMoon, FaSun } from 'react-icons/fa';
 
 const TopNavBar = ({activePage, title}) => {
     const [navs, setNavs] = useState([
@@ -21,6 +22,10 @@ const TopNavBar = ({activePage, title}) => {
     const {push, query, back} = useRouter()
 
     const {currentProject} = useContext(ProjectContext);
+
+    const { colorMode, toggleColorMode } = useColorMode();
+
+    const isDark = colorMode === "dark";
 
     useEffect(() => {
         if(!currentProject || !query.projectId) return
@@ -89,11 +94,12 @@ const TopNavBar = ({activePage, title}) => {
                 </Tooltip>)}
             </HStack> : <>loading</> :
             <></>
-            } 
+            }
+            <HStack ms='auto'>
             {query.projectId && <Tooltip hasArrow  label={'setting'} placement='bottom'>
                 <div>
                     <IconButton 
-                        ms='auto'
+                        
                         active={activePage === 'setting'} 
                         label={'top-nav-settings'} 
                         icon={
@@ -103,7 +109,22 @@ const TopNavBar = ({activePage, title}) => {
                         onClick={() => push(`/project/${currentProject.publicId}/settings`)}
                     />
                 </div>
-            </Tooltip>   }            
+            </Tooltip>   }  
+                <Tooltip hasArrow  label={'Toogle mode'} placement='bottom'>
+                    <div>
+                    <IconButton
+                    label={'toggle-btn'}
+                    variant={isDark ? 'solid' : 'ghost'}
+                    ml={"1px"}
+                    boxShadow={isDark ? "0px 0px 16px 2px white" : "dark-lg"}
+                    icon={isDark ? <FaSun color='white'/> : <FaMoon />}
+                    isRound="true"
+                    onClick={toggleColorMode}
+                />
+                    </div>
+                </Tooltip> 
+            </HStack>
+                     
         </Flex>
     );
 };
