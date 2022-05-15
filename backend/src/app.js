@@ -42,7 +42,8 @@ app.use(cors());
 
 const io = new Server(http, {
   cors: {
-    origin: (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? "http://localhost:3000" : 'http://34.238.51.139:3000',
+    // (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? "http://localhost:3000" :
+    origin: 'http://34.238.51.139:3000',
     methods: ["GET", "POST"],
   },
 });
@@ -102,7 +103,7 @@ app.use((req,res,next) => {
 
 http.listen(3001, () => {
   console.log("Server has been initialized!");
-  console.log('Your routes will be running on http://localhost:3001');
+  console.log(`Your routes will be running on ${(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? "http://localhost:3000" : 'http://34.238.51.139:3000'}`);
 });
 
 
