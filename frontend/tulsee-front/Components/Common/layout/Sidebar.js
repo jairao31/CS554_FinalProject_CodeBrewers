@@ -21,7 +21,7 @@ import { HiMenu } from "react-icons/hi";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { FiArchive } from "react-icons/fi";
 
-import Footer from "../SideFooter/Footer";
+
 
 const Sidebar = () => {
   const { logout, UserDetails, loggingOut } = useContext(UserContext);
@@ -162,8 +162,6 @@ const Sidebar = () => {
 
           ))}
           </VStack>
-          
-          <Footer />
         </Box>
       </Flex>
     </Box>
