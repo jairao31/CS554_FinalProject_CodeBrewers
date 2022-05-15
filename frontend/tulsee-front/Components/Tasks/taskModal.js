@@ -39,6 +39,7 @@ const TaskModal = ({isOpen, onClose, selected, mode , insertTask, updateTask, lo
             setDetails({})
         }else{
             if(mode === 'edit') {
+                console.log(selected)
                 setDetails(selected)
             }
         }
@@ -55,10 +56,19 @@ const TaskModal = ({isOpen, onClose, selected, mode , insertTask, updateTask, lo
 
     const handleSelect = value => {
         setDetails(prev => {
-            return {
-                ...prev,
-                assignees: prev.assignees ? [...prev.assignees,value] : [value]
+            let exist = false
+            if(prev.assignees) {
+                exist = prev.assignees.find(i => i.publicId === value.publicId);
             }
+            if(!exist) {
+                return {
+                    ...prev,
+                    assignees: prev.assignees ? [...prev.assignees,value] : [value]
+                }
+            }else{
+                return prev
+            }
+           
         })
     }
 
@@ -74,6 +84,12 @@ const TaskModal = ({isOpen, onClose, selected, mode , insertTask, updateTask, lo
     const handleSubmit = e => {
         e.preventDefault();
         const {title,description,status} = details
+
+        if(title.trim().length === 0 || status.trim().length === 0) {
+            toast({title:'Title or status missing!', status:"warning", duration: 2000});
+            return;
+        }
+
         if(mode !== 'edit') {
             addTask({
                 projectId: currentProject.publicId,
@@ -105,7 +121,7 @@ const TaskModal = ({isOpen, onClose, selected, mode , insertTask, updateTask, lo
                 }
             })
         }else{
-            updateTask(details.publicId,{title,description,assignees,status})
+            updateTask(details.publicId,{title,description,assignees:details.assignees,status})
         }    
     }
 
@@ -113,7 +129,7 @@ const TaskModal = ({isOpen, onClose, selected, mode , insertTask, updateTask, lo
     <Modal isOpen={isOpen} onClose={() => onClose()}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add Task</ModalHeader>
+          <ModalHeader>{mode === 'edit' ? 'Edit' : 'Add'} Task</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={handleSubmit}>

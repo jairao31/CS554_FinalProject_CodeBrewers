@@ -30,6 +30,10 @@ const ChangePassword = () => {
             toast({title: "Please fill all the fields", status: "warning", duration: 2000});
             return
         }
+        if(newPassword.length < 6) {
+            toast({title: "password should be of atleast 6 characters", status: "warning", duration: 2000});
+            return
+        }
         if(newPassword !== confirmPassword) {
             toast({title: "password and confirm password does not match", status: "warning", duration: 2000});
             return
@@ -48,6 +52,7 @@ const ChangePassword = () => {
                     onChange={handleChange}
                     type='password'
                     isRequired
+                    helperText={'If account created using google signIn, your password must be <firstName>1234'}
                 />
                 <CommonInput
                     label="New Password"
@@ -56,6 +61,7 @@ const ChangePassword = () => {
                     onChange={handleChange}
                     type='password'
                     isRequired
+                    helperText={'atleast 6 characters long'}
                 />
                 <CommonInput
                     label="Confirm Password"

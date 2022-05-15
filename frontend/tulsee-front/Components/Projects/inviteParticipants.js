@@ -32,7 +32,13 @@ const InviteParticipants = () => {
             return
         }
         setSelectedUsers(prev => {
-            return [...prev, user]
+            let exist = false
+            exist = prev.find(i => i.publicId === user.publicId);
+            if(!exist) {
+                return [...prev, user]
+            }else{
+                return prev
+            }
         })
     }
 

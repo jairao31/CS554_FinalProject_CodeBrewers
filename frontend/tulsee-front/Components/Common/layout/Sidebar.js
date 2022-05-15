@@ -46,6 +46,7 @@ const Sidebar = () => {
           TULSEE.io
         </Text> */}
         <Image
+          cursor={'pointer'}
           onClick={() => push(`/`)}
           w={"80px"}
           src={"/Logo1.png"}
@@ -104,7 +105,7 @@ const Sidebar = () => {
           <Text w={"100%"} fontWeight={"semibold"} mb={2} fontSize="lg">
             Personal
           </Text>
-          <VStack maxH={'300px'} overflowY='auto'>
+          <VStack maxH={'150px'} overflowY='auto'>
           {personalProjects.map((i) => (
             <Box  w='100%'>
             <Button

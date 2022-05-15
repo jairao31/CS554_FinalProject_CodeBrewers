@@ -36,6 +36,11 @@ const ProjectSettings = () => {
 
     const handleSubmit = e => {
         e.preventDefault()
+        const {name} = details;
+        if(!name || name.trim().length === 0) {
+            toast({title:'Please provide project name', status:'warning', duration: 2000});
+            return
+        }
         editProject(details,{
             onSuccess: d=> {
                 setCurrentProject(d)
@@ -66,6 +71,7 @@ const ProjectSettings = () => {
                     placeholder={'Project Name'}
                     name='name'
                     value={details.name || ''}
+                    isRequired
                     onChange={handleChange}
                 />
                 <Button type='submit' variant='outline' mt={2} isLoading={isLoading}>Save Changes</Button>
