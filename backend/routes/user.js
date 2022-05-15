@@ -308,7 +308,6 @@ router.get("/autoComplete/:query", async(req,res) => {
 })
 
 router.get("/logout/:userId", async (req, res) => {
-    req.session.destroy();
     const {userId} = req.params;
     if(!userId) {
       res.status(400).json({error: "Please provide a userId"});

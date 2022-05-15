@@ -118,27 +118,6 @@ object-assign
  */
 
 /*!
- * Connect - session - Cookie
- * Copyright(c) 2010 Sencha Inc.
- * Copyright(c) 2011 TJ Holowaychuk
- * MIT Licensed
- */
-
-/*!
- * Connect - session - Session
- * Copyright(c) 2010 Sencha Inc.
- * Copyright(c) 2011 TJ Holowaychuk
- * MIT Licensed
- */
-
-/*!
- * Connect - session - Store
- * Copyright(c) 2010 Sencha Inc.
- * Copyright(c) 2011 TJ Holowaychuk
- * MIT Licensed
- */
-
-/*!
  * Copyright (c) 2015, Salesforce.com, Inc.
  * All rights reserved.
  *
@@ -421,10 +400,6 @@ object-assign
  */
 
 /*!
- * Prototype.
- */
-
-/*!
  * Sentinel value for a document remove.
  */
 
@@ -627,22 +602,6 @@ object-assign
  */
 
 /*!
- * express-session
- * Copyright(c) 2010 Sencha Inc.
- * Copyright(c) 2011 TJ Holowaychuk
- * Copyright(c) 2014-2015 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-/*!
- * express-session
- * Copyright(c) 2010 Sencha Inc.
- * Copyright(c) 2011 TJ Holowaychuk
- * Copyright(c) 2015 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-/*!
  * finalhandler
  * Copyright(c) 2014-2022 Douglas Christopher Wilson
  * MIT Licensed
@@ -718,12 +677,6 @@ object-assign
  */
 
 /*!
- * on-headers
- * Copyright(c) 2014 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-/*!
  * parseurl
  * Copyright(c) 2014 Jonathan Ong
  * Copyright(c) 2014-2017 Douglas Christopher Wilson
@@ -733,12 +686,6 @@ object-assign
 /*!
  * proxy-addr
  * Copyright(c) 2014-2016 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-/*!
- * random-bytes
- * Copyright(c) 2016 Douglas Christopher Wilson
  * MIT Licensed
  */
 
@@ -788,13 +735,6 @@ object-assign
  * type-is
  * Copyright(c) 2014 Jonathan Ong
  * Copyright(c) 2014-2015 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-/*!
- * uid-safe
- * Copyright(c) 2014 Jonathan Ong
- * Copyright(c) 2015-2017 Douglas Christopher Wilson
  * MIT Licensed
  */
 
