@@ -351,7 +351,8 @@ router.post("/invite/email", async(req,res) => {
   }
   
     const output = `<div>
-      <p><strong>${sender.displayName}</strong> invites you to join <strong>TULSEE</strong></p>
+      <p><strong>${sender.displayName}</strong> invites you to join <strong>TULSEE</strong>.</p>
+      <a href='http://34.238.51.139:3000/'>Click here</a>
     </div>`
 
     let transporter = nodemailer.createTransport({
