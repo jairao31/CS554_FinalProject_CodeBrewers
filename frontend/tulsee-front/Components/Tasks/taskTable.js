@@ -32,6 +32,8 @@ import { useAddComment } from '../../api/task/addComment';
 import { useDeleteComment } from '../../api/task/deleteComment';
 import { UserContext } from '../Contexts/UserContext';
 import { MdDelete } from 'react-icons/md';
+import Linkify from 'react-linkify';
+import CommonTextarea from '../Common/CommonTextarea';
 
 const TaskTable = ({tasks, updateTask, deleteTask}) => {
     
@@ -262,11 +264,12 @@ const CommentSection = ({task,isOpen, onClose, handleSend, commenting, handleDel
         </DrawerBody>
         <DrawerFooter>
                 <Flex gap={2}>
-                    <CommonInput 
+                    <CommonTextarea
+                        minH='50px'
                         placeholder='Type here...' 
                         value={text}
                         onChange={handleChange}
-                        onKeyPress={handleSubmit}
+                        onKeyUp={e => e.keyCode === 13 && !e.shiftKey && handleSubmit()}
                     />
                     <Button onClick={handleSubmit} isLoading={commenting}  mt={2} colorScheme='blue'>Send</Button>
                 </Flex>
@@ -276,6 +279,12 @@ const CommentSection = ({task,isOpen, onClose, handleSend, commenting, handleDel
 }
 
 const SingleComment = ({comment,handleDelete,deleting}) => {
+    const componentDecorator = (href, text, key) => (
+        <a style={{color:'blue'}} href={href} key={key} target="_blank" rel="noopener noreferrer">
+            {text}
+        </a>
+      );
+    
     const {userID} = useContext(UserContext)
     const MemoizedComment = useMemo(() => {return <Box borderRadius={'md'} boxShadow='md' p={2} mb={2}>
     <HStack justifyContent={'space-between'} mb={2}>
@@ -285,7 +294,10 @@ const SingleComment = ({comment,handleDelete,deleting}) => {
         </Flex>
         {comment.createdBy.publicId === userID && <IconButton isLoading={deleting} onClick={() =>handleDelete()} size={'sm'} variant='ghost' icon={<MdDelete/>}/>}
     </HStack>
-    <Text fontSize={'md'} ml={'40px'}>{comment.text}</Text>
+    <Linkify componentDecorator={componentDecorator}>
+        <Text fontSize={'md'} ml={'40px'}>{comment.text}</Text>
+    </Linkify>
+    
 </Box>},[comment,handleDelete,deleting,userID])
     return MemoizedComment
 }

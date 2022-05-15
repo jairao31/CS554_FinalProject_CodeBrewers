@@ -52,7 +52,6 @@ const ChangePassword = () => {
                     onChange={handleChange}
                     type='password'
                     isRequired
-                    helperText={'If account created using google signIn, your password must be <firstName>1234'}
                 />
                 <CommonInput
                     label="New Password"

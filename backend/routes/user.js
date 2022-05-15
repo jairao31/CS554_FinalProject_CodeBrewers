@@ -25,9 +25,9 @@ function isPassword(str) {
 // "SIGNUP" Router calling "CreateUser"
 router.post("/signup", async (req, res) => {
   try {
-    const { publicId, password, firstName, lastName, email, profilePhotoUrl } = req.body;
+    const { publicId, password, firstName, lastName, email, profilePhotoUrl, type } = req.body;
 
-    if(!publicId || !email || !password || !firstName || !lastName) {
+    if(!publicId || !email || !password || !firstName || !lastName || !type) {
         res.status(400).json({error: "Insufficient inputs"});
         return
     }
@@ -37,6 +37,7 @@ router.post("/signup", async (req, res) => {
         typeof password !== "string" || 
         typeof firstName !== "string" ||
         typeof lastName !== "string" ||
+        typeof type !== "string" ||
         password.trim().length < 6
         ) {
       res.status(400).json({error: "Invalid input"});
@@ -64,6 +65,7 @@ router.post("/signup", async (req, res) => {
           } else {
             const userData = {
               publicId,
+              type,
               profilePhotoUrl: profilePhotoUrl ||  null,
               firstName: firstName.trim().toLowerCase(),
               lastName: lastName.trim().toLowerCase(),

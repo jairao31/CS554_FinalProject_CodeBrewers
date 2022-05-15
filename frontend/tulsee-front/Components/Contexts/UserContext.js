@@ -29,7 +29,7 @@ const UserContextProvider = ({children}) => {
 
     const toast = useToast();
 
-    const {data: User, isError, isLoading: isLoggingIn} = useGetUser(userID, !!userID);
+    const {data: User, refetch: refetchUser,isError, isLoading: isLoggingIn} = useGetUser(userID, !!userID);
 
     const { colorMode, toggleColorMode } = useColorMode();
 
@@ -49,7 +49,8 @@ const UserContextProvider = ({children}) => {
                 lastName: user.displayName.split(' ')[1],
                 email: user.email,
                 profilePhotoUrl: user.photoURL,
-                password:`${user.displayName.split(' ')[0]}1234`
+                password:`${user.displayName.split(' ')[0]}1234`,
+                type:'google'
             }
             addUser(request,{
                 onSuccess: d =>  {
@@ -100,6 +101,7 @@ const UserContextProvider = ({children}) => {
             console.log(credential.user)
             addUser({
                 publicId: credential.user.uid,
+                type:'password',
                 ...details
             }, {
                 onSuccess: data => {
@@ -184,7 +186,22 @@ const UserContextProvider = ({children}) => {
     }
  
     return (
-        <UserContext.Provider value={{createUser,loginUser,UserDetails,userID,logout,setUserDetails,changePassword,loggingOut,googleSignIn, isLoggingIn, isRegistering}}>
+        <UserContext.Provider 
+            value={{
+                createUser,
+                loginUser,
+                UserDetails,
+                userID,
+                logout,
+                setUserDetails,
+                changePassword,
+                loggingOut,
+                googleSignIn, 
+                isLoggingIn, 
+                isRegistering,
+                refetchUser
+            }}
+        >
             {children}
         </UserContext.Provider>
     );

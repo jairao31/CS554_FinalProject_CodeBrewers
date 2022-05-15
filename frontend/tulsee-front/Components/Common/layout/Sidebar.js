@@ -63,7 +63,7 @@ const Sidebar = () => {
         </Text>
         {/* <IconButton onClick={() => push("/invites")} fontWeight={'bold'} variant={'ghost'} size={'sm'} icon={<GoRequestChanges size={'18px'}/>}/> */}
         <Menu>
-          <MenuButton as={IconButton} icon={<HiMenu />} variant="ghost" />
+          <MenuButton aria-label="sidebar-menu" as={IconButton} icon={<HiMenu />} variant="ghost" />
           <MenuList>
             <MenuItem
               onClick={() => push("/invites")}
@@ -111,7 +111,8 @@ const Sidebar = () => {
             <Button
               backgroundColor={
                 currentProject &&
-                currentProject.publicId !== i.publicId &&
+                currentProject.publicId === i.publicId ?
+                "transparent":
                 "brand.700"
               }
               onClick={() => push(`/project/${i.publicId}/task`)}
@@ -140,8 +141,9 @@ const Sidebar = () => {
               <Box w='100%'>
               <Button
                 backgroundColor={
-                  currentProject &&
-                  currentProject.publicId !== i.publicId &&
+                  (currentProject &&
+                  currentProject.publicId === i.publicId) ?
+                  "transparent":
                   "brand.700"
                 }
                 onClick={() => push(`/project/${i.publicId}/task`)}

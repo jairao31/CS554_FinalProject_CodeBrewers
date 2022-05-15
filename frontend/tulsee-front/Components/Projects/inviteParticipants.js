@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react';
 import { RiCloseCircleFill } from 'react-icons/ri';
 import { useInviteUsers } from '../../api/project/inviteUsers';
+import CommonAvatar from '../Common/CommonAvatar';
 import UserAutocomplete from '../Common/UserAutocomplete';
 import { ProjectContext } from '../Contexts/ProjectContext';
 
@@ -78,7 +79,7 @@ const InviteParticipants = () => {
                 {
                     selectedUsers.map(i => 
                         {return <HStack key={i.publicId} w={'100%'} p={2} >
-                            <Avatar size={'sm'} src={i.profilePhotoUrl}  name={i.displayName}/>
+                            <CommonAvatar size={'sm'} src={i.profilePhotoUrl}  name={i.displayName} publicId={i.publicId}/>
                             <Text>{i.displayName}</Text>
                             <IconButton variant={'ghost'} icon={<RiCloseCircleFill/>} onClick={() => handleRemove(i.publicId)}/>
                         </HStack>}

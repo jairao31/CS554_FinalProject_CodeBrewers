@@ -3,6 +3,7 @@ import React from 'react';
 import { MdDelete, MdEdit, MdInfo } from 'react-icons/md';
 import {BiCommentDetail} from 'react-icons/bi'
 import CommonSelect from '../Common/CommonSelect';
+import CommonAvatar from '../Common/CommonAvatar';
 
 const SingleTask = ({task, 
     handleStatus, 
@@ -33,14 +34,15 @@ const SingleTask = ({task,
                <AvatarGroup size={'sm'} max={2}>
                     {
                         task.assignees && task.assignees.map(i => 
-                            <Avatar  key={i.publicId} src={i.profilePhotoUrl} name={i.displayName}/>    
+                            <CommonAvatar key={i.publicId} src={i.profilePhotoUrl} name={i.displayName} publicId={i.publicId}/>
+                            // <Avatar  key={i.publicId} src={i.profilePhotoUrl} name={i.displayName}/>    
                         )
                     }
                </AvatarGroup>
            </Td>
            <Td>
                <Flex gap={2}>
-                <Avatar size={'sm'} src={task.createdBy.profilePhotoUrl} name={task.createdBy.name}/>
+                <CommonAvatar size={'sm'} src={task.createdBy.profilePhotoUrl} name={task.createdBy.name} publicId={task.createdBy.publicId}/>
                 <Text mt={2} minW='80px' maxW={'80px'} isTruncated>{task.createdBy.name}</Text>
                </Flex>
             </Td>
@@ -48,6 +50,7 @@ const SingleTask = ({task,
                <Flex gap={2}>
                    <Tooltip label='Info' hasArrow>
                         <IconButton
+                            aria-label='task-info'
                             onClick={() => handleInfo()}
                             disabled={isLoading}
                             icon={<MdInfo/>}
@@ -57,6 +60,7 @@ const SingleTask = ({task,
                    </Tooltip>
                    <Tooltip label='Comment' hasArrow>
                         <IconButton
+                            aria-label='task-comment'
                             onClick={() => handleComment()}
                             disabled={isLoading}
                             icon={<BiCommentDetail/>}
@@ -66,6 +70,7 @@ const SingleTask = ({task,
                    </Tooltip>
                    <Tooltip label='Edit' hasArrow>
                         <IconButton
+                            aria-label='task-edit'
                             disabled={isLoading}
                             icon={<MdEdit/>}
                             variant='outline'
@@ -76,6 +81,7 @@ const SingleTask = ({task,
  
                    <Tooltip label='Delete' hasArrow>
                         <IconButton
+                            aria-label='task-delete'
                             disabled={isLoading}
                             icon={<MdDelete/>}
                             variant='outline'

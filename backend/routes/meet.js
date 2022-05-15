@@ -5,6 +5,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const config = require("../config/meetConfig");
 const rp = require("request-promise");
+const nodemailer = require('nodemailer')
 
 
 var email;
@@ -14,6 +15,18 @@ const payload = {
   iss: config.APIKey,
   exp: new Date().getTime() + 5000,
 };
+
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    type: 'OAuth2',
+    user: process.env.AUTH_USERNAME,
+    pass: process.env.AUTH_PASSWORD,
+    clientId: process.env.AUTH_CLIENT_ID,
+    clientSecret: process.env.AUTH_SECRET,
+    refreshToken: process.env.AUTH_REFRESH_TOKEN
+  }
+});
 
 const token = jwt.sign(payload, config.APISecret);
 router.post("/", (req, res) => {
@@ -40,9 +53,22 @@ router.post("/", (req, res) => {
     json: true, //Parse the JSON string in the response
   };
 
+
+
   rp(options)
-    .then(function (response) {
+    .then(async function (response) {
       console.log("response is: ", response.join_url);
+      const output = `<div>
+      <p>You can join the meet at <strong>${response.join_url}</strong></p>
+    </div>`
+    
+      await transporter.sendMail({
+        from: `tulsee4ever@gmail.com`, // sender address
+        to: 'tulsee4ever@gmail.com', // list of receivers
+        subject: "New meeting created", // Subject line
+        text: `meeting link`, // plain text body
+        html: output, // html body
+      });
       // response.status(200).json(response);
       let dataRes = {
         join_url: response.join_url,

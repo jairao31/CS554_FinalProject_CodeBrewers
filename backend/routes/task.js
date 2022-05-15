@@ -163,7 +163,7 @@ router.patch('/comment/:taskId', async(req,res) => {
 
 router.delete('/comment/:taskId/:commentId', async(req,res) => {
     const {taskId, commentId} = req.params
-    if(!taskId || commentId) {
+    if(!taskId || !commentId) {
         res.status(400).json({error: "Insufficient funds"});
         return
     }

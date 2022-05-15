@@ -66,10 +66,10 @@ const TopNavBar = ({activePage, title}) => {
             <HStack>
                 <Tooltip hasArrow  label={'Home'} placement='bottom'>
                     <div>
-                        <IconButton onClick={() => push('/')} variant={'ghost'} icon={<MdHome size={'20px'}/>}/>
+                        <IconButton label={`home-btn`} onClick={() => push('/')} variant={'ghost'} icon={<MdHome size={'20px'}/>}/>
                     </div>
                 </Tooltip>
-                <IconButton variant={'ghost'} icon={<MdArrowBackIosNew size={'20px'}/>} onClick={() => back()}/>
+                <IconButton label={`back-btn`} variant={'ghost'} icon={<MdArrowBackIosNew size={'20px'}/>} onClick={() => back()}/>
                 <Text mt={'8px!important'} fontSize={'lg'} fontWeight={500} minW={'100px'} alignSelf={'flex-start'}>{title}</Text>
             </HStack>
             {query.projectId ? currentProject ? <HStack mx='auto'>

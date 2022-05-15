@@ -24,6 +24,7 @@ import MoonLoader from "react-spinners/MoonLoader";
 import BeatLoader from "react-spinners/BeatLoader";
 import { GrOverview } from "react-icons/gr";
 import { ImEnter } from "react-icons/im";
+import CommonAvatar from "../Components/Common/CommonAvatar";
 
 const SearchBarContainer = styled(motion.div)`
   display: flex;
@@ -361,10 +362,11 @@ const Home = () => {
                           w={"100%"}
                           p={2}
                         >
-                          <Avatar
+                          <CommonAvatar
                             size={"sm"}
                             src={i.profilePhotoUrl}
                             name={i.displayName}
+                            isOnline={i.isActive}
                           />
                           <Text color={"white"} p={2}>
                             {i.displayName}
