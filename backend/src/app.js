@@ -33,7 +33,7 @@ firebase.initializeApp({
   databaseURL: "https://tulsee-43d3d-default-rtdb.firebaseio.com/"
 });
 
-const session = require('express-session');
+// const session = require('express-session');
 const configRoutes = require('../routes');
 const http = require('http').createServer(app);
 const { Server } = require("socket.io");
@@ -51,14 +51,14 @@ const io = new Server(http, {
 
 app.use(express.json());
 
-app.use(
-    session({
-        name: 'AuthCookie',
-        secret: 'some secret string!',
-        resave: false,
-        saveUninitialized: true
-    })
-  );
+// app.use(
+//     session({
+//         name: 'AuthCookie',
+//         secret: 'some secret string!',
+//         resave: false,
+//         saveUninitialized: true
+//     })
+//   );
 app.use(express.urlencoded({ extended: true }));
 
 
