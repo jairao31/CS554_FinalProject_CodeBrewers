@@ -52,6 +52,7 @@ const Sidebar = () => {
           src={"/Logo1.png"}
           width={"70px"}
           marginLeft={"5px"}
+          alt='tulsee-logo'
         />
         <Button isLoading={loggingOut} variant="ghost" onClick={() => logout()}>
           Logout
