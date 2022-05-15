@@ -67,8 +67,6 @@ const LoginForm = () => {
           <FormHelperText
             textAlign={"center"}
             boxShadow="sl"
-            _hover={{ boxShadow: "md" }}
-            _active={{ boxShadow: "lg" }}
           >
             We will never share your email!🤞
           </FormHelperText>
@@ -86,7 +84,7 @@ const LoginForm = () => {
               onChange={handleChange}
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
+              <Button backgroundColor={'brand.700'}  h="1.75rem" size="sm" onClick={handleClick}>
                 {show ? "Hide" : "Show"}
               </Button>
             </InputRightElement>
@@ -96,7 +94,7 @@ const LoginForm = () => {
           {" "}
           Remember Me{" "}
         </Checkbox> */}
-        <Button type="submit" bg={"brand.500"} variant="solid">
+        <Button backgroundColor={'brand.700'}  type="submit" bg={"brand.500"} variant="solid">
           Login
         </Button>
         <Text textAlign={'center'}> OR </Text>

@@ -97,7 +97,6 @@ const RegisterForm = () => {
             />
           </InputGroup>
         </FormControl>
-        <Divider borderColor={"gray.500"} />
         <FormControl isRequired>
           <InputGroup>
             <InputLeftAddon children={<MdEmail />} />
@@ -111,10 +110,9 @@ const RegisterForm = () => {
             />
           </InputGroup>
           <FormHelperText
+            color='#67788f'
             textAlign={"center"}
             boxShadow="sl"
-            _hover={{ boxShadow: "md" }}
-            _active={{ boxShadow: "lg" }}
           >
             We will never share your email!🤞
           </FormHelperText>
@@ -131,7 +129,7 @@ const RegisterForm = () => {
               value={details.password || ""}
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
+              <Button h="1.75rem" size="sm" backgroundColor={'brand.700'} onClick={handleClick}>
                 {show ? "Hide" : "Show"}
               </Button>
             </InputRightElement>
@@ -149,7 +147,7 @@ const RegisterForm = () => {
               value={details.confirmPassword || ""}
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleConfirmShow}>
+              <Button backgroundColor={'brand.700'} h="1.75rem" size="sm" bac onClick={handleConfirmShow}>
                 {confirmShow ? "Hide" : "Show"}
               </Button>
             </InputRightElement>
@@ -157,11 +155,12 @@ const RegisterForm = () => {
         </FormControl>
         {/* <Checkbox color={'white'} colorScheme={'green'} onClick={() =>setCookies}> Remember Me </Checkbox> */}
         <Button
+          backgroundColor={'brand.700'} 
           className="button"
           type="submit"
           variant="solid"
           // boxShadow={'rgba(44, 187, 99, 0.35) 0 -25px 18px -14px inset,rgba(44, 187, 99, 0.25) 0 1px 2px, rgba(44, 187, 99, 0.25) 0 2px 4px,rgba(44, 187, 99, 0.25) 0 4px 8px, rgba(44, 187, 99, 0.25) 0 8px 16px, rgba(44, 187, 99, 0.25) 0 16px 32px'}
-          // isLoading
+          isLoading={isRegistering}
           loadingText="Signing Up"
         >
           Sign Up

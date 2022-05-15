@@ -43,7 +43,7 @@ export default function Login() {
   return (
 
     <Flex h={'100vh'}>
-      <Flex w={'45%'} bg={'#45B39D'} direction={'column'} justifyContent='center'>
+      <Flex w={'45%'} bg={'#00a88f'} direction={'column'} justifyContent='center'>
         <Flex p='0 50px' justifyContent={'center'}>
           <Box>
             <Text fontWeight={800} color='white' fontSize={'4xl'}>
@@ -86,8 +86,8 @@ export default function Login() {
           </Center>
           <Tabs  variant={"solid-rounded"} isFitted m={4}>
             <TabList gap={2} mb={2}>
-              <Tab _selected={{ color: 'white', bg: '#45B39D' }} boxShadow={'md'}>Sign Up</Tab>
-              <Tab _selected={{ color: 'white', bg: '#45B39D' }} boxShadow={'md'} >Login</Tab>
+              <Tab _selected={{ color: 'white', bg: 'brand.700' }} boxShadow={'md'}>Sign Up</Tab>
+              <Tab _selected={{ color: 'white', bg: 'brand.700' }} boxShadow={'md'} >Login</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
