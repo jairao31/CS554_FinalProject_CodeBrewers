@@ -10,11 +10,14 @@ import {
   Stack,
   InputRightElement,
   Checkbox,
+  useToast,
+  Text,
 } from "@chakra-ui/react";
 import { MdEmail } from "react-icons/md";
 import { IoInformationCircle } from "react-icons/io5";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { UserContext } from "../Contexts/UserContext";
+import { FcGoogle } from "react-icons/fc";
 
 const RegisterForm = () => {
   const [show, setShow] = useState(false);
@@ -23,7 +26,9 @@ const RegisterForm = () => {
   const handleClick = () => setShow(!show);
   const handleConfirmShow = () => setConfirmShow(!confirmShow);
 
-  const { createUser } = useContext(UserContext);
+  const toast = useToast()
+
+  const { createUser, googleSignIn, isLoggingIn, isRegistering } = useContext(UserContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,6 +43,26 @@ const RegisterForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let request = details;
+    const {firstName,lastName,email,password,confirmPassword} = request
+    if(!firstName || !lastName || !email || !password || !confirmPassword) {
+      toast({title:"Please fill all the fields", status:'warning', duration: 2000});
+      return
+    }
+    if(firstName.trim().length === 0 || lastName.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0 || confirmPassword.trim().length === 0) {
+      toast({title:"Please fill all the fields", status:'warning', duration: 2000});
+      return
+    }
+
+    if(password.length < 6 || confirmPassword.length < 6) {
+      toast({title:"Passwords should be atleast 6 characters long!", status:'warning', duration: 2000});
+      return
+    }
+
+    if(password !== confirmPassword) {
+      toast({title:"Both passwords should match", status:'warning', duration: 2000});
+      return
+    }
+
     delete request.confirmPassword;
     createUser(request);
     setDetails({});
@@ -141,6 +166,8 @@ const RegisterForm = () => {
         >
           Sign Up
         </Button>
+        <Text textAlign={'center'}> OR </Text>
+        <Button variant={'outline'} isLoading={isLoggingIn || isRegistering} leftIcon={<FcGoogle/>} onClick={() => googleSignIn()}>Sign up with google</Button>
       </Stack>
     </form>
   );

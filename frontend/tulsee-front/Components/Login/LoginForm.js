@@ -11,11 +11,14 @@ import {
   Checkbox,
   InputRightElement,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { UserContext } from "../Contexts/UserContext";
 import {FcGoogle} from 'react-icons/fc'
+
+
 
 const LoginForm = () => {
   const [details, setDetails] = useState({
@@ -25,6 +28,7 @@ const LoginForm = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const { loginUser, googleSignIn, isLoggingIn, isRegistering } = useContext(UserContext);
+  const toast = useToast()
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDetails((prev) => {
@@ -36,6 +40,11 @@ const LoginForm = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    const {email,password} = details;
+    if(email.trim().length === 0 || password.trim().length === 0) {
+      toast({title:'Please fill all the fields', status: 'warning', duration: 2000});
+      return
+    }
     loginUser(details);
     setDetails({});
   };

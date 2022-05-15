@@ -210,6 +210,8 @@ const CommentSection = ({task,isOpen, onClose, handleSend, commenting, handleDel
 
     const last = createRef()
 
+    const toast = useToast()
+
     useEffect(() => {
         if(!task || !task.comments) return
         setComments(task.comments);
@@ -230,6 +232,10 @@ const CommentSection = ({task,isOpen, onClose, handleSend, commenting, handleDel
     }
 
     const handleSubmit = e => {
+        if(text.trim().length === 0) {
+            toast({title:'Enter a comment to post', status:"warning", duration: 3000});
+            return;
+        }
         handleSend(text)
         setText('')
     }

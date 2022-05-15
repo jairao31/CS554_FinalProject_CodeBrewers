@@ -45,20 +45,40 @@ const CreateNewForm = () => {
         })
     },[UserDetails])
 
+
     const handleChange = (value,name) => {
-        setPayload(prev => {
-            return {
-                ...prev,
-                [name] : value
-            }
-        })
+        if(name === "type") {
+            setPayload(prev => {
+                return {
+                    ...prev,
+                    [name] : value,
+                    requested: value === "Personal" ? [] : prev.requested
+                }
+            })
+        }else{
+            setPayload(prev => {
+                return {
+                    ...prev,
+                    [name] : value,
+                }
+            })
+        }
+
     }
 
     const handleSelect = user => {
         setPayload(prev => {
-            return {
-                ...prev,
-                requested : prev.requested ? [...prev.requested,user] : [user]
+            let exist = false
+            if(prev.requested) {
+                exist = prev.requested.find(i => i.publicId === user.publicId);
+            }
+            if(!exist) {
+                return {
+                    ...prev,
+                    requested : prev.requested ? [...prev.requested,user] : [user]
+                }
+            }else{
+                return prev
             }
         })
     }

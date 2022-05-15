@@ -6,9 +6,10 @@ import {
   HStack,
   Input,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import { UserContext } from "../Contexts/UserContext";
 import { useRouter } from "next/router";
@@ -18,7 +19,7 @@ import { get24TimeFormat } from "../../helpers/dateFormat";
 import { getBaseUrl } from "../../api/base";
 
 const ChatBox = () => {
-  const [text, setText] = useState();
+  const [text, setText] = useState("");
   const [chat, setChat] = useState([]);
   const [room, setRoom] = useState("room1");
   const [userId, setUserId] = useState();
@@ -28,7 +29,10 @@ const ChatBox = () => {
 
   const { query } = useRouter();
 
+  const toast = useToast()
   // const socketRef = useRef();
+
+  const lastMessage = useRef()
   
 
   const { data: messages } = useGetMessages(query.projectId, !!query.projectId);
@@ -53,10 +57,16 @@ const ChatBox = () => {
     return () =>  socketRef.disconnect()
   }, [UserDetails]);
 
+  useEffect(() => {
+    if(lastMessage) {
+      lastMessage.current.scrollIntoView({behavior:'smooth'})
+    }
+  },[chat])
+
 
   useEffect(() => {
     if(!socket) return
-    socket.on("message", ({ sender, createdAt, text }) => {
+    socket.on("message", ({ sender, createdAt, text }) => {  
       setChat((prev) => {
         return [...prev, { sender, createdAt, text }];
       });
@@ -71,6 +81,9 @@ const ChatBox = () => {
         ];
       });
     });
+    if(lastMessage) {
+      lastMessage.current.scrollIntoView({behavior:'smooth'})
+    }
   }, [socket]);
 
   useEffect(() => {
@@ -79,6 +92,12 @@ const ChatBox = () => {
   }, [messages]);
 
   const onMessageSubmit = () => {
+
+    if(text.trim().length === 0) {
+      toast({title: 'Enter a message to send', status: 'warning', duration: 2000});
+      return
+    }
+
     sendMessage(
       {
         projectId: room,
@@ -136,7 +155,7 @@ const ChatBox = () => {
             <Box   >
                 <Text
                 ml={i.sender.publicId === userId && 'auto'}
-                mr={i.sender.publicId !== userId && 'auto'}
+                mr={i.sender.publicId !== userId ? 'auto':'20px'}
                 bg={i.sender.publicId === userId ? "brand.700" : "brand.500"}
                 p={2}
                 borderRadius="md"
@@ -149,7 +168,7 @@ const ChatBox = () => {
               <Text    
                 w={'fit-content'}            
                 ml={i.sender.publicId === userId && 'auto'}
-                mr={i.sender.publicId !== userId && 'auto'} 
+                mr={i.sender.publicId !== userId ? 'auto':'20px'} 
                 fontSize={"xs"} 
                 color={"#99A3A4 "}>
                 {i.sender.name} | {get24TimeFormat(i.createdAt)}
@@ -157,6 +176,8 @@ const ChatBox = () => {
             </Box>
           </Flex>
         ))}
+        <div ref={lastMessage}>
+        </div>
       </VStack>
       <HStack gap="10px">
         <Input

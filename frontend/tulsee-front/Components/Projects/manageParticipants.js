@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Grid, GridItem, HStack, Text, useToast } from '@chakra-ui/react';
+import { Avatar, Box, Button, Grid, GridItem, HStack, Tag, Text, useToast } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { useRemoveParticipant } from '../../api/project/removeParticipant';
 import { ProjectContext } from '../Contexts/ProjectContext';
@@ -42,6 +42,7 @@ const ManageParticipants = () => {
                             <HStack>
                                 <Avatar size={'sm'} src={i.profilePhotoUrl} name={i.displayName}/>
                                 <Text>{i.displayName}</Text>
+                                {currentProject.createdBy.publicId === i.publicId && <Tag size={'sm'}>Owner</Tag>}
                             </HStack>
                         </GridItem>
                         <GridItem>
