@@ -10,7 +10,7 @@ router.post('/', async(req,res) => {
             res.status(401).json({error:'Insufficient Funds'})
             return
         }
-        if(typeof projectId !== "string" || typeof title !== "string" || typeof createdBy !== "string" ) {
+        if(typeof projectId !== "string" || typeof title !== "string" || typeof createdBy !== "object" ) {
             res.status(401).json({error:'Invalid data type'})
             return
         }
