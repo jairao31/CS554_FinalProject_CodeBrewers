@@ -1,4 +1,4 @@
-import { Container } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import React from 'react';
 import Layout from '../Components/Common/layout';
 import TopNavBar from '../Components/Common/TopNavBar';
@@ -8,9 +8,9 @@ const Invites = () => {
     return (
         <Layout>
             <TopNavBar title={"Invites"}/>
-            <Container mx={0}>
+            <Box mx={0} w='80%' maxHeight='100vh' overflowY={'auto'}>
                 <InviteTable/>
-            </Container>
+            </Box>
         </Layout>
     );
 };

@@ -1,6 +1,7 @@
 import { Avatar, Box, Button, Grid, GridItem, HStack, Tag, Text, useToast } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { useRemoveParticipant } from '../../api/project/removeParticipant';
+import CommonAvatar from '../Common/CommonAvatar';
 import { ProjectContext } from '../Contexts/ProjectContext';
 import { UserContext } from '../Contexts/UserContext';
 
@@ -40,7 +41,7 @@ const ManageParticipants = () => {
                     return <Grid templateColumns='repeat(2, 1fr)' gap={2} key={i.publicId} w={'40%'} p={2}>
                         <GridItem>
                             <HStack>
-                                <Avatar size={'sm'} src={i.profilePhotoUrl} name={i.displayName}/>
+                                <CommonAvatar  size={'sm'} src={i.profilePhotoUrl} name={i.displayName} publicId={i.publicId}/>
                                 <Text>{i.displayName}</Text>
                                 {currentProject.createdBy.publicId === i.publicId && <Tag size={'sm'}>Owner</Tag>}
                             </HStack>

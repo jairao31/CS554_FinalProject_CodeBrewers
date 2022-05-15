@@ -1,11 +1,10 @@
 import {
-  Avatar,
   Box,
   Button,
   Flex,
   HStack,
-  Input,
   Text,
+  Textarea,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -17,6 +16,9 @@ import { useSendMessage } from "../../api/chat/sendMessageMutation";
 import { useGetMessages } from "../../api/chat/getMessages";
 import { get24TimeFormat } from "../../helpers/dateFormat";
 import { getBaseUrl } from "../../api/base";
+import CommonAvatar from "../Common/CommonAvatar";
+import { ProjectContext } from "../Contexts/ProjectContext";
+import Linkify from 'react-linkify'
 
 const ChatBox = () => {
   const [text, setText] = useState("");
@@ -26,6 +28,7 @@ const ChatBox = () => {
   const [socket, setSocket] = useState(null)
 
   const { UserDetails } = useContext(UserContext);
+  const {currentProject} = useContext(ProjectContext);
 
   const { query } = useRouter();
 
@@ -130,68 +133,91 @@ const ChatBox = () => {
     );
   };
 
+  const componentDecorator = (href, text, key) => (
+    <a href={href} key={key} target="_blank" rel="noopener noreferrer">
+        {text}
+    </a>
+  );
+
   return (
-    <Box display={'flex'} justifyContent='end' w={"100%"} p={5} h={"90%"} >
-      <Flex h='100%' w={'100%'} direction='column' justifyContent={'space-between'}>
-      <VStack mb='auto'  w={"100%"} minH={'calc(100% - 280px)'} maxH={'calc(100vh - 140px)'} overflowY='auto'>
-        {chat.map((i, idx) => (
-          <Flex
-            minW={0}
-            key={idx}
-            gap={2}
-            w="100%"
-            justifyContent={
-              i.sender.publicId === userId ? "flex-end" : "flex-start"
-            }
-          >
-            {i.sender.publicId !== userId && (
-              <Avatar
-                size={"sm"}
-                src={i.sender.profilePhotoUrl}
-                name={i.sender.name}
-                alt={`${i.sender.name}_dp`}
-              />
-            )}
-            <Box   >
-                <Text
-                ml={i.sender.publicId === userId && 'auto'}
-                mr={i.sender.publicId !== userId ? 'auto':'20px'}
-                bg={i.sender.publicId === userId ? "brand.700" : "brand.500"}
-                p={2}
-                borderRadius="md"
-                color={"white"}
-                w={"fit-content"}
-                maxW="400px"
+    <HStack h='100%'>
+        <VStack borderRight={'1px solid #D5D8DC'} gap={2} px={2} py={5} h='100%'>
+          {currentProject && currentProject.participants.map(i => 
+            <CommonAvatar 
+              size={'sm'}
+              key={i.publicId}
+              src={i.profilePhotoUrl}
+              name={i.displayName}
+              publicId={i.publicId}
+            />
+          )}
+        </VStack>
+        <Box display={'flex'} justifyContent='end' w={"100%"} p={5} h={"90%"} >
+          <Flex h='100%' w={'100%'} direction='column' justifyContent={'space-between'}>
+          <VStack mb='auto'  w={"100%"} minH={'calc(100% - 280px)'} maxH={'calc(100vh - 140px)'} overflowY='auto'>
+            {chat.map((i, idx) => (
+              <Flex
+                minW={0}
+                key={idx}
+                gap={2}
+                w="100%"
+                justifyContent={
+                  i.sender.publicId === userId ? "flex-end" : "flex-start"
+                }
               >
-                {i.text}
-              </Text>
-              <Text    
-                w={'fit-content'}            
-                ml={i.sender.publicId === userId && 'auto'}
-                mr={i.sender.publicId !== userId ? 'auto':'20px'} 
-                fontSize={"xs"} 
-                color={"#99A3A4 "}>
-                {i.sender.name} | {get24TimeFormat(i.createdAt)}
-              </Text>
-            </Box>
+                {i.sender.publicId !== userId && (
+                  <CommonAvatar
+                    size={"sm"}
+                    src={i.sender.profilePhotoUrl}
+                    name={i.sender.name}
+                    publicId={i.sender.publicId}
+                  />
+                )}
+                <Box>
+                  <Linkify componentDecorator={componentDecorator}>
+                      <Text
+                      ml={i.sender.publicId === userId && 'auto'}
+                      mr={i.sender.publicId !== userId ? 'auto':'20px'}
+                      bg={i.sender.publicId === userId ? "brand.700" : "brand.300"}
+                      p={2}
+                      borderRadius="md"
+                      color={i.sender.publicId === userId ?"white":'black'}
+                      w={"fit-content"}
+                      maxW="400px"
+                    >
+                      {i.text}
+                    </Text>
+                  </Linkify>
+                  <Text    
+                    w={'fit-content'}            
+                    ml={i.sender.publicId === userId && 'auto'}
+                    mr={i.sender.publicId !== userId ? 'auto':'20px'} 
+                    fontSize={"xs"} 
+                    color={"brand.900"}>
+                    {i.sender.name} | {get24TimeFormat(i.createdAt)}
+                  </Text>
+                </Box>
+              </Flex>
+            ))}
+            <div ref={lastMessage}>
+            </div>
+          </VStack>
+          <HStack gap="10px">
+            <Textarea
+              minH='50px'
+              placeholder="type message here..."
+              value={text || ""}
+              onChange={(e) => setText(e.target.value)}
+              onKeyUp={e => e.keyCode === 13 && !e.shiftKey ? onMessageSubmit() : setText(e.target.value)}
+            />
+            <Button onClick={onMessageSubmit} backgroundColor='brand.700' isLoading={isLoading}>
+              Send
+            </Button>
+          </HStack>
           </Flex>
-        ))}
-        <div ref={lastMessage}>
-        </div>
-      </VStack>
-      <HStack gap="10px">
-        <Input
-          placeholder="type message here..."
-          value={text || ""}
-          onChange={(e) => setText(e.target.value)}
-          onKeyUp={e => e.keyCode === 13 ? onMessageSubmit() : setText(e.target.value)}
-        />
-        <Button onClick={onMessageSubmit} isLoading={isLoading}>
-          Send
-        </Button>
-      </HStack>
-      </Flex>
-    </Box>
+        </Box>
+    </HStack>
+
   );
 };
 

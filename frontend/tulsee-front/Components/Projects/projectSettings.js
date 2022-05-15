@@ -78,12 +78,12 @@ const ProjectSettings = () => {
             </form>
             <Divider/>
             <ManageParticipants/>
-            <Divider/>
-            <InviteParticipants/>
-           {currentProject && currentProject.createdBy.publicId === userID &&  <>
+            {currentProject && currentProject.type === 'Group' && <>
                 <Divider/>
-                <ArchiveProject/>
+                <InviteParticipants/> 
             </>}
+            <Divider/>
+            <ArchiveProject/>
             <br/>
             <br/>
         </Box>

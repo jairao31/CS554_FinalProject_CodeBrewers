@@ -2,7 +2,7 @@ import { Textarea } from '@chakra-ui/react';
 import React from 'react';
 import FormControlLayout from '../FormControlLayout';
 
-const CommonTextarea = ({label,onChange,helperText,value,name,isError,isRequired,size,placeholder}) => {
+const CommonTextarea = ({label,onChange,helperText,value,name,isError,isRequired,size,placeholder,...props}) => {
     return (
         <FormControlLayout
             label={label}
@@ -11,6 +11,7 @@ const CommonTextarea = ({label,onChange,helperText,value,name,isError,isRequired
             helperText={helperText}
         >
             <Textarea
+                {...props}
                 id={label}
                 value={value}
                 onChange={e => onChange(e.target.value, e.target.name)}

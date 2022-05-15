@@ -23,6 +23,7 @@
     "react-dom": "18.0.0",
     "react-easy-crop": "^4.2.0",
     "react-icons": "^4.3.1",
+    "react-linkify": "^1.0.0-alpha",
     "react-query": "^3.37.0",
     "react-select": "^5.3.1",
     "react-spinners": "^0.11.0",

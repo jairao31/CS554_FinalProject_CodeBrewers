@@ -10,7 +10,7 @@ import ErrorBoundary from '../Components/ErrorBoundary';
 
 
 const MyApp = ({Component, PageProps}) => {
-    console.log('firebaseId: ', process.env.FIREBASE_AUTH_DOMAIN)
+
     const firebaseConfig = {
         apiKey: "AIzaSyA80n1RK8xk-2PY44aZz-mY8Q8Pq3XLZm0",
         authDomain: "tulsee-43d3d.firebaseapp.com",

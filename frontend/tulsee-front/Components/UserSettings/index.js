@@ -190,7 +190,7 @@ const UserSettings = () => {
         </Button>
       </form>
       <Divider />
-      <ChangePassword />
+      {details.type !== 'google' && <ChangePassword />}
     
       <PhotoCropModal isOpen={isOpen} onClose={onClose} photo={profilePic}/>
     </Box>

@@ -24,11 +24,15 @@ const InviteTable = () => {
 
     const [currentInvites, setCurrentInvites] = useState()
 
-    const {UserDetails} = useContext(UserContext)
+    const {UserDetails,refetchUser} = useContext(UserContext)
     const {setGroupProjects} = useContext(ProjectContext)
     const {mutate: updateInvite, isLoading} = useAcceptRejectInvite();
 
     const toast = useToast();
+
+    useEffect(() => {
+        refetchUser()
+    },[])
 
     useEffect(() => {
         if(!UserDetails) return
@@ -66,13 +70,13 @@ const InviteTable = () => {
     
 
     return (
-        UserDetails ? <TableContainer minW={'800px'}>
+        UserDetails ? <TableContainer minW={'60%'}>
             <Table variant='simple' size={'lg'} >
                 <TableCaption>Invitations to projects</TableCaption>
                 <Thead>
                 <Tr>
                     <Th>Project</Th>
-                    <Th>Sent by</Th>
+                    <Th>Owner</Th>
                     <Th >Sent on</Th>
                     <Th >Accept/Reject</Th>
                 </Tr>

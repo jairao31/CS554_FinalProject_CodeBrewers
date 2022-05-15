@@ -78,7 +78,7 @@ const TaskContainer = () => {
     return (
         !isLoading ? <Box p={5} maxH='100vh' overflowY={'auto'}>
             <Flex justifyContent={'flex-end'}>
-                <Button onClick={onOpen} mb={2} size={'sm'} leftIcon={<MdAdd/>}>
+                <Button onClick={onOpen} mb={2} size={'sm'} leftIcon={<MdAdd/>} backgroundColor='#008268!important'>
                     Task
                 </Button>
             </Flex>

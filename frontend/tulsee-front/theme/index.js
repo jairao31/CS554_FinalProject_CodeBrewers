@@ -1,6 +1,17 @@
 import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 
 const overrides = {
+  styles:{
+    global:()=>({
+      '.chakra-form__required-indicator':{
+        color:'#e22d2d!important'
+      },
+      '.chakra-form__helper-text':{
+        color:'#67788f!important'
+      }
+    }),
+  },
+
   fonts: {
     heading: "Lato, sans-serif",
     body: "Lato, sans-serif",
@@ -11,7 +22,7 @@ const overrides = {
       100: "#E5E3C9",
       300: "#B4CFB0",
       500: "#45B39D",
-      700: "#148F77",
+      700: "#008268",
       900: "#000000",
     },
   },
@@ -34,6 +45,7 @@ const overrides = {
       baseStyle:{
         color: "brand.900"
       }
+      
     },
     Button: {
       baseStyle:{
@@ -47,13 +59,13 @@ const overrides = {
           }
         },
         'outline' : {
-          borderColor:'brand.500',
+          borderColor:'brand.700',
           _hover:{
             backgroundColor:'rgba(180, 207, 176,0.3)'
           }
         },
         'solid': {
-          backgroundColor:'brand.500',
+          backgroundColor:'#148F77',
           _hover:{
             backgroundColor:'#73C6B6'
           }
@@ -71,6 +83,11 @@ const overrides = {
             backgroundColor:'rgba(180, 207, 176,0.2)'
           }
         }
+      }
+    },
+    Input:{
+      asterisk:{
+        color:'black'
       }
     }
   },
