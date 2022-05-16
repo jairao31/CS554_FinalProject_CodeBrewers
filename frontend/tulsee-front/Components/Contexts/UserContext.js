@@ -71,7 +71,6 @@ const UserContextProvider = ({children}) => {
               // User is signed in, see docs for a list of available properties
               // https://firebase.google.com/docs/reference/js/firebase.User
               const uid = user.uid;
-              console.log(user)
                 setUserID(uid);
                 if(user.providerData[0].providerId !== 'password') {
                 setGoogle(true)
@@ -102,7 +101,6 @@ const UserContextProvider = ({children}) => {
                 ...details
             }, {
                 onSuccess: data => {
-                    console.log(data);
                     toast({title:"User registered successfully!", status:'success', duration: 2000});
                 },
                 onError: e => {
@@ -122,7 +120,6 @@ const UserContextProvider = ({children}) => {
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
-            console.log(user)
             toast({title:'User logged in successfully!', status:'success', duration: 2000});
             // ...
         })
@@ -149,7 +146,6 @@ const UserContextProvider = ({children}) => {
             currentPassword
         )
         reauthenticateWithCredential(user,credential).then(() => {
-            console.log('user authenticated');
             updatePassword(user, password).then(() => {
                 toast({title: 'Password changed successfully', status: "success", duration: 2000})
             }).catch(e => {
