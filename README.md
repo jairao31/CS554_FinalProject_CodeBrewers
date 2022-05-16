@@ -2,7 +2,7 @@
 
 # *TULSEE* 🪴
 
-[TULSEE]() is a go-to management and collaboration platform for everyone who wants to support their project teams, research groups, and other collaborative work.
+[TULSEE](http://34.238.51.139:3000/) is a go-to management and collaboration platform for everyone who wants to support their project teams, research groups, and other collaborative work.
 
 ## *Getting Started*
 
@@ -15,7 +15,7 @@ Directory:
 npm install
 
 // command to start the backend server
-npm start
+npm run start:dev
 ```
 
 #### /frontend/tulsee-front/
@@ -39,7 +39,7 @@ yarn run dev
 1. Task:
    - create new task, assign users to the task
    - update task status (Open, In Progress, Under Review, Done)
-   - user settings, Projectinvitese, and Archive
+   - user settings, Project invites, and Archive
 
 2. Chat:
    - chat room for all the group members

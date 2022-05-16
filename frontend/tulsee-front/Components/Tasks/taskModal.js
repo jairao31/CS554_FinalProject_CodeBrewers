@@ -146,7 +146,7 @@ const TaskModal = ({isOpen, onClose, selected, mode , insertTask, updateTask, lo
                     name='description'
                     onChange={handleChange}
                 />
-                {currentProject && currentProject.type === "Group" && <UserAutocomplete label="Assignees" handleSelect={handleSelect} options={currentProject.participants}/>}
+                {currentProject && currentProject.type === "Group" && <UserAutocomplete allowSelf={true} label="Assignees" handleSelect={handleSelect} options={currentProject.participants}/>}
                 {
                     details.assignees && details.assignees.map(i => 
                     {return <HStack key={i.publicId} w={'100%'} p={2} >
