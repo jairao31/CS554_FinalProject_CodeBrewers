@@ -19,7 +19,7 @@ import { UserContext } from '../../Contexts/UserContext';
 import { SiMinutemailer } from 'react-icons/si';
 import InviteUserModal from './inviteUserModal';
 
-const UserAutocomplete = ({label, handleSelect, options}) => {
+const UserAutocomplete = ({label, handleSelect, options, allowSelf}) => {
 
     const [query, setQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -41,17 +41,19 @@ const UserAutocomplete = ({label, handleSelect, options}) => {
         }else{
             if(options) {
                 console.log(options)
-                setSearchResults(options.filter(i => i.displayName.toLowerCase().includes(value.toLowerCase()) && i.publicId !== UserDetails.publicId))
+                if(!allowSelf) {
+                    setSearchResults(options.filter(i => i.displayName.toLowerCase().includes(value.toLowerCase()) && i.publicId !== UserDetails.publicId))
+                }else{
+                    setSearchResults(options.filter(i => i.displayName.toLowerCase().includes(value.toLowerCase())))
+                }
             }
         }
     }
 
     useEffect(() => {
-        console.log(results);
-        if(!results) return;
-        console.log(results);
-        setSearchResults(results.filter(i => i.publicId !== UserDetails.publicId))
-    },[results])
+        if(!results || options) return;
+        if(!allowSelf) setSearchResults(results.filter(i => i.publicId !== UserDetails.publicId))
+    },[results,allowSelf,options])
 
     useEffect(() => {
         if(query.length > 2 && searchResults) {
