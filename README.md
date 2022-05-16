@@ -59,6 +59,12 @@ yarn run dev
    - archive project
 
 
+## *Test account:*
+**Username:** patick@gmail.com
+**Password:** patrick1234
+
+
+
 ## *Technologies used:*
 **Next.js:**  Front-end framework
 
