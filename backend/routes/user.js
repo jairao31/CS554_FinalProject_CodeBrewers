@@ -50,7 +50,6 @@ router.post("/signup", async (req, res) => {
       .equalTo(email)
       .once("value", (snapshot) => {
         try {
-          // console.log('entered')
           let result = [];
           userCollection().off("value");
           for (var key in snapshot.val()) {
@@ -178,7 +177,6 @@ router.patch("/:userId", async (req, res) => {
         res.json(snapshot.val());
       });
     });
-    // console.log(result)
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message ? error.messsage : error });
