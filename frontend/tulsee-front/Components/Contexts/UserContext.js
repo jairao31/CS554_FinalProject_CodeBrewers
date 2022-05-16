@@ -64,9 +64,6 @@ const UserContextProvider = ({children}) => {
         }
     },[google,isError])
  
-    // useEffect(() => {
-    //     console.log('current user: ', user.email)
-    // },[user])
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {

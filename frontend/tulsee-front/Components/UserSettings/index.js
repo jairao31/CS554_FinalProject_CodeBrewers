@@ -49,7 +49,6 @@ const UserSettings = () => {
 			const reader = new FileReader();
 			reader.readAsDataURL(e.target.files[0]);
 			reader.addEventListener("load", () => {
-        console.log(reader.result)
 				setProfilePic(reader.result);
         onOpen()
 			});
