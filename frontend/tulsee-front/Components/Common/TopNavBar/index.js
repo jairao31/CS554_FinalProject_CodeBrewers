@@ -116,8 +116,9 @@ const TopNavBar = ({activePage, title}) => {
                     label={'toggle-btn'}
                     variant={isDark ? 'solid' : 'ghost'}
                     ml={"1px"}
+               
                     boxShadow={isDark ? "0px 0px 16px 2px white" : "dark-lg"}
-                    icon={isDark ? <FaSun color='white'/> : <FaMoon />}
+                    icon={isDark ? <FaSun size={'18px'} color='white'/> : <FaMoon size={'18px'} />}
                     isRound="true"
                     onClick={toggleColorMode}
                 />

@@ -82,8 +82,6 @@ export default function Login() {
             p={3}
             rounded="lg"
           >
-          <Center>
-          </Center>
           <Tabs  variant={"solid-rounded"} isFitted m={4}>
             <TabList gap={2} mb={2}>
               <Tab _selected={{ color: 'white', bg: 'brand.700' }} boxShadow={'md'}>Sign Up</Tab>

@@ -49,7 +49,6 @@ const UserSettings = () => {
 			const reader = new FileReader();
 			reader.readAsDataURL(e.target.files[0]);
 			reader.addEventListener("load", () => {
-        console.log(reader.result)
 				setProfilePic(reader.result);
         onOpen()
 			});
@@ -130,7 +129,7 @@ const UserSettings = () => {
         Basic Details
       </Text>
       <Box mb={4} w='fit-content' position={'relative'}>
-        <input id='profile_photo_input' type='file' style={{display:'none'}} onChange={profileImg}/>
+        <input id='profile_photo_input' type='file' style={{display:'none'}} accept='.jpg,.png,.webp,.jpeg' onChange={profileImg}/>
         <Avatar size={'lg'} src={details.profilePhotoUrl} alt={`${details.firstName}_dp`} name={details.displayName}/>
         {/* Write user crop feature */}
         <Box 

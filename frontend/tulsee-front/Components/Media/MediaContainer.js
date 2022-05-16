@@ -50,7 +50,6 @@ const MediaContainer = () => {
     uploadMd(form, {
       onSuccess: (d) => {
         alert("Media Uploaded!");
-        console.log(d)
         setMediaList(prev => {
           return [d,...prev]
         })
@@ -83,7 +82,7 @@ const MediaContainer = () => {
   };
 
   return (
-    <Box maxH={"100vh"} overflowY="auto" pt={2}>
+    <Box maxH={"88%"} overflowY="auto" pt={3} pb={3}>
       <Flex px={"100px"} justifyContent={"flex-end"}>
         <Input
           id="media-upload-input"
@@ -107,7 +106,7 @@ const MediaContainer = () => {
       </Flex>
 
       <VStack px={"100px"} mt={2}>
-        {Media && !isLoading ? (
+        {Media && !isLoading ? mediaList.length > 0 ?(
           mediaList.map((img) => (
             <Box w={"100%"}>
               <Flex my={2} w={"100%"} justifyContent={"space-between"}>
@@ -119,9 +118,7 @@ const MediaContainer = () => {
                 ) : (
                   <Image w={"80px"} src={"/docpdf.png"} borderRadius={"md"} />
                 )}
-                <Text style={{ textAlign: "center", margin: "auto" }}>
-                  {img.name}
-                </Text>
+                <Text style={{ display: "flex" }}>{img.name}</Text>
                 <HStack gap={2}>
                   <IconButton
                     variant={"outline"}
@@ -140,8 +137,13 @@ const MediaContainer = () => {
               <Divider />
             </Box>
           ))
-        ) : (
-          <>No Media Found!</>
+        ):<Image
+            src='/media.svg'
+            w='400px'
+            mt='15%'
+            alt='media-img'
+        /> : (
+          <>loading...</>
         )}
       </VStack>
       {/* <Flex gap={2}>
