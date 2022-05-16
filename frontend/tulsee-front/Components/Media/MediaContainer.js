@@ -50,7 +50,6 @@ const MediaContainer = () => {
     uploadMd(form, {
       onSuccess: (d) => {
         alert("Media Uploaded!");
-        console.log(d)
         setMediaList(prev => {
           return [d,...prev]
         })
