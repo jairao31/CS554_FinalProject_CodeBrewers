@@ -107,7 +107,7 @@ const MediaContainer = () => {
       </Flex>
 
       <VStack px={"100px"} mt={2}>
-        {Media && !isLoading ? (
+        {Media && !isLoading ? mediaList.length > 0 ?(
           mediaList.map((img) => (
             <Box w={"100%"}>
               <Flex my={2} w={"100%"} justifyContent={"space-between"}>
@@ -138,7 +138,12 @@ const MediaContainer = () => {
               <Divider />
             </Box>
           ))
-        ) : (
+        ):<Image
+            src='/media.svg'
+            w='400px'
+            mt='15%'
+            alt='media-img'
+        /> : (
           <>loading...</>
         )}
       </VStack>
