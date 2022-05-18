@@ -2,7 +2,9 @@
 
 # *TULSEE* 🪴
 
-[TULSEE](http://34.238.51.139:3000/) is a go-to management and collaboration platform for everyone who wants to support their project teams, research groups, and other collaborative work.
+[TULSEE](http://tulsee.live/) is a go-to management and collaboration platform for everyone who wants to support their project teams, research groups, and other collaborative work.
+
+[Youtube Link](https://www.youtube.com/watch?v=WNGdDGG9vdc)
 
 ## *Getting Started*
 
