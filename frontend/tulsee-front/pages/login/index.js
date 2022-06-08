@@ -10,6 +10,10 @@ import {
   TabPanel,
   useColorModeValue,
   Flex,
+  Divider,
+  Button,
+  HStack,
+  Link,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect } from "react";
 
@@ -76,7 +80,8 @@ export default function Login() {
       <Flex direction={'column'} justifyContent='center' w={'55%'}>
         <Box 
           mx={'auto'}
-          my='auto'
+          mt='auto'
+          mb='20px'
             boxShadow='md'
             w="385px"
             p={3}
@@ -97,6 +102,15 @@ export default function Login() {
             </TabPanels>
           </Tabs>
           </Box>
+        <HStack 
+          mb='auto'   
+          w="385px"
+          mx='auto'
+          justifyContent={'center'}
+          mt='20px'
+        >
+          <Link href='/team'>Made with ❤️ by CodeBrewers</Link>
+        </HStack>
       </Flex>
     </Flex>
 

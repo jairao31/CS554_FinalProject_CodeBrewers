@@ -33,3 +33,18 @@ input::placeholder{
 .chakra-form-control .chakra-form__required-indicator{
   color: black!important;
 }
+
+.fadeIn{
+  animation: fadeInAnimation ease 3s;
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+      opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
