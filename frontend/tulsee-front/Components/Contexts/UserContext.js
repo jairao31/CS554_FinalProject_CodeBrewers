@@ -35,6 +35,8 @@ const UserContextProvider = ({children}) => {
 
     const googleProvider = new GoogleAuthProvider();
 
+    console.log(pathname)
+
     useEffect(() => {
         if(User) {
             setUserDetails(User);
@@ -77,7 +79,7 @@ const UserContextProvider = ({children}) => {
               }
               // ...
             } else {
-                if(pathname !== '/login') {
+                if(pathname !== '/login' && pathname !== '/team') {
                     setUserDetails(null)
                     setUserID(null)
                     setGoogle(false)
